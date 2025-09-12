@@ -94,7 +94,6 @@ func _spawn_row(values: Array, row_index: int) -> void:
 
 		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
 		mat.flags_transparent = true
-		mat.unshaded = true
 		mat.emission_enabled = true
 		mat.emission = mat.albedo_color
 		mat.emission_energy = 1.2
