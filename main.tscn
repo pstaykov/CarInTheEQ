@@ -42,6 +42,7 @@ transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 1, 0, -8, 0, -4.37136e-06, 
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="VehicleBody3D" type="VehicleBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660243, 0)
 script = ExtResource("1_ig7tw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]

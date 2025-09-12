@@ -22,6 +22,6 @@ func _physics_process(delta: float) -> void:
 	brake = braking
 
 	# steering
-	var steer_dir := Input.get_action_strength("turn_right") - Input.get_action_strength("turn_left")
+	var steer_dir := Input.get_action_strength("turn_left") - Input.get_action_strength("turn_right")
 	_steer_target = steer_dir * max_steer
 	steering = lerp(steering, _steer_target, steer_speed * delta)
