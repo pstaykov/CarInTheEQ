@@ -88,8 +88,8 @@ func _spawn_row(values: Array, row_index: int) -> void:
 		var mat := StandardMaterial3D.new()
 		var t = clamp(h / (height_scale * 0.8), 0.0, 1.0)  # normalize 0..1
 
-		var low_color = Color(0.0, 0.0, 1.0, 0.98)   # blue
-		var high_color = Color(0.5, 0.0, 0.5, 0.98)  # purple
+		var low_color = Color(0.0, 0.0, 1.0, 0.9)   # blue
+		var high_color = Color(0.5, 0.0, 0.5, 0.9)  # purple
 		mat.albedo_color = low_color.lerp(high_color, t)
 
 		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
