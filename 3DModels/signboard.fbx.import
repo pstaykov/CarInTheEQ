@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://cp1xgnjc6t5fs"
-path="res://.godot/imported/low_poly_retro_palm_tree.glb-2a44bd16800aa70cabb8459d50d1b60b.scn"
+uid="uid://og1jec2w2646"
+path="res://.godot/imported/signboard.fbx-f3489676bf7bbcafd4961ad8194a6434.scn"
 
 [deps]
 
-source_file="res://low_poly_retro_palm_tree.glb"
-dest_files=["res://.godot/imported/low_poly_retro_palm_tree.glb-2a44bd16800aa70cabb8459d50d1b60b.scn"]
+source_file="res://3DModels/signboard.fbx"
+dest_files=["res://.godot/imported/signboard.fbx-f3489676bf7bbcafd4961ad8194a6434.scn"]
 
 [params]
 
@@ -28,10 +28,11 @@ meshes/force_disable_compression=false
 skins/use_named_skins=true
 animation/import=true
 animation/fps=30
-animation/trimming=false
+animation/trimming=true
 animation/remove_immutable_tracks=true
 animation/import_rest_as_RESET=false
 import_script/path=""
 _subresources={}
-gltf/naming_version=1
-gltf/embedded_image_handling=1
+fbx/importer=0
+fbx/allow_geometry_helper_nodes=false
+fbx/embedded_image_handling=1

@@ -3,7 +3,7 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://b8pli0j671qre"
-path.s3tc="res://.godot/imported/low-poly_cartoon_style_car_03_1.png-da3f56ccee782c06b2743c86b25d2cf8.s3tc.ctex"
+path.s3tc="res://.godot/imported/low-poly_cartoon_style_car_03_1.png-0254408e04ae408a345b49da617a89ad.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -14,8 +14,8 @@ generator_parameters={
 
 [deps]
 
-source_file="res://low-poly_cartoon_style_car_03_1.png"
-dest_files=["res://.godot/imported/low-poly_cartoon_style_car_03_1.png-da3f56ccee782c06b2743c86b25d2cf8.s3tc.ctex"]
+source_file="res://3DModels/low-poly_cartoon_style_car_03_1.png"
+dest_files=["res://.godot/imported/low-poly_cartoon_style_car_03_1.png-0254408e04ae408a345b49da617a89ad.s3tc.ctex"]
 
 [params]
 
