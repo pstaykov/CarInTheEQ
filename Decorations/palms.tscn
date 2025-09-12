@@ -1,3 +1,7 @@
-[gd_scene format=3 uid="uid://dyp058jv1y670"]
+[gd_scene load_steps=2 format=3 uid="uid://dyp058jv1y670"]
+
+[ext_resource type="PackedScene" uid="uid://cky3nnt3v8ebi" path="res://model.glb" id="1_2f1ld"]
 
 [node name="MeshInstance3D" type="MeshInstance3D"]
+
+[node name="model" parent="." instance=ExtResource("1_2f1ld")]
