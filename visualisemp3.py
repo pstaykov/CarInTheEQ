@@ -4,18 +4,25 @@ import pyqtgraph.opengl as gl
 from PyQt5 import QtWidgets, QtCore
 from PyQt5.QtWidgets import QFileDialog, QProgressBar, QPushButton
 from pydub import AudioSegment
-import sys, threading, json
+import sys
+import threading
+import json
 
 # === Config ===
 samplerate = 44100
 blocksize = 1024
 fft_size = 512
+full_bins = fft_size // 2
+target_bins = 40
+max_freq = 4000.0
 history = 100
-num_bins = fft_size // 2
-Z = np.zeros((history, num_bins))
+frame_interval = 0.8  # seconds between JSON frames
 
-x = np.linspace(0, samplerate / 2, num_bins)
-y = np.linspace(0, history, history)
+# frequency axis
+freqs = np.linspace(0, samplerate / 2, full_bins)
+cutoff_index = np.argmax(freqs > max_freq)  # index of first bin > 4000 Hz
+if cutoff_index == 0:
+    cutoff_index = full_bins  # fallback
 
 # === Qt App and GL View ===
 app = QtWidgets.QApplication([])
@@ -40,6 +47,10 @@ gl_widget.setCameraPosition(distance=150, elevation=30, azimuth=-135)
 layout.addWidget(gl_widget)
 
 # === Surface ===
+Z = np.zeros((history, target_bins))
+x = np.linspace(0, max_freq, target_bins)
+y = np.linspace(0, history, history)
+
 surface = gl.GLSurfacePlotItem(
     x=x, y=y, z=Z.T,
     shader='heightColor',
@@ -58,79 +69,67 @@ layout.addWidget(btn)
 stop_flag = False
 total_samples = 1
 playback_ptr = 0
+last_saved_time = 0.0
+json_data = {"frames": [], "bands": target_bins}
 
 # === Progress Timer ===
 progress_timer = QtCore.QTimer()
-
 
 def update_progress():
     if total_samples > 0:
         fraction = min(playback_ptr / total_samples, 1.0)
         progress_bar.setValue(int(fraction * 1000))
 
-
-# === JSON export function ===
-def audio_to_json(audio: np.ndarray, filename="spectrum.json",
-                  samplerate=44100, fft_size=1024, bands=40,
-                  max_freq=4000, step_ms=200):
-    """Convert audio array into spectrum frames and save as JSON."""
-    step_size = int(samplerate * step_ms / 1000)
-    freqs = np.fft.rfftfreq(fft_size, 1 / samplerate)
-    valid_bins = freqs <= max_freq
-    freqs = freqs[valid_bins]
-
-    band_edges = np.linspace(0, len(freqs), bands + 1, dtype=int)
-    frames = []
-
-    for start in range(0, len(audio) - step_size, step_size):
-        chunk = audio[start:start + step_size]
-        windowed = chunk * np.hanning(len(chunk))
-        spectrum = np.abs(np.fft.rfft(windowed, n=fft_size))[valid_bins]
-        spectrum = np.log1p(spectrum)
-
-        band_vals = []
-        for i in range(bands):
-            band_slice = spectrum[band_edges[i]:band_edges[i + 1]]
-            band_vals.append(float(band_slice.mean()) if len(band_slice) > 0 else 0.0)
-        frames.append(band_vals)
-
-    data = {
-        "samplerate": samplerate,
-        "bands": bands,
-        "step_ms": step_ms,
-        "max_freq": max_freq,
-        "frames": frames
-    }
-
-    with open(filename, "w") as f:
-        json.dump(data, f)
-
-    print(f"[✓] Saved {len(frames)} frames to {filename}")
-
+# === Helper: downsample FFT spectrum to 40 bins (0–4000 Hz) ===
+def compress_spectrum(spectrum: np.ndarray) -> list:
+    band_edges = np.linspace(0, cutoff_index, target_bins + 1, dtype=int)
+    out = []
+    for i in range(target_bins):
+        start, end = band_edges[i], band_edges[i + 1]
+        if end > start:
+            out.append(float(np.mean(spectrum[start:end])))
+        else:
+            out.append(0.0)
+    return out
 
 # === Visualizer Thread ===
 def run_visualizer(audio_data):
-    global Z, stop_flag, playback_ptr, total_samples
+    global Z, stop_flag, playback_ptr, total_samples, last_saved_time, json_data
     playback_ptr = 0
     total_samples = len(audio_data)
     chunk_size = blocksize
+    last_saved_time = 0.0
+    json_data = {"frames": [], "bands": target_bins}
 
     while playback_ptr + chunk_size < total_samples and not stop_flag:
         chunk = audio_data[playback_ptr:playback_ptr + chunk_size]
         windowed = chunk * np.hanning(len(chunk))
-        spectrum = np.abs(np.fft.rfft(windowed, n=fft_size))[:num_bins]
+        spectrum = np.abs(np.fft.rfft(windowed, n=fft_size))[:full_bins]
         spectrum = np.log1p(spectrum / (np.max(spectrum) + 1e-6))
 
+        # compress to 40 bins, 0–4000 Hz
+        spectrum40 = compress_spectrum(spectrum)
+
+        # update visualization
         Z = np.roll(Z, -1, axis=0)
-        Z[-1] = spectrum
+        Z[-1] = spectrum40
         surface.setData(z=Z.T)
+
+        # save frame to JSON only every 0.8s
+        current_time = playback_ptr / samplerate
+        if current_time - last_saved_time >= frame_interval:
+            json_data["frames"].append(spectrum40)
+            last_saved_time = current_time
 
         playback_ptr += chunk_size
         sd.sleep(int(1000 * chunk_size / samplerate))
 
+    # save JSON after playback
+    with open("spectrum.json", "w") as f:
+        json.dump(json_data, f)
+
     progress_timer.stop()
     progress_bar.setValue(1000)
-
 
 # === MP3 Upload Handler ===
 def upload_mp3():
@@ -147,16 +146,12 @@ def upload_mp3():
     song = AudioSegment.from_mp3(filename).set_channels(1).set_frame_rate(samplerate)
     audio = np.array(song.get_array_of_samples()).astype(np.float32) / (2 ** 15)
 
-    # === JSON export here ===
-    audio_to_json(audio, filename="spectrum.json")
-
     stop_flag = False
     thread = threading.Thread(target=run_visualizer, args=(audio,))
     thread.start()
 
     sd.play(audio, samplerate)
     progress_timer.start(100)
-
 
 btn.clicked.connect(upload_mp3)
 progress_timer.timeout.connect(update_progress)
