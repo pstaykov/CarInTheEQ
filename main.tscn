@@ -162,6 +162,3 @@ current = true
 fov = 30.0
 script = ExtResource("8_5vw27")
 car_path = NodePath("../../../VehicleBody3D")
-
-[node name="signboard" parent="." instance=ExtResource("10_4c57u")]
-transform = Transform3D(11.575, 0, 0, 0, 11.575, 0, 0, 0, 11.575, 17.5936, -0.132242, -1.6716)
