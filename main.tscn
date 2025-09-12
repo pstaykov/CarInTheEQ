@@ -19,7 +19,7 @@ size = Vector3(125.401, 1, 0.994934)
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
 
-[node name="Node3D" type="Node3D"]
+[node name="Main" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.911826, -0.342616, -0.248363, -0.0605956, -0.68714, 0.716875, 0.406044, 0.640877, 0.651463, 0, 0, 0)
@@ -44,14 +44,13 @@ transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 1, 0, -8, 0, -4.37136e-06, 
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="VehicleBody3D" type="VehicleBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000281334, 0.657219, -0.00313276)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.000281334, 0.657219, -0.00313276)
 mass = 300.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.1, 0)
 script = ExtResource("1_ig7tw")
-max_engine_force = 2000.0
+max_engine_force = 1400.0
 max_brake = 20.0
-steer_speed = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
 transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.0334751)
@@ -60,18 +59,22 @@ shape = SubResource("BoxShape3D_1bvp3")
 [node name="WheelFL" type="VehicleWheel3D" parent="VehicleBody3D"]
 transform = Transform3D(0.325, 0, 0, 0, 0.325, 0, 0, 0, 0.325, 0.487396, 0.130589, 0.582711)
 use_as_steering = true
+wheel_friction_slip = 5.0
 
 [node name="WheelRL" type="VehicleWheel3D" parent="VehicleBody3D"]
 transform = Transform3D(1, 0, 0, 0, 0.302255, 0, 0, 0, 0.313162, 0.51854, 0.134144, -0.483319)
 use_as_traction = true
+wheel_friction_slip = 4.0
 
 [node name="WheelRR" type="VehicleWheel3D" parent="VehicleBody3D"]
 transform = Transform3D(0.34, 0, 0, 0, 0.34, 0, 0, 0, 0.34, -0.475524, 0.160931, -0.450517)
 use_as_traction = true
+wheel_friction_slip = 4.0
 
 [node name="WheelFR" type="VehicleWheel3D" parent="VehicleBody3D"]
 transform = Transform3D(1.041, 0, 0, 0, 0.299, 0, 0, 0, 0.299, -0.498612, 0.139305, 0.597657)
 use_as_steering = true
+wheel_friction_slip = 5.0
 
 [node name="SpringArm3D" type="SpringArm3D" parent="VehicleBody3D"]
 transform = Transform3D(-0.996041, -0.0728179, 0.0509877, 0, 0.573576, 0.819152, -0.0888943, 0.815909, -0.571306, 0.255, 1.9, -4.095)
@@ -89,3 +92,16 @@ transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 14.662, 0
 
 [node name="SprectrumSpawner_gd" type="Node3D" parent="."]
 script = ExtResource("4_1bvp3")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SpeedLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = -1
+anchor_left = 0.109
+anchor_top = 0.15
+anchor_right = 0.109
+anchor_bottom = 0.15
+offset_left = -125.568
+offset_top = -97.2
+offset_right = 125.432
+offset_bottom = 96.8
