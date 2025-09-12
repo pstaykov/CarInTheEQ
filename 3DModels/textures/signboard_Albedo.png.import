@@ -2,20 +2,17 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://d1j6begt07hak"
-path.s3tc="res://.godot/imported/low-poly_cartoon_style_car_03_0.png-56820a3461b213d8fc53f2d2386b245d.s3tc.ctex"
+uid="uid://c7yl1nivecnav"
+path.s3tc="res://.godot/imported/signboard_Albedo.png-072ee74c6bfe4bf357de3524fb892bd8.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
 }
-generator_parameters={
-"md5": "113006d88ac53e0beef8c1f68fb06c89"
-}
 
 [deps]
 
-source_file="res://low-poly_cartoon_style_car_03_0.png"
-dest_files=["res://.godot/imported/low-poly_cartoon_style_car_03_0.png-56820a3461b213d8fc53f2d2386b245d.s3tc.ctex"]
+source_file="res://3DModels/textures/signboard_Albedo.png"
+dest_files=["res://.godot/imported/signboard_Albedo.png-072ee74c6bfe4bf357de3524fb892bd8.s3tc.ctex"]
 
 [params]
 

@@ -1,15 +1,14 @@
 [gd_scene load_steps=18 format=3 uid="uid://j5as40ig7f3t"]
 
-[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://vehicle_body_3d.gd" id="1_ig7tw"]
+[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://panorama_image (2).png" id="1_lquwl"]
-[ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://low-poly_cartoon_style_car_03.glb" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://low_poly_retro_palm_tree.glb" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
-[ext_resource type="Script" path="res://audio_stream_player_3d.gd" id="6_7mycd"]
+[ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="4_1bvp3"]
 [ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="6_272bh"]
-[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://sign_text.glb" id="7_272bh"]
-[ext_resource type="Script" path="res://mini_map_cam.gd" id="8_5vw27"]
-[ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://signboard.fbx" id="10_4c57u"]
+[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_272bh"]
+[ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_5vw27"]
+[ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="10_4c57u"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("1_lquwl")
@@ -37,6 +36,10 @@ size = Vector3(125.401, 1, 35.324)
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
 
+[sub_resource type="GDScript" id="GDScript_kek77"]
+script/source = "extends AudioStreamPlayer3D
+"
+
 [node name="Main" type="Node3D"]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
@@ -63,11 +66,11 @@ shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="VehicleBody3D" type="VehicleBody3D" parent="."]
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.000281334, 0.657219, -0.00313276)
-mass = 300.0
+mass = 100.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.1, 0)
 script = ExtResource("1_ig7tw")
-max_engine_force = 1400.0
+max_engine_force = 500.0
 max_brake = 20.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
@@ -77,22 +80,18 @@ shape = SubResource("BoxShape3D_1bvp3")
 [node name="WheelFL" type="VehicleWheel3D" parent="VehicleBody3D"]
 transform = Transform3D(0.325, 0, 0, 0, 0.325, 0, 0, 0, 0.325, 0.487396, 0.130589, 0.582711)
 use_as_steering = true
-wheel_friction_slip = 5.0
 
 [node name="WheelRL" type="VehicleWheel3D" parent="VehicleBody3D"]
 transform = Transform3D(1, 0, 0, 0, 0.302255, 0, 0, 0, 0.313162, 0.51854, 0.134144, -0.483319)
 use_as_traction = true
-wheel_friction_slip = 4.0
 
 [node name="WheelRR" type="VehicleWheel3D" parent="VehicleBody3D"]
 transform = Transform3D(0.34, 0, 0, 0, 0.34, 0, 0, 0, 0.34, -0.475524, 0.160931, -0.450517)
 use_as_traction = true
-wheel_friction_slip = 4.0
 
 [node name="WheelFR" type="VehicleWheel3D" parent="VehicleBody3D"]
 transform = Transform3D(1.041, 0, 0, 0, 0.299, 0, 0, 0, 0.299, -0.498612, 0.139305, 0.597657)
 use_as_steering = true
-wheel_friction_slip = 5.0
 
 [node name="SpringArm3D" type="SpringArm3D" parent="VehicleBody3D"]
 transform = Transform3D(-0.996041, -0.0728179, 0.0509877, 0, 0.573576, 0.819152, -0.0888943, 0.815909, -0.571306, 0.255, 1.9, -4.095)
@@ -109,7 +108,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.0
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000281334, -0.657219, -0.00313276)
 stream = ExtResource("6_272bh")
 autoplay = true
-script = ExtResource("6_7mycd")
+script = SubResource("GDScript_kek77")
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("3_h2yge")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 22.2119, 0.14351, -1.43778)

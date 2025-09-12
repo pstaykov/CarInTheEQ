@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://mued56800r2d"
-path="res://.godot/imported/signboard_Normal.png-5d331d9278388935d418155c76e55aea.ctex"
+uid="uid://6kudrkh5w72l"
+path="res://.godot/imported/signboard_Roughness.png-f10e4ff04b96a55971ee83b1c86cf6af.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/signboard_Normal.png"
-dest_files=["res://.godot/imported/signboard_Normal.png-5d331d9278388935d418155c76e55aea.ctex"]
+source_file="res://3DModels/textures/signboard_Roughness.png"
+dest_files=["res://.godot/imported/signboard_Roughness.png-f10e4ff04b96a55971ee83b1c86cf6af.ctex"]
 
 [params]
 
