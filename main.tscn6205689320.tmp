@@ -129,19 +129,17 @@ offset_right = 125.432
 offset_bottom = 96.8
 
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
-offset_left = 378.0
-offset_right = 795.0
-offset_bottom = 177.0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 513.0
+offset_bottom = 514.0
 
 [node name="MiniMapViewport" type="SubViewport" parent="MiniMapViewportContainer"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(417, 122)
 render_target_update_mode = 4
 
 [node name="MiniMapCam" type="Camera3D" parent="MiniMapViewportContainer/MiniMapViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.720551, 0.693402, 0, -0.693402, 0.720551, 0, 31.115, 0)
 current = true
-fov = 30.0
 script = ExtResource("8_5vw27")
-car_path = NodePath("../../../VehicleBody3D")
