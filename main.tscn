@@ -16,7 +16,7 @@ ambient_light_color = Color(1, 0.962932, 0.785119, 1)
 size = Vector3(2.0274, 1, 0.994934)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
-size = Vector3(2.02046, 2.19301, 0.906738)
+size = Vector3(1.02294, 2.2668, 0.657196)
 
 [node name="Node3D" type="Node3D"]
 
@@ -44,10 +44,16 @@ shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="VehicleBody3D" type="VehicleBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660243, 0)
+mass = 300.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.32, 0)
 script = ExtResource("1_ig7tw")
+max_engine_force = 2000.0
+max_brake = 20.0
+steer_speed = 3.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
-transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, -0.490709, 0.500106, 0.360375)
+transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.0334751)
 shape = SubResource("BoxShape3D_1bvp3")
 
 [node name="WheelFL" type="VehicleWheel3D" parent="VehicleBody3D"]
