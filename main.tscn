@@ -43,10 +43,10 @@ transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 1, 0, -8, 0, -4.37136e-06, 
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="VehicleBody3D" type="VehicleBody3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660243, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000281334, 0.657219, -0.00313276)
 mass = 300.0
 center_of_mass_mode = 1
-center_of_mass = Vector3(0, -0.32, 0)
+center_of_mass = Vector3(0, -0.1, 0)
 script = ExtResource("1_ig7tw")
 max_engine_force = 2000.0
 max_brake = 20.0
