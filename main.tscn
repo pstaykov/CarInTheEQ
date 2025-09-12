@@ -1,10 +1,11 @@
-[gd_scene load_steps=9 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=14 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://panorama_image (2).png" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://low-poly_cartoon_style_car_03.glb" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://low_poly_retro_palm_tree.glb" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://blela7682g5op" path="res://signboard.fbx" id="6_7mycd"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("1_lquwl")
@@ -119,3 +120,6 @@ offset_left = -125.568
 offset_top = -97.2
 offset_right = 125.432
 offset_bottom = 96.8
+
+[node name="signboard" parent="." instance=ExtResource("6_7mycd")]
+transform = Transform3D(9.55, 0, 0, 0, 9.55, 0, 0, 0, 9.55, 17.6592, 0.0155037, -1.50754)
