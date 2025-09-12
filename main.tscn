@@ -6,6 +6,9 @@
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://low_poly_retro_palm_tree.glb" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
 [ext_resource type="Script" path="res://audio_stream_player_3d.gd" id="6_7mycd"]
+[ext_resource type="PackedScene" uid="uid://blela7682g5op" path="res://signboard.fbx" id="6_7mycd"]
+[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://sign_text.glb" id="7_272bh"]
+[ext_resource type="Script" uid="uid://cvoibrk8hv12p" path="res://audio_stream_player_3d.gd" id="6_7mycd"]
 [ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="6_272bh"]
 [ext_resource type="Script" path="res://mini_map_cam.gd" id="8_5vw27"]
 
@@ -110,7 +113,7 @@ autoplay = true
 script = ExtResource("6_7mycd")
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("3_h2yge")]
-transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 14.662, 0.621074, -1.44374)
+transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 22.2119, 0.14351, -1.43778)
 
 [node name="SprectrumSpawner_gd" type="Node3D" parent="."]
 script = ExtResource("4_1bvp3")
@@ -128,6 +131,11 @@ offset_top = -97.2
 offset_right = 125.432
 offset_bottom = 96.8
 
+[node name="signboard" parent="." instance=ExtResource("6_7mycd")]
+transform = Transform3D(9.55, 0, 0, 0, 9.55, 0, 0, 0, 9.55, 17.8828, 0.00168663, -1.5388)
+
+[node name="sign_text" parent="." instance=ExtResource("7_272bh")]
+transform = Transform3D(-0.3, 2.62268e-08, 0, 1.14641e-15, 1.31134e-08, -0.3, -2.62268e-08, -0.3, -1.31134e-08, 19.2034, 2.48691, -1.24572)
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
 offset_left = 378.0
 offset_right = 795.0
