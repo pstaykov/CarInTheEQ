@@ -9,7 +9,7 @@
 [ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="6_272bh"]
 [ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://sign_text.glb" id="7_272bh"]
 [ext_resource type="Script" path="res://mini_map_cam.gd" id="8_5vw27"]
-[ext_resource type="PackedScene" uid="uid://1qthohdnyvcj" path="res://signboard.fbx" id="10_4c57u"]
+[ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://signboard.fbx" id="10_4c57u"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("1_lquwl")
@@ -131,7 +131,7 @@ offset_right = 125.432
 offset_bottom = 96.8
 
 [node name="sign_text" parent="." instance=ExtResource("7_272bh")]
-transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, 19.1486, 2.75713, -1.32001)
+transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, 19.4344, 3.00067, -0.943636)
 
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
 offset_left = 378.0
@@ -150,3 +150,6 @@ current = true
 fov = 30.0
 script = ExtResource("8_5vw27")
 car_path = NodePath("../../../VehicleBody3D")
+
+[node name="signboard" parent="." instance=ExtResource("10_4c57u")]
+transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, 17.8417, -0.0289622, -1.2874)
