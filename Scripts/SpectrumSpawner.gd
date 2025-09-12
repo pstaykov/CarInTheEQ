@@ -61,17 +61,9 @@ func _spawn_row(values: Array, row_index: int) -> void:
 	var left_x := center_x - total_width * 0.5
 	var z := start_z - row_index * row_spacing
 
-	# --- tunnel gap selection ---
-	var gap_start: int
-	if last_gap_start == -1:
-		gap_start = 20  # first row always at band 20
-	else:
-		var offset_options = [-1, 0, 0, 0, 0, 1]  # smoother, only +/-1 at most
-		var offset = offset_options[randi() % offset_options.size()]
-		gap_start = clamp(last_gap_start + offset, 0, bands - gap_size)
-	last_gap_start = gap_start
+	# --- fixed tunnel always at bar 20 ---
+	var gap_start = 20
 
-	# --- spawn bars ---
 	for i in range(bands):
 		if i >= gap_start and i < gap_start + gap_size:
 			continue
@@ -84,20 +76,16 @@ func _spawn_row(values: Array, row_index: int) -> void:
 		bm.size = Vector3(band_width, 1.0, band_width)
 		mi.mesh = bm
 
-		# === Color by magnitude ===
+		# material with alpha 0 to start invisible
 		var mat := StandardMaterial3D.new()
-		var t = clamp(h / (height_scale * 0.8), 0.0, 1.0)  # normalize 0..1
-
-		var low_color = Color(0.0, 0.0, 1.0, 0.98)   # blue
-		var high_color = Color(0.5, 0.0, 0.5, 0.98)  # purple
+		var t: float = clamp(h / (height_scale * 0.8), 0.0, 1.0)
+		var low_color = Color(0.0, 0.0, 1.0, 0.0)   # start fully transparent
+		var high_color = Color(0.6, 0.0, 0.6, 0.0)
 		mat.albedo_color = low_color.lerp(high_color, t)
-
 		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		mat.flags_transparent = true
+		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 		mat.emission_enabled = true
 		mat.emission = mat.albedo_color
-		mat.emission_energy = 1.2
-
 		mi.material_override = mat
 
 		mi.transform.origin = Vector3(
@@ -108,6 +96,18 @@ func _spawn_row(values: Array, row_index: int) -> void:
 		mi.scale = Vector3(1.0, h, 1.0)
 
 		add_child(mi)
+
+		# --- tween fade in ---
+		mat.albedo_color.a = 0.0   # start fully transparent
+		mi.material_override = mat
+
+		var tween: Tween = create_tween()
+		tween.tween_property(mat, "albedo_color:a", 0.7, 0.5) # fade alpha to 0.7 over 0.5s
+		tween.tween_property(mat, "emission:a", 0.7, 0.5)
+
+
+
+
 
 	# --- add pink floor under the tunnel gap ---
 	var floor = MeshInstance3D.new()

@@ -1,17 +1,17 @@
 [gd_scene load_steps=18 format=3 uid="uid://j5as40ig7f3t"]
 
-[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="1_ig7tw"]
-[ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://panorama_image (2).png" id="1_lquwl"]
-[ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="4_1bvp3"]
-[ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="6_272bh"]
-[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_272bh"]
-[ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_5vw27"]
-[ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="10_4c57u"]
+[ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://img/panorama_image (2).png" id="1_ynf5e"]
+[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="2_hptm8"]
+[ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="3_d1ilt"]
+[ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="4_6iyac"]
+[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="5_fdnlq"]
+[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="6_jkdf5"]
+[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_wsu2k"]
+[ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_k12tt"]
+[ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="9_h1bgf"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
-panorama = ExtResource("1_lquwl")
+panorama = ExtResource("1_ynf5e")
 
 [sub_resource type="Sky" id="Sky_272bh"]
 sky_material = SubResource("PanoramaSkyMaterial_lquwl")
@@ -54,7 +54,7 @@ environment = SubResource("Environment_7dm0k")
 [node name="road" type="Node3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="road"]
-transform = Transform3D(-0.000437114, 0, -1000, 0, 1, 0, 10000, 0, -4.37114e-05, 0, -0.51, 0)
+transform = Transform3D(-1.38937e-06, 0, -31.61, 0, 1, 0, 31.785, 0, -1.38172e-06, 0, -0.51, 0)
 mesh = SubResource("BoxMesh_ig7tw")
 surface_material_override/0 = SubResource("StandardMaterial3D_1bvp3")
 
@@ -69,7 +69,7 @@ transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.000
 mass = 100.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.1, 0)
-script = ExtResource("1_ig7tw")
+script = ExtResource("2_hptm8")
 max_engine_force = 500.0
 max_brake = 20.0
 cameras = [NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam"), NodePath("SpringArmChaseCAm/ChaseCam")]
@@ -102,12 +102,12 @@ transform = Transform3D(1, 0, 0, 0, 0.767166, -0.64145, 0, 0.64145, 0.767165, 0,
 current = true
 fov = 75.3
 
-[node name="Sketchfab_Scene" parent="VehicleBody3D" instance=ExtResource("2_0xm2m")]
+[node name="Sketchfab_Scene" parent="VehicleBody3D" instance=ExtResource("3_d1ilt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.00787032)
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="VehicleBody3D"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000281334, -0.657219, -0.00313276)
-stream = ExtResource("6_272bh")
+stream = ExtResource("4_6iyac")
 autoplay = true
 script = SubResource("GDScript_kek77")
 
@@ -129,11 +129,11 @@ fov = 44.5
 transform = Transform3D(-0.726575, 0, -0.687088, 0, 1, 0, 0.687088, 0, -0.726575, -0.274211, 0.53339, -0.784377)
 light_energy = 4.012
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("3_h2yge")]
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("5_fdnlq")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 22.2119, 0.14351, -1.43778)
 
 [node name="SprectrumSpawner_gd" type="Node3D" parent="."]
-script = ExtResource("4_1bvp3")
+script = ExtResource("6_jkdf5")
 
 [node name="CanvasLayer" type="CanvasLayer" parent="."]
 
@@ -148,7 +148,7 @@ offset_top = -97.2
 offset_right = 125.432
 offset_bottom = 96.8
 
-[node name="sign_text" parent="." instance=ExtResource("7_272bh")]
+[node name="sign_text" parent="." instance=ExtResource("7_wsu2k")]
 transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, 19.4344, 3.00067, -0.943636)
 
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
@@ -166,8 +166,8 @@ render_target_update_mode = 4
 transform = Transform3D(1, 0, 0, 0, 0.720551, 0.693402, 0, -0.693402, 0.720551, 0, 31.115, 0)
 current = true
 fov = 30.0
-script = ExtResource("8_5vw27")
+script = ExtResource("8_k12tt")
 car_path = NodePath("../../../VehicleBody3D")
 
-[node name="signboard" parent="." instance=ExtResource("10_4c57u")]
+[node name="signboard" parent="." instance=ExtResource("9_h1bgf")]
 transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, 17.8417, -0.0289622, -1.2874)
