@@ -51,3 +51,21 @@ func _physics_process(delta: float) -> void:
 	if speed_label:
 		speed_label.text = "Speed: %d km/h" % speed_kmh
 		
+
+func _input(event: InputEvent) -> void:
+	if event.is_action_pressed("switch_camera"):
+		_switch_camera()
+
+
+func _switch_camera() -> void:
+	if cameras.is_empty():
+		return
+
+	# disable current cam
+	cameras[current_index].current = false
+
+	# cycle to next
+	current_index = (current_index + 1) % cameras.size()
+
+	# enable new cam
+	cameras[current_index].current = true
