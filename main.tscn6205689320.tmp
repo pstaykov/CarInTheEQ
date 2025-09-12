@@ -1,28 +1,13 @@
-<<<<<<< HEAD
-[gd_scene load_steps=9 format=3 uid="uid://j5as40ig7f3t"]
-=======
-[gd_scene load_steps=14 format=3 uid="uid://j5as40ig7f3t"]
-<<<<<<< HEAD
->>>>>>> parent of c8dd328 (Merge branch 'main' of https://github.com/pstaykov/CarInTheEQ)
-=======
 [gd_scene load_steps=16 format=3 uid="uid://j5as40ig7f3t"]
->>>>>>> parent of 2a38e3c (Revert "Merge branch 'main' of https://github.com/pstaykov/CarInTheEQ")
 
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://panorama_image (2).png" id="1_lquwl"]
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://low-poly_cartoon_style_car_03.glb" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://low_poly_retro_palm_tree.glb" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
-<<<<<<< HEAD
-=======
-[ext_resource type="PackedScene" uid="uid://blela7682g5op" path="res://signboard.fbx" id="6_7mycd"]
-<<<<<<< HEAD
->>>>>>> parent of c8dd328 (Merge branch 'main' of https://github.com/pstaykov/CarInTheEQ)
-=======
 [ext_resource type="Script" uid="uid://cvoibrk8hv12p" path="res://audio_stream_player_3d.gd" id="6_7mycd"]
 [ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="6_272bh"]
 [ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://mini_map_cam.gd" id="8_5vw27"]
->>>>>>> parent of 2a38e3c (Revert "Merge branch 'main' of https://github.com/pstaykov/CarInTheEQ")
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("1_lquwl")
@@ -41,7 +26,6 @@ ambient_light_energy = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
 depth_draw_mode = 2
-albedo_color = Color(0, 0, 0, 1)
 metallic = 0.1
 metallic_specular = 0.15
 
@@ -55,6 +39,7 @@ size = Vector3(1.02294, 2.2668, 0.657196)
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.966358, 0.0446066, -0.253301, 0.222371, 0.343551, 0.91348, -0.128074, 0.936982, -0.322098, 0, 0, 0)
+light_energy = 11.64
 light_indirect_energy = 2.245
 shadow_enabled = true
 
@@ -142,29 +127,19 @@ offset_left = -125.568
 offset_top = -97.2
 offset_right = 125.432
 offset_bottom = 96.8
-<<<<<<< HEAD
-=======
 
-[node name="signboard" parent="." instance=ExtResource("6_7mycd")]
-transform = Transform3D(9.55, 0, 0, 0, 9.55, 0, 0, 0, 9.55, 17.6592, 0.0155037, -1.50754)
-<<<<<<< HEAD
->>>>>>> parent of c8dd328 (Merge branch 'main' of https://github.com/pstaykov/CarInTheEQ)
-=======
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
-offset_left = 378.0
-offset_right = 795.0
-offset_bottom = 177.0
+offset_left = 1.0
+offset_top = 2.0
+offset_right = 513.0
+offset_bottom = 514.0
 
 [node name="MiniMapViewport" type="SubViewport" parent="MiniMapViewportContainer"]
 transparent_bg = true
 handle_input_locally = false
-size = Vector2i(417, 122)
 render_target_update_mode = 4
 
 [node name="MiniMapCam" type="Camera3D" parent="MiniMapViewportContainer/MiniMapViewport"]
 transform = Transform3D(1, 0, 0, 0, 0.720551, 0.693402, 0, -0.693402, 0.720551, 0, 31.115, 0)
 current = true
-fov = 30.0
 script = ExtResource("8_5vw27")
-car_path = NodePath("../../../VehicleBody3D")
->>>>>>> parent of 2a38e3c (Revert "Merge branch 'main' of https://github.com/pstaykov/CarInTheEQ")
