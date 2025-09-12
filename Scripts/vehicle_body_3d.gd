@@ -6,9 +6,11 @@ extends VehicleBody3D
 @export var max_steer: float = 0.4     # radians (~34°) at low speed
 @export var steer_speed: float = 2.0   # how fast steering follows input
 @export var max_speed: float = 14.0    # m/s → 50 km/h
+@export var cameras: Array[Camera3D]   # assign in Inspector
 
 # === RUNTIME ===
 var _steer_target := 0.0
+var current_index := 0
 
 # reference to UI label (adjust path if needed)
 @onready var speed_label: Label = get_tree().root.get_node("Main/CanvasLayer/SpeedLabel")
@@ -48,3 +50,4 @@ func _physics_process(delta: float) -> void:
 	var speed_kmh = speed * 3.6
 	if speed_label:
 		speed_label.text = "Speed: %d km/h" % speed_kmh
+		
