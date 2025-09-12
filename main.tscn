@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://low-poly_cartoon_style_car_03.glb" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://low_poly_retro_palm_tree.glb" id="3_h2yge"]
-[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
+[ext_resource type="Script" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
 
 [sub_resource type="Environment" id="Environment_7dm0k"]
 background_mode = 1
@@ -11,10 +11,67 @@ background_color = Color(0.710278, 0.53413, 0.619917, 1)
 ambient_light_source = 3
 ambient_light_color = Color(1, 0.962932, 0.785119, 1)
 
-[sub_resource type="BoxMesh" id="BoxMesh_ig7tw"]
+[sub_resource type="GDScript" id="GDScript_1bvp3"]
+script/source = "# Road.gd (attach to the Road Node3D)
+extends Node3D
 
-[sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
-size = Vector3(125.401, 1, 0.994934)
+
+@export var segment_length := 1.0    # length of each quad piece along the path
+@export var width := 10.0             # road width
+@export var segments := 800          # number of segments (increase for smoother road)
+@export var align_rotate_x := true   # rotate plane so it lies flat on XZ
+
+func _ready():
+	var path := get_node(\"Path3D\") as Path3D
+	if not path:
+		push_error(\"path_node isn't a Path3D.\")
+		return
+
+	# create a reusable plane mesh for each segment
+	var plane := PlaneMesh.new()
+	plane.size = Vector2(width, segment_length)
+
+	# optionally create a material or texture here:
+	var mat = StandardMaterial3D.new()
+	mat.albedo_texture = preload(\"res://Road_texture.jpg\")
+	plane.material = mat
+
+	# cleanup any previous children used for segments
+	for c in path.get_children():
+		if c is PathFollow3D:
+			c.queue_free()
+
+	# create segments
+	for i in range(segments):
+		var pf := PathFollow3D.new()
+		path.add_child(pf)
+		pf.progress_ratio = float(i) / max(1, segments - 1)
+		
+
+		var mi := MeshInstance3D.new()
+		mi.mesh = plane.duplicate()  # instance of the plane
+		if align_rotate_x:
+			# plane default faces +Z; rotate to lie flat on XZ plane
+			mi.rotate_x(deg_to_rad(90.0))
+			pf.add_child(mi)
+		
+			var body := StaticBody3D.new()
+			var col := CollisionShape3D.new()
+			var box := BoxShape3D.new()
+			box.size = Vector3(width, 0.1, segment_length) # thin box covering the road piece
+			col.shape = box
+			body.add_child(col)
+			pf.add_child(body)
+
+		# optionally adjust UV scale or material to tile texture nicely
+"
+
+[sub_resource type="Curve3D" id="Curve3D_lquwl"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 0, 0.018, 0, 0, 0, 0, 0, 0, 4.95288, 0.00396729, 10.5807, 0, 0, 0, 0, 0, 0, 9.66506, 0.00774384, 22.7686, 0, 0, 0, 0, 0, 0, 7.63159, 0.00614166, 33.8941, 0, 0, 0, 0, 0, 0, 3.58225, 0.00294495, 45.2792, 0, 0, 0, 0, 0, 0, -4.58488, -0.00354767, 56.2195, 0, 0, 0, 0, 0, 0, -4.41943, -0.00340271, 62.2661, 0, 0, 0, 0, 0, 0, 3.87088, 0.00323486, 83.4855, 0, 0, 0, 0, 0, 0, 3.68171, 0.00310516, 92.0728, 0, 0, 0, 0, 0, 0, -26.8599, -0.286865, 121.57, 0, 0, 0, 0, 0, 0, -39.235, -0.403763, 178.87, 0, 0, 0, 0, 0, 0, -5.65094, -0.0836945, 207.292),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 12
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
@@ -32,16 +89,13 @@ shadow_enabled = true
 environment = SubResource("Environment_7dm0k")
 
 [node name="road" type="Node3D" parent="."]
+script = SubResource("GDScript_1bvp3")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="road"]
-transform = Transform3D(-0.000437114, 0, -98.595, 0, 1, 0, 10000, 0, -4.30972e-06, 0, 0, 0)
-mesh = SubResource("BoxMesh_ig7tw")
+[node name="Path3D" type="Path3D" parent="road"]
+curve = SubResource("Curve3D_lquwl")
 
-[node name="StaticBody3D" type="StaticBody3D" parent="road"]
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="road/StaticBody3D"]
-transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 1, 0, -8, 0, -4.37136e-06, -2.15713e-05, 0, -493.495)
-shape = SubResource("BoxShape3D_0xm2m")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="road/Path3D"]
+transform = Transform3D(1000, 0, 0, 0, 10, 0, 0, 0, 1000, 0, 0, 0)
 
 [node name="VehicleBody3D" type="VehicleBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.000281334, 0.657219, -0.00313276)
@@ -54,7 +108,7 @@ max_brake = 20.0
 steer_speed = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
-transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.0334751)
+transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.013406)
 shape = SubResource("BoxShape3D_1bvp3")
 
 [node name="WheelFL" type="VehicleWheel3D" parent="VehicleBody3D"]
