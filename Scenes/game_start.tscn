@@ -1,7 +1,7 @@
 [gd_scene load_steps=4 format=3 uid="uid://dvvmqyrcyfwj6"]
 
-[ext_resource type="Script" uid="uid://pntpsqhpvfaa" path="res://game_start.gd" id="1_sn725"]
-[ext_resource type="Texture2D" uid="uid://cxr0dgq6w10lr" path="res://Start_menu_screen.jpg" id="2_dpf5s"]
+[ext_resource type="Script" uid="uid://pntpsqhpvfaa" path="res://Scripts/game_start.gd" id="1_sn725"]
+[ext_resource type="Texture2D" uid="uid://cxr0dgq6w10lr" path="res://img/Start_menu_screen.jpg" id="2_dpf5s"]
 [ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="3_26ewq"]
 
 [node name="UI_root" type="Control"]
