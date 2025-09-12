@@ -1,8 +1,9 @@
-[gd_scene load_steps=8 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=9 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://low-poly_cartoon_style_car_03.glb" id="2_0xm2m"]
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://low_poly_retro_palm_tree.glb" id="3_h2yge"]
+[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
 
 [sub_resource type="Environment" id="Environment_7dm0k"]
 background_mode = 1
@@ -13,7 +14,7 @@ ambient_light_color = Color(1, 0.962932, 0.785119, 1)
 [sub_resource type="BoxMesh" id="BoxMesh_ig7tw"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
-size = Vector3(2.0274, 1, 0.994934)
+size = Vector3(125.401, 1, 0.994934)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
@@ -33,13 +34,13 @@ environment = SubResource("Environment_7dm0k")
 [node name="road" type="Node3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="road"]
-transform = Transform3D(-6.32285e-07, 0, -100, 0, 1, 0, 14.465, 0, -4.37114e-06, 0, 0, 0)
+transform = Transform3D(-0.000437114, 0, -98.595, 0, 1, 0, 10000, 0, -4.30972e-06, 0, 0, 0)
 mesh = SubResource("BoxMesh_ig7tw")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="road"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="road/StaticBody3D"]
-transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 1, 0, -8, 0, -4.37136e-06, 0, 0, 0)
+transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 1, 0, -8, 0, -4.37136e-06, -2.15713e-05, 0, -493.495)
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="VehicleBody3D" type="VehicleBody3D" parent="."]
@@ -50,7 +51,7 @@ center_of_mass = Vector3(0, -0.1, 0)
 script = ExtResource("1_ig7tw")
 max_engine_force = 2000.0
 max_brake = 20.0
-steer_speed = 3.0
+steer_speed = 2.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
 transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.0334751)
@@ -85,3 +86,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.0
 
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("3_h2yge")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 14.662, 0.621074, -1.44374)
+
+[node name="SprectrumSpawner_gd" type="Node3D" parent="."]
+script = ExtResource("4_1bvp3")
