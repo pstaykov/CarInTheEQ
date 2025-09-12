@@ -1,4 +1,4 @@
-[gd_scene load_steps=18 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=19 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://panorama_image (2).png" id="1_lquwl"]
@@ -9,6 +9,7 @@
 [ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_272bh"]
 [ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_5vw27"]
 [ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="10_4c57u"]
+[ext_resource type="PackedScene" uid="uid://dyp058jv1y670" path="res://Decorations/palms.tscn" id="10_efxa6"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("1_lquwl")
@@ -170,3 +171,7 @@ car_path = NodePath("../../../VehicleBody3D")
 
 [node name="signboard" parent="." instance=ExtResource("10_4c57u")]
 transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, 17.8417, -0.0289622, -1.2874)
+
+[node name="Roadside_deco" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" parent="Roadside_deco" instance=ExtResource("10_efxa6")]
