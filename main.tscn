@@ -1,7 +1,8 @@
-[gd_scene load_steps=7 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=8 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://low-poly_cartoon_style_car_03.glb" id="2_0xm2m"]
+[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://low_poly_retro_palm_tree.glb" id="3_h2yge"]
 
 [sub_resource type="Environment" id="Environment_7dm0k"]
 background_mode = 1
@@ -75,3 +76,6 @@ fov = 114.305
 
 [node name="Sketchfab_Scene" parent="VehicleBody3D" instance=ExtResource("2_0xm2m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.00787032)
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("3_h2yge")]
+transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 14.662, 0.621074, -1.44374)
