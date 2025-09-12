@@ -46,7 +46,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.660243, 0)
 script = ExtResource("1_ig7tw")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
-transform = Transform3D(0.9, 0, 0, 0, 0.3, 0, 0, 0, 1.8, -0.00800627, 0.466482, 0.00839811)
+transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, -0.490709, 0.500106, 0.360375)
 shape = SubResource("BoxShape3D_1bvp3")
 
 [node name="WheelFL" type="VehicleWheel3D" parent="VehicleBody3D"]
@@ -74,3 +74,4 @@ current = true
 fov = 114.305
 
 [node name="Sketchfab_Scene" parent="VehicleBody3D" instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.00787032)
