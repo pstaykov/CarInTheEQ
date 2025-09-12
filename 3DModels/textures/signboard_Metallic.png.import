@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dqc7bg1adwc7d"
-path="res://.godot/imported/signboard_AO.png-ba8e57e757e1f0f81ed9afc13770a977.ctex"
+uid="uid://kjw7iki3v8vu"
+path="res://.godot/imported/signboard_Metallic.png-f13b9866c71171d4af6d41d3d3e054c0.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://textures/signboard_AO.png"
-dest_files=["res://.godot/imported/signboard_AO.png-ba8e57e757e1f0f81ed9afc13770a977.ctex"]
+source_file="res://3DModels/textures/signboard_Metallic.png"
+dest_files=["res://.godot/imported/signboard_Metallic.png-f13b9866c71171d4af6d41d3d3e054c0.ctex"]
 
 [params]
 

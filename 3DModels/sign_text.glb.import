@@ -4,12 +4,12 @@ importer="scene"
 importer_version=1
 type="PackedScene"
 uid="uid://bdosa12yxj7m"
-path="res://.godot/imported/sign_text.glb-ddd53f3771e09f2f70884bd0892f28d6.scn"
+path="res://.godot/imported/sign_text.glb-003a7d7f46e28adf7ecb434ad7f79dc7.scn"
 
 [deps]
 
-source_file="res://sign_text.glb"
-dest_files=["res://.godot/imported/sign_text.glb-ddd53f3771e09f2f70884bd0892f28d6.scn"]
+source_file="res://3DModels/sign_text.glb"
+dest_files=["res://.godot/imported/sign_text.glb-003a7d7f46e28adf7ecb434ad7f79dc7.scn"]
 
 [params]
 
