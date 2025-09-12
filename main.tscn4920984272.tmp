@@ -1,4 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=15 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://panorama_image (2).png" id="1_lquwl"]
@@ -7,7 +7,6 @@
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
 [ext_resource type="Script" uid="uid://cvoibrk8hv12p" path="res://audio_stream_player_3d.gd" id="6_7mycd"]
 [ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="6_272bh"]
-[ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://mini_map_cam.gd" id="8_5vw27"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("1_lquwl")
@@ -26,6 +25,7 @@ ambient_light_energy = 0.0
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
 depth_draw_mode = 2
+albedo_color = Color(0, 0, 0, 1)
 metallic = 0.1
 metallic_specular = 0.15
 
@@ -103,12 +103,6 @@ fov = 75.3
 [node name="Sketchfab_Scene" parent="VehicleBody3D" instance=ExtResource("2_0xm2m")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.00787032)
 
-[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="VehicleBody3D"]
-transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000281334, -0.657219, -0.00313276)
-stream = ExtResource("6_272bh")
-autoplay = true
-script = ExtResource("6_7mycd")
-
 [node name="Sketchfab_Scene" parent="." instance=ExtResource("3_h2yge")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 14.662, 0.621074, -1.44374)
 
@@ -128,20 +122,7 @@ offset_top = -97.2
 offset_right = 125.432
 offset_bottom = 96.8
 
-[node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
-offset_left = 378.0
-offset_right = 795.0
-offset_bottom = 177.0
-
-[node name="MiniMapViewport" type="SubViewport" parent="MiniMapViewportContainer"]
-transparent_bg = true
-handle_input_locally = false
-size = Vector2i(417, 122)
-render_target_update_mode = 4
-
-[node name="MiniMapCam" type="Camera3D" parent="MiniMapViewportContainer/MiniMapViewport"]
-transform = Transform3D(1, 0, 0, 0, 0.720551, 0.693402, 0, -0.693402, 0.720551, 0, 31.115, 0)
-current = true
-fov = 30.0
-script = ExtResource("8_5vw27")
-car_path = NodePath("../../../VehicleBody3D")
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="."]
+stream = ExtResource("6_272bh")
+autoplay = true
+script = ExtResource("6_7mycd")
