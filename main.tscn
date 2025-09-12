@@ -1,5 +1,4 @@
-[gd_scene load_steps=16 format=3 uid="uid://j5as40ig7f3t"]
-[gd_scene load_steps=17 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=18 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://vehicle_body_3d.gd" id="1_ig7tw"]
 [ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://panorama_image (2).png" id="1_lquwl"]
@@ -7,12 +6,10 @@
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://low_poly_retro_palm_tree.glb" id="3_h2yge"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://SpectrumSpawner.gd" id="4_1bvp3"]
 [ext_resource type="Script" path="res://audio_stream_player_3d.gd" id="6_7mycd"]
-[ext_resource type="PackedScene" uid="uid://blela7682g5op" path="res://signboard.fbx" id="6_7mycd"]
-[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://sign_text.glb" id="7_272bh"]
-[ext_resource type="Script" uid="uid://cvoibrk8hv12p" path="res://audio_stream_player_3d.gd" id="6_7mycd"]
 [ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="6_272bh"]
 [ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://sign_text.glb" id="7_272bh"]
 [ext_resource type="Script" path="res://mini_map_cam.gd" id="8_5vw27"]
+[ext_resource type="PackedScene" uid="uid://1qthohdnyvcj" path="res://signboard.fbx" id="10_4c57u"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("1_lquwl")
@@ -133,22 +130,8 @@ offset_top = -97.2
 offset_right = 125.432
 offset_bottom = 96.8
 
-[node name="signboard" parent="." instance=ExtResource("6_7mycd")]
-[node name="signboard" parent="."]
-_import_path = NodePath("")
-unique_name_in_owner = false
-process_mode = 0
-process_priority = 0
-process_physics_priority = 0
-process_thread_group = 0
-physics_interpolation_mode = 0
-auto_translate_mode = 0
-editor_description = ""
-transform = Transform3D(9.55, 0, 0, 0, 9.55, 0, 0, 0, 9.55, 17.8828, 0.00168663, -1.5388)
-script = null
-
 [node name="sign_text" parent="." instance=ExtResource("7_272bh")]
-transform = Transform3D(-0.3, 2.62268e-08, 0, 1.14641e-15, 1.31134e-08, -0.3, -2.62268e-08, -0.3, -1.31134e-08, 19.2034, 2.48691, -1.24572)
+transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, 19.1486, 2.75713, -1.32001)
 
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
 offset_left = 378.0
