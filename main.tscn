@@ -151,6 +151,7 @@ transform = Transform3D(9.55, 0, 0, 0, 9.55, 0, 0, 0, 9.55, 17.6592, 0.0155037, 
 <<<<<<< HEAD
 >>>>>>> parent of c8dd328 (Merge branch 'main' of https://github.com/pstaykov/CarInTheEQ)
 =======
+
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
 offset_left = 378.0
 offset_right = 795.0
@@ -168,4 +169,3 @@ current = true
 fov = 30.0
 script = ExtResource("8_5vw27")
 car_path = NodePath("../../../VehicleBody3D")
->>>>>>> parent of 2a38e3c (Revert "Merge branch 'main' of https://github.com/pstaykov/CarInTheEQ")
