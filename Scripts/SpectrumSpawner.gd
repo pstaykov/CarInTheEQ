@@ -7,34 +7,11 @@ extends Node3D
 @export var spacing: float = 10.0             # distance between decorations
 @export var offset_z: float = 5.0             # how far ahead to spawn
 
-# working palm system
-#var last_decoration_z := 0
-#
-#func _process(delta: float) -> void:
-	#var car := $"../Car" # adjust path
-	#if not car:
-		#return
-#
-	#var car_z :float = -car.global_transform.origin.z
-	#if car_z - last_decoration_z > spacing:
-		#spawn_decorations(car_z + offset_z)
-		#last_decoration_z = car_z
-#
-#func spawn_decorations(z_pos: float) -> void:
-	#if decorations.is_empty():
-		#return
-#
-	## left side
-	#var left_scene: PackedScene = decorations.pick_random()
-	#var left := left_scene.instantiate()
-	#left.global_transform.origin = Vector3(-road_width, 0, -z_pos)
-	#add_child(left)
-#
-	## right side
-	#var right_scene: PackedScene = decorations.pick_random()
-	#var right := right_scene.instantiate()
-	#right.global_transform.origin = Vector3(road_width, 0, -z_pos)
-	#add_child(right)
+# sun
+@export var sun_scene: PackedScene = preload("res://Decorations/Sun.tscn")
+var sun: Node3D= null
+
+
 
 # === CONFIG ===
 @export var bar_width: float = 3
@@ -187,3 +164,17 @@ func _spawn_row(values: Array) -> void:
 		var right_edge_x = left_x + (tunnel_pos + gap_size) * bar_width
 		palm_right.transform.origin = Vector3(right_edge_x - 2.0, ground_y, z_offset)
 		add_child(palm_right)
+		
+		# --- Sun behind the gap ---
+	if sun == null and sun_scene:
+		sun = sun_scene.instantiate()
+		add_child(sun)
+		sun.scale = Vector3(30, 30, 1) # make it big
+
+	if sun:
+		# Position the sun directly at the horizon behind the tunnel gap
+		var sun_x = gap_x
+		var sun_y = ground_y + sun.scale.y * 0.4  # half risen
+		var sun_z = z_offset - row_spacing * 500   # slightly behind the latest floor
+		sun.transform.origin = Vector3(sun_x, sun_y, sun_z)
+		
