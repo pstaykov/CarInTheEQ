@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="5_fdnlq"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="6_jkdf5"]
 [ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_wsu2k"]
-[ext_resource type="Script" path="res://Scripts/VieportContainer.gd" id="8_hptm8"]
+[ext_resource type="Script" uid="uid://ml46sid6l4o4" path="res://Scripts/VieportContainer.gd" id="8_hptm8"]
 [ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_k12tt"]
 [ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="9_h1bgf"]
 
@@ -78,7 +78,7 @@ center_of_mass = Vector3(0, -0.1, 0)
 script = ExtResource("2_hptm8")
 max_engine_force = 500.0
 max_brake = 20.0
-cameras = [NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam"), NodePath("SpringArmChaseCAm/ChaseCam")]
+cameras = [NodePath("behindCam"), NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam"), NodePath("SpringArmChaseCAm/ChaseCam")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Car"]
 transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.0334751)
@@ -136,6 +136,9 @@ light_energy = 16.0
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Car"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000281334, -0.657219, -0.00313276)
+
+[node name="behindCam" type="Camera3D" parent="Car"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.66795e-07, 1.1683, 3.05157)
 
 [node name="ThePalmOfMemories" parent="." instance=ExtResource("5_fdnlq")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 22.2119, 0.14351, -1.43778)
