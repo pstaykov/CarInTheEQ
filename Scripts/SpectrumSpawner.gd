@@ -102,11 +102,28 @@ func _spawn_row(values: Array) -> void:
 
 		var h: float = float(values[i]) * height_scale
 		h = max(h, 1.0)
+		
+		# Create a StaticBody3D to hold the mesh and collision
+		var body := StaticBody3D.new()
 
+		# Create the mesh
 		var bar := MeshInstance3D.new()
 		var mesh := BoxMesh.new()
 		mesh.size = Vector3(bar_width, 1.0, row_spacing)
 		bar.mesh = mesh
+
+		# Create the collision shape
+		var collision := CollisionShape3D.new()
+		var shape := BoxShape3D.new()
+		shape.size = mesh.size
+		collision.shape = shape
+
+		# Add mesh and collision to the body
+		body.add_child(bar)
+		body.add_child(collision)
+
+		# Add the body to the scene
+		add_child(body)
 
 		# material
 		var mat := StandardMaterial3D.new()
@@ -122,14 +139,13 @@ func _spawn_row(values: Array) -> void:
 		mat.emission_energy_multiplier = 1.2
 		bar.material_override = mat
 
-		bar.transform.origin = Vector3(
+		# Position and scale the StaticBody3D (not just the MeshInstance3D)
+		body.transform.origin = Vector3(
 			left_x + i * bar_width,
 			ground_y + h * 0.5,
 			z_offset
 		)
-		bar.scale = Vector3(1.0, h, 1.0)
-
-		add_child(bar)
+		body.scale = Vector3(1.0, h, 1.0)
 
 	# --- Pink floor strip under the tunnel ---
 	var floor := MeshInstance3D.new()
@@ -165,7 +181,7 @@ func _spawn_row(values: Array) -> void:
 		palm_right.transform.origin = Vector3(right_edge_x - 2.0, ground_y, z_offset)
 		add_child(palm_right)
 		
-		# --- Sun behind the gap ---
+	# --- Sun behind the gap ---
 	if sun == null and sun_scene:
 		sun = sun_scene.instantiate()
 		add_child(sun)
@@ -177,4 +193,3 @@ func _spawn_row(values: Array) -> void:
 		var sun_y = ground_y + sun.scale.y * 0.4  # half risen
 		var sun_z = z_offset - row_spacing * 500   # slightly behind the latest floor
 		sun.transform.origin = Vector3(sun_x, sun_y, sun_z)
-		
