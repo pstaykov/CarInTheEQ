@@ -24,5 +24,3 @@
 - Listen **and** look at the music as it pulses through the EQ  
 
 ---
-
-Feel free to add installation instructions, controls, or dev notes below if you want to expand it further. Want help writing those too?
