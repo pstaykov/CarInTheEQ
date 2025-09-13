@@ -1,0 +1,18 @@
+[gd_scene load_steps=3 format=3 uid="uid://k42x8feig5q3"]
+
+[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="1_55ysc"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_55ysc"]
+size = Vector3(2.06738, 13.8553, 1.92093)
+
+[node name="palm" type="Node3D"]
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+disable_mode = 1
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.279226, 6.52153, -0.195194)
+shape = SubResource("BoxShape3D_55ysc")
+
+[node name="Sketchfab_Scene" parent="StaticBody3D" instance=ExtResource("1_55ysc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.221121, -0.00425339, -0.131947)
