@@ -1,0 +1,190 @@
+[gd_scene load_steps=18 format=3 uid="uid://j5as40ig7f3t"]
+
+[ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://img/panorama_image (2).png" id="1_ynf5e"]
+[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="2_hptm8"]
+[ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="3_d1ilt"]
+[ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="4_6iyac"]
+[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="5_fdnlq"]
+[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="6_jkdf5"]
+[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_wsu2k"]
+[ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_k12tt"]
+[ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="9_h1bgf"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
+panorama = ExtResource("1_ynf5e")
+
+[sub_resource type="Sky" id="Sky_272bh"]
+sky_material = SubResource("PanoramaSkyMaterial_lquwl")
+
+[sub_resource type="Environment" id="Environment_7dm0k"]
+background_mode = 2
+sky = SubResource("Sky_272bh")
+ambient_light_source = 3
+ambient_light_color = Color(1, 0.962932, 0.785119, 1)
+ambient_light_energy = 0.0
+glow_intensity = 3.92
+
+[sub_resource type="BoxMesh" id="BoxMesh_ig7tw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1bvp3"]
+depth_draw_mode = 2
+metallic = 0.1
+metallic_specular = 0.15
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
+size = Vector3(125.401, 1, 35.324)
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
+size = Vector3(1.02294, 2.2668, 0.657196)
+
+[sub_resource type="GDScript" id="GDScript_kek77"]
+script/source = "extends AudioStreamPlayer3D
+"
+
+[node name="Main" type="Node3D"]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.966358, 0.0446066, -0.253301, 0.222371, 0.343551, 0.91348, -0.128074, 0.936982, -0.322098, 0, 0, 0)
+light_energy = 11.64
+light_indirect_energy = 2.245
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_7dm0k")
+
+[node name="road" type="Node3D" parent="."]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="road"]
+transform = Transform3D(-1.38937e-06, 0, -31.61, 0, 1, 0, 31.785, 0, -1.38172e-06, 0, -0.51, 0)
+mesh = SubResource("BoxMesh_ig7tw")
+surface_material_override/0 = SubResource("StandardMaterial3D_1bvp3")
+
+[node name="StaticBody3D" type="StaticBody3D" parent="road"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="road/StaticBody3D"]
+transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 0.365, 0, -8, 0, -4.37136e-06, -3.59, -0.185, -493.495)
+shape = SubResource("BoxShape3D_0xm2m")
+
+[node name="VehicleBody3D" type="VehicleBody3D" parent="." node_paths=PackedStringArray("cameras")]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.000281334, 0.657219, -0.00313276)
+mass = 100.0
+center_of_mass_mode = 1
+center_of_mass = Vector3(0, -0.1, 0)
+script = ExtResource("2_hptm8")
+max_engine_force = 500.0
+max_brake = 20.0
+cameras = [NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam"), NodePath("SpringArmChaseCAm/ChaseCam")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="VehicleBody3D"]
+transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.0334751)
+shape = SubResource("BoxShape3D_1bvp3")
+
+[node name="WheelFL" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(0.325, 0, 0, 0, 0.325, 0, 0, 0, 0.325, 0.487396, 0.130589, 0.582711)
+use_as_steering = true
+
+[node name="WheelRL" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1, 0, 0, 0, 0.302255, 0, 0, 0, 0.313162, 0.51854, 0.134144, -0.483319)
+use_as_traction = true
+
+[node name="WheelRR" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(0.34, 0, 0, 0, 0.34, 0, 0, 0, 0.34, -0.475524, 0.160931, -0.450517)
+use_as_traction = true
+
+[node name="WheelFR" type="VehicleWheel3D" parent="VehicleBody3D"]
+transform = Transform3D(1.041, 0, 0, 0, 0.299, 0, 0, 0, 0.299, -0.498612, 0.139305, 0.597657)
+use_as_steering = true
+
+[node name="SpringArmChaseCAm" type="SpringArm3D" parent="VehicleBody3D"]
+transform = Transform3D(-0.996041, -0.0728179, 0.0509877, 0, 0.573576, 0.819152, -0.0888943, 0.815909, -0.571306, 0.255, 1.9, -4.095)
+
+[node name="ChaseCam" type="Camera3D" parent="VehicleBody3D/SpringArmChaseCAm"]
+transform = Transform3D(1, 0, 0, 0, 0.767166, -0.64145, 0, 0.64145, 0.767165, 0, 0.652, -0.457)
+current = true
+fov = 75.3
+
+[node name="Sketchfab_Scene" parent="VehicleBody3D" instance=ExtResource("3_d1ilt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.00787032)
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="VehicleBody3D"]
+transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000281334, -0.657219, -0.00313276)
+stream = ExtResource("4_6iyac")
+autoplay = true
+script = SubResource("GDScript_kek77")
+
+[node name="HoodCam" type="Camera3D" parent="VehicleBody3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -4.05998e-08, 0.471037, 0.46411)
+fov = 92.0
+
+[node name="FirstPersonCam" type="Camera3D" parent="VehicleBody3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, 0.225396, 0.554704, 1.97906e-08)
+
+[node name="frontCam" type="Camera3D" parent="VehicleBody3D"]
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -7.94244e-08, 0.239407, 0.90704)
+
+[node name="TopCam" type="Camera3D" parent="VehicleBody3D"]
+transform = Transform3D(-1, 8.74228e-08, 3.82137e-15, 0, -4.37114e-08, 1, 8.74228e-08, 1, 4.37114e-08, 0, 11, 0)
+fov = 44.5
+
+[node name="SpotLight3D" type="SpotLight3D" parent="VehicleBody3D"]
+transform = Transform3D(-0.726575, 0, -0.687088, 0, 1, 0, 0.687088, 0, -0.726575, -0.274211, 0.53339, -0.784377)
+light_energy = 4.012
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="VehicleBody3D"]
+transform = Transform3D(-0.949825, -0.197823, -0.242279, -0.308836, 0.470494, 0.826593, -0.0495284, 0.859943, -0.507982, -0.13049, 0.242151, 0.73144)
+light_color = Color(1, 1, 0.239216, 1)
+light_energy = 16.0
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("5_fdnlq")]
+transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 22.2119, 0.14351, -1.43778)
+
+[node name="SprectrumSpawner" type="Node3D" parent="."]
+script = ExtResource("6_jkdf5")
+json_path = null
+timer_interval = null
+band_width = null
+band_gap = null
+row_spacing = null
+height_scale = null
+ground_y = null
+center_x = null
+start_z = null
+gap_size = null
+fade_in_time = null
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="SpeedLabel" type="Label" parent="CanvasLayer"]
+anchors_preset = -1
+anchor_left = 0.109
+anchor_top = 0.15
+anchor_right = 0.109
+anchor_bottom = 0.15
+offset_left = -125.568
+offset_top = -97.2
+offset_right = 125.432
+offset_bottom = 96.8
+
+[node name="sign_text" parent="." instance=ExtResource("7_wsu2k")]
+transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, 19.4344, 3.00067, -0.943636)
+
+[node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
+offset_left = 378.0
+offset_right = 795.0
+offset_bottom = 177.0
+
+[node name="MiniMapViewport" type="SubViewport" parent="MiniMapViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(417, 122)
+render_target_update_mode = 4
+
+[node name="MiniMapCam" type="Camera3D" parent="MiniMapViewportContainer/MiniMapViewport"]
+transform = Transform3D(1, 0, 0, 0, 0.720551, 0.693402, 0, -0.693402, 0.720551, 0, 31.115, 0)
+current = true
+fov = 30.0
+script = ExtResource("8_k12tt")
+car_path = NodePath("../../../VehicleBody3D")
+
+[node name="signboard" parent="." instance=ExtResource("9_h1bgf")]
+transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, 17.8417, -0.0289622, -1.2874)
