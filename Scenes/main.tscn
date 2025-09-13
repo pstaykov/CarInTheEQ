@@ -1,5 +1,6 @@
-[gd_scene load_steps=16 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=17 format=3 uid="uid://j5as40ig7f3t"]
 
+[ext_resource type="Script" uid="uid://dpmi4b802mrkh" path="res://Scripts/main.gd" id="1_hptm8"]
 [ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://img/panorama_image (2).png" id="1_ynf5e"]
 [ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="2_hptm8"]
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="3_d1ilt"]
@@ -37,6 +38,7 @@ size = Vector3(125.401, 1, 35.324)
 size = Vector3(1.02294, 2.2668, 0.657196)
 
 [node name="Main" type="Node3D"]
+script = ExtResource("1_hptm8")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.966358, 0.0446066, -0.253301, 0.222371, 0.343551, 0.91348, -0.128074, 0.936982, -0.322098, 0, 0, 0)
@@ -169,3 +171,58 @@ car_path = NodePath("../../../Car")
 
 [node name="signboard" parent="." instance=ExtResource("9_h1bgf")]
 transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, 17.8417, -0.0289622, -1.2874)
+
+[node name="PauseGame" type="CanvasLayer" parent="."]
+
+[node name="Panel" type="Panel" parent="PauseGame"]
+process_mode = 3
+visible = false
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -185.5
+offset_top = -89.0
+offset_right = 185.5
+offset_bottom = 89.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="PauseGame/Panel"]
+process_mode = 3
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="PauseGame/Panel/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+text = "Game Paused!"
+horizontal_alignment = 1
+
+[node name="Continue" type="Button" parent="PauseGame/Panel/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+text = "Continue"
+
+[node name="Restart" type="Button" parent="PauseGame/Panel/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+text = "Restart
+"
+
+[node name="MainMenu" type="Button" parent="PauseGame/Panel/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+text = "Main Menu
+"
+
+[node name="Quit" type="Button" parent="PauseGame/Panel/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+text = "Quit
+"
