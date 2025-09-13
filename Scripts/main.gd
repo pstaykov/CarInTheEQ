@@ -6,6 +6,10 @@ func _ready():
 	$PauseGame/Panel/VBoxContainer/Restart.pressed.connect(_on_restart_button_pressed)
 	$PauseGame/Panel/VBoxContainer/MainMenu.pressed.connect(_on_main_menu_button_pressed)
 	$PauseGame/Panel/VBoxContainer/Quit.pressed.connect(_on_quit_button_pressed)
+	AudioServer.set_bus_volume_db(
+		AudioServer.get_bus_index("Master"),
+		linear_to_db(Global.master_volume)
+	)
 
 func _input(event):
 	if event.is_action_pressed("ui_cancel"): # usually Esc
