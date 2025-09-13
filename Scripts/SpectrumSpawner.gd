@@ -1,5 +1,41 @@
 extends Node3D
 
+@export var decorations: Array[PackedScene] = [
+	preload("res://Decorations/palm.tscn")
+]  # assign Tree, Rock, etc.
+@export var road_width: float = 10.0          # half-width from center
+@export var spacing: float = 10.0             # distance between decorations
+@export var offset_z: float = 5.0             # how far ahead to spawn
+
+# working palm system
+#var last_decoration_z := 0
+#
+#func _process(delta: float) -> void:
+	#var car := $"../Car" # adjust path
+	#if not car:
+		#return
+#
+	#var car_z :float = -car.global_transform.origin.z
+	#if car_z - last_decoration_z > spacing:
+		#spawn_decorations(car_z + offset_z)
+		#last_decoration_z = car_z
+#
+#func spawn_decorations(z_pos: float) -> void:
+	#if decorations.is_empty():
+		#return
+#
+	## left side
+	#var left_scene: PackedScene = decorations.pick_random()
+	#var left := left_scene.instantiate()
+	#left.global_transform.origin = Vector3(-road_width, 0, -z_pos)
+	#add_child(left)
+#
+	## right side
+	#var right_scene: PackedScene = decorations.pick_random()
+	#var right := right_scene.instantiate()
+	#right.global_transform.origin = Vector3(road_width, 0, -z_pos)
+	#add_child(right)
+
 # === CONFIG ===
 @export var bar_width: float = 10.0
 @export var row_spacing: float = 11.0
@@ -68,6 +104,7 @@ func _on_tick() -> void:
 	current_row += 1
 	z_offset -= row_spacing
 
+@export var palm_scene: PackedScene = decorations.pick_random()
 
 func _spawn_row(values: Array) -> void:
 	var left_x := -(bands * bar_width) * 0.5
@@ -130,5 +167,19 @@ func _spawn_row(values: Array) -> void:
 		ground_y - 0.1,
 		z_offset
 	)
-
 	add_child(floor)
+
+	# --- Decorations at edges ---
+	# Left side (just before tunnel)
+	if tunnel_pos > 0:
+		var palm_left : Node3D = decorations.pick_random().instantiate()
+		var left_x_pos = left_x + (tunnel_pos - 1) * bar_width
+		palm_left.transform.origin = Vector3(left_x_pos + 8, ground_y, z_offset)
+		add_child(palm_left)
+
+	# Right side (just after tunnel)
+	if tunnel_pos + gap_size < bands:
+		var palm_right : Node3D = decorations.pick_random().instantiate()
+		var right_x_pos = left_x + (tunnel_pos + gap_size) * bar_width
+		palm_right.transform.origin = Vector3(right_x_pos - 8, ground_y, z_offset)
+		add_child(palm_right)
