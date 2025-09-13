@@ -33,7 +33,7 @@ metallic = 0.1
 metallic_specular = 0.15
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
-size = Vector3(125.401, 1, 35.324)
+size = Vector3(436.28, 1, 35.324)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
@@ -60,7 +60,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_1bvp3")
 [node name="StaticBody3D" type="StaticBody3D" parent="road"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="road/StaticBody3D"]
-transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 0.365, 0, -8, 0, -4.37136e-06, -3.59, -0.185, -493.495)
+transform = Transform3D(-1.37778e-06, 0, 117.535, 0, 0.365, 0, -31.52, 0, -5.13762e-06, -3.59005, -0.185, -1737.01)
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="Car" type="VehicleBody3D" parent="." node_paths=PackedStringArray("cameras")]
@@ -172,7 +172,7 @@ size = Vector2i(417, 122)
 render_target_update_mode = 4
 
 [node name="MiniMapCam" type="Camera3D" parent="MiniMapViewportContainer/MiniMapViewport"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35, 3.8385, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35.8079, 3.83856, -1.13684)
 current = true
 fov = 30.0
 script = ExtResource("8_k12tt")

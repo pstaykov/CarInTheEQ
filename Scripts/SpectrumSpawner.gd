@@ -60,7 +60,7 @@ func _ready() -> void:
 	randomize()
 	_load_json(Global.current_level["json_path"])
 	if frames.is_empty():
-		push_error("❌ No frames in JSON: %s" % Global.current_level["json_path"])
+		push_error("No frames in JSON: %s" % Global.current_level["json_path"])
 		return
 
 	# --- Timer ---
@@ -79,11 +79,11 @@ func _ready() -> void:
 			var player: AudioStreamPlayer3D = car.get_node("AudioStreamPlayer3D")
 			player.stream = load(audio_path)
 			player.play()
-			print("🎵 Playing %s on car" % audio_path)
+			print("Playing %s on car" % audio_path)
 		else:
-			push_warning("⚠ Car or AudioStreamPlayer3D not found in scene!")
+			push_warning("Car or AudioStreamPlayer3D not found in scene!")
 	else:
-		push_warning("⚠ No audio found for: %s" % audio_path)
+		push_warning("No audio found for: %s" % audio_path)
 
 
 func _load_json(path: String) -> void:
@@ -95,13 +95,13 @@ func _load_json(path: String) -> void:
 	bands = data.get("bands", 0)
 	if bands == 0 and frames.size() > 0:
 		bands = frames[0].size()
-	print("✅ Loaded %d frames, %d bands" % [frames.size(), bands])
+	print("Loaded %d frames, %d bands" % [frames.size(), bands])
 
 
 func _on_tick() -> void:
 	if current_row >= frames.size():
 		timer.stop()
-		print("✅ Finished spawning spectrum")
+		print("Finished spawning spectrum")
 		return
 
 	_spawn_row(frames[current_row])
