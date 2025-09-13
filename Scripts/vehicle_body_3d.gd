@@ -17,7 +17,7 @@ var current_index := 0
 
 func _ready() -> void:
 	global_transform.origin = Vector3(0, 1.2, 0) # spawn above road
-
+	cameras[0].current = true
 
 func _physics_process(delta: float) -> void:
 	# --- throttle and brake ---
