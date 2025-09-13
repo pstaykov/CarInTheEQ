@@ -26,6 +26,7 @@ func _ready():
 	$VBoxContainer/SonicButton.pressed.connect(func(): _on_song_selected("Sonic"))
 	$VBoxContainer/PacManButton.pressed.connect(func(): _on_song_selected("PacMan"))
 	$VBoxContainer/AKAIButton.pressed.connect(func(): _on_song_selected("AKAI"))
+	$VBoxContainer/Back.pressed.connect(func(): _on_back_button_pressed())
 
 func _on_song_selected(song_name: String) -> void:
 	if not songs.has(song_name):
@@ -41,3 +42,6 @@ func _on_song_selected(song_name: String) -> void:
 	Global.current_level = game_data
 
 	get_tree().change_scene_to_file("res://Scenes/main.tscn")
+
+func _on_back_button_pressed() -> void:
+	get_tree().change_scene_to_file("res://Scenes/game_start.tscn")
