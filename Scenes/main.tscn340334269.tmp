@@ -1,4 +1,4 @@
-[gd_scene load_steps=20 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=19 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://dpmi4b802mrkh" path="res://Scripts/main.gd" id="1_hptm8"]
 [ext_resource type="Texture2D" uid="uid://x7brsbwwlava" path="res://img/panorama_image (2).png" id="1_ynf5e"]
@@ -6,7 +6,6 @@
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="3_d1ilt"]
 [ext_resource type="Script" uid="uid://0pj6vevpq8hq" path="res://Scenes/roof_eq.gd" id="5_d1ilt"]
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="5_fdnlq"]
-[ext_resource type="Script" uid="uid://cvh5evafvffhi" path="res://Scenes/window_eq.gd" id="6_6iyac"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="6_jkdf5"]
 [ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_wsu2k"]
 [ext_resource type="Script" uid="uid://ml46sid6l4o4" path="res://Scripts/VieportContainer.gd" id="8_hptm8"]
@@ -146,10 +145,6 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.66795e-07, 1.1683, 3.05157
 [node name="RoofEQ" type="Node3D" parent="Car"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.813198, 0)
 script = ExtResource("5_d1ilt")
-
-[node name="windowEQ" type="Node3D" parent="Car"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0184231, 0.463136, 0.351507)
-script = ExtResource("6_6iyac")
 
 [node name="ThePalmOfMemories" parent="." instance=ExtResource("5_fdnlq")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 1.53722, 0.14351, 5.33982)
