@@ -13,7 +13,7 @@ var _steer_target := 0.0
 var current_index := 0
 
 # reference to UI label (adjust path if needed)
-@onready var speed_label: Label = get_tree().root.get_node("Main/CanvasLayer/SpeedLabel")
+@onready var speed_label: Label = get_tree().root.get_node("Main/SpeedLabel/SpeedLabel")
 
 func _ready() -> void:
 	global_transform.origin = Vector3(0, 1.2, 0) # spawn above road
