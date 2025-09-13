@@ -17,6 +17,10 @@ var songs = {
 	"AKAI": {
 		"audio": "res://audio/AKAI.mp3",
 		"json": "res://audio/Jsons/AKAI.json"
+	},
+	"TriPoloski": {
+		"audio": "res://audio/TriPoloski.mp3",
+		"json": "res://audio/Jsons/TriPoloski.json"
 	}
 }
 
@@ -26,6 +30,7 @@ func _ready():
 	$VBoxContainer/SonicButton.pressed.connect(func(): _on_song_selected("Sonic"))
 	$VBoxContainer/PacManButton.pressed.connect(func(): _on_song_selected("PacMan"))
 	$VBoxContainer/AKAIButton.pressed.connect(func(): _on_song_selected("AKAI"))
+	$VBoxContainer/TriPoloskiButton.pressed.connect(func(): _on_song_selected("TriPoloski"))
 	$VBoxContainer/Back.pressed.connect(func(): _on_back_button_pressed())
 
 func _on_song_selected(song_name: String) -> void:
