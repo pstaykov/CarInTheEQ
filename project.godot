@@ -19,6 +19,11 @@ config/icon="res://icon.svg"
 
 Global="*res://Scripts/Global.gd"
 
+[gui]
+
+theme/default_theme_scale=3.01
+theme/custom_font="uid://b4j557ixbb7jg"
+
 [input]
 
 brake={

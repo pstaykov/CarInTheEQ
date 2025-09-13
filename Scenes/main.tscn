@@ -7,7 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="5_fdnlq"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="6_jkdf5"]
 [ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_wsu2k"]
-[ext_resource type="Script" path="res://Scenes/VieportContainer.gd" id="8_hptm8"]
+[ext_resource type="Script" uid="uid://ml46sid6l4o4" path="res://Scripts/VieportContainer.gd" id="8_hptm8"]
 [ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_k12tt"]
 [ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="9_h1bgf"]
 
@@ -33,7 +33,7 @@ metallic = 0.1
 metallic_specular = 0.15
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
-size = Vector3(125.401, 1, 35.324)
+size = Vector3(436.28, 1, 35.324)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
@@ -60,7 +60,7 @@ surface_material_override/0 = SubResource("StandardMaterial3D_1bvp3")
 [node name="StaticBody3D" type="StaticBody3D" parent="road"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="road/StaticBody3D"]
-transform = Transform3D(-3.49691e-07, 0, 100.005, 0, 0.365, 0, -8, 0, -4.37136e-06, -3.59, -0.185, -493.495)
+transform = Transform3D(-1.37778e-06, 0, 117.535, 0, 0.365, 0, -31.52, 0, -5.13762e-06, -3.59005, -0.185, -1737.01)
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="Car" type="VehicleBody3D" parent="." node_paths=PackedStringArray("cameras")]
@@ -130,7 +130,7 @@ light_energy = 16.0
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Car"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000281334, -0.657219, -0.00313276)
 
-[node name="Sketchfab_Scene" parent="." instance=ExtResource("5_fdnlq")]
+[node name="ThePalmOfMemories" parent="." instance=ExtResource("5_fdnlq")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 22.2119, 0.14351, -1.43778)
 
 [node name="SprectrumSpawner" type="Node3D" parent="."]
@@ -149,13 +149,20 @@ offset_top = -97.2
 offset_right = 125.432
 offset_bottom = 96.8
 
-[node name="sign_text" parent="." instance=ExtResource("7_wsu2k")]
+[node name="TheSignOfTheCurvyRoad" parent="." instance=ExtResource("7_wsu2k")]
 transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, 19.4344, 3.00067, -0.943636)
 
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
-offset_left = 378.0
-offset_right = 795.0
-offset_bottom = 177.0
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -208.5
+offset_top = -177.0
+offset_right = 208.5
+grow_horizontal = 2
+grow_vertical = 0
 script = ExtResource("8_hptm8")
 
 [node name="MiniMapViewport" type="SubViewport" parent="MiniMapViewportContainer"]
@@ -165,9 +172,9 @@ size = Vector2i(417, 122)
 render_target_update_mode = 4
 
 [node name="MiniMapCam" type="Camera3D" parent="MiniMapViewportContainer/MiniMapViewport"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35, 3.8385, 0)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35.8079, 3.83856, -1.13684)
 current = true
-fov = 25.0
+fov = 30.0
 script = ExtResource("8_k12tt")
 car_path = NodePath("../../../Car")
 
