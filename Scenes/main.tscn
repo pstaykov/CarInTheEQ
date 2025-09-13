@@ -141,7 +141,7 @@ transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.66795e-07, 1.1683, 3.05157)
 
 [node name="ThePalmOfMemories" parent="." instance=ExtResource("5_fdnlq")]
-transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 22.2119, 0.14351, -1.43778)
+transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 1.53722, 0.14351, 5.33982)
 
 [node name="SprectrumSpawner" type="Node3D" parent="."]
 script = ExtResource("6_jkdf5")
@@ -160,7 +160,7 @@ offset_right = 125.432
 offset_bottom = 96.8
 
 [node name="TheSignOfTheCurvyRoad" parent="." instance=ExtResource("7_wsu2k")]
-transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, 19.4344, 3.00067, -0.943636)
+transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, -1.26757, 3.17124, 5.84302)
 
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
 anchors_preset = 7
@@ -191,7 +191,7 @@ script = ExtResource("8_k12tt")
 car_path = NodePath("../../../Car")
 
 [node name="signboard" parent="." instance=ExtResource("9_h1bgf")]
-transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, 17.8417, -0.0289622, -1.2874)
+transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, -2.83298, -0.0289622, 5.4902)
 
 [node name="PauseGame" type="CanvasLayer" parent="."]
 
