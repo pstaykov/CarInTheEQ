@@ -37,8 +37,8 @@ extends Node3D
 	#add_child(right)
 
 # === CONFIG ===
-@export var bar_width: float = 2.5
-@export var row_spacing: float = 2.5
+@export var bar_width: float = 3
+@export var row_spacing: float = 3
 @export var height_scale: float = 50.0
 @export var ground_y: float = 0.0
 @export var step_time: float = 0.2
