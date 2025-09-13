@@ -37,20 +37,24 @@ extends Node3D
 	#add_child(right)
 
 # === CONFIG ===
-@export var bar_width: float = 10.0
-@export var row_spacing: float = 11.0
-@export var height_scale: float = 100.0
+@export var bar_width: float = 2.5
+@export var row_spacing: float = 2.5
+@export var height_scale: float = 50.0
 @export var ground_y: float = 0.0
-@export var step_time: float = 0.8
-@export var gap_size: int = 3
+@export var step_time: float = 0.2
+@export var gap_size: int = 8
+
+
 
 # === RUNTIME ===
 var frames: Array = []
 var bands: int = 0
 var current_row: int = 0
-var z_offset: float = 0.0
-var tunnel_pos: int = 20
+var z_offset: float = 10.0
+var offset_x: float = 30.0  
+var tunnel_pos: int = 35
 var timer: Timer
+var row_counter: int = 0
 
 func _ready() -> void:
 	randomize()
@@ -111,7 +115,7 @@ func _spawn_row(values: Array) -> void:
 
 	# --- Tunnel shifting (max ±1, 25% chance) ---
 	if randi() % 100 < 25:
-		tunnel_pos += randi_range(-1, 1)
+		tunnel_pos += randi_range(-2, 2)
 		tunnel_pos = clamp(tunnel_pos, 1, bands - gap_size - 1)
 
 	# --- Spawn bars ---
@@ -169,17 +173,17 @@ func _spawn_row(values: Array) -> void:
 	)
 	add_child(floor)
 
-	# --- Decorations at edges ---
-	# Left side (just before tunnel)
-	if tunnel_pos > 0:
+	# --- Decorations at road edges (every 4th row) ---
+	row_counter += 1
+	if row_counter % 4 == 0 and not decorations.is_empty():
+		# Left edge of the drivable road (just before tunnel starts)
 		var palm_left : Node3D = decorations.pick_random().instantiate()
-		var left_x_pos = left_x + (tunnel_pos - 1) * bar_width
-		palm_left.transform.origin = Vector3(left_x_pos + 8, ground_y, z_offset)
+		var left_edge_x = left_x + tunnel_pos * bar_width
+		palm_left.transform.origin = Vector3(left_edge_x + 2.0, ground_y, z_offset)
 		add_child(palm_left)
 
-	# Right side (just after tunnel)
-	if tunnel_pos + gap_size < bands:
+		# Right edge of the drivable road (just after tunnel ends)
 		var palm_right : Node3D = decorations.pick_random().instantiate()
-		var right_x_pos = left_x + (tunnel_pos + gap_size) * bar_width
-		palm_right.transform.origin = Vector3(right_x_pos - 8, ground_y, z_offset)
+		var right_edge_x = left_x + (tunnel_pos + gap_size) * bar_width
+		palm_right.transform.origin = Vector3(right_edge_x - 2.0, ground_y, z_offset)
 		add_child(palm_right)
