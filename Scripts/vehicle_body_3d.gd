@@ -5,7 +5,7 @@ extends VehicleBody3D
 @export var max_brake: float = 60.0
 @export var max_steer: float = 0.4     # radians (~34°) at low speed
 @export var steer_speed: float = 2.0   # how fast steering follows input
-@export var max_speed: float = 14.0    # m/s → 50 km/h
+@export var max_speed: float = 15.0    # m/s → 50 km/h
 @export var cameras: Array[Camera3D]   # assign in Inspector
 
 # === RUNTIME ===
