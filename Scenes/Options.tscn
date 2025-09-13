@@ -1,0 +1,51 @@
+[gd_scene load_steps=3 format=3 uid="uid://do5ksykaihl3f"]
+
+[ext_resource type="Script" uid="uid://bokon8fbomyid" path="res://Scenes/options.gd" id="1_qqnya"]
+[ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="2_hg628"]
+
+[node name="Options" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -2.0
+offset_top = -2.0
+offset_right = -2.0
+offset_bottom = -2.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_qqnya")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 0.367622
+anchor_top = 0.500772
+anchor_right = 0.648872
+anchor_bottom = 0.500772
+offset_left = -29.5
+offset_top = -21.5
+offset_right = 29.5
+offset_bottom = 21.5
+grow_horizontal = 2
+grow_vertical = 2
+metadata/_edit_use_anchors_ = true
+
+[node name="Label" type="Label" parent="VBoxContainer"]
+layout_mode = 2
+text = "Volume"
+
+[node name="VolumeSlider" type="HSlider" parent="VBoxContainer"]
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.5
+
+[node name="back" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "Back"
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
+position = Vector2(394, 332.5)
+stream = ExtResource("2_hg628")
+autoplay = true

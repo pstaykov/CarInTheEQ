@@ -10,8 +10,7 @@ func _on_start_button_pressed():
 	get_tree().change_scene_to_file("res://Scenes/SongSelect.tscn")
 
 func _on_options_button_pressed():
-	# You can make a new Options scene later
-	print("Options clicked!")
+	get_tree().change_scene_to_file("res://Scenes/Options.tscn")
 
 func _on_quit_button_pressed():
 	get_tree().quit()
