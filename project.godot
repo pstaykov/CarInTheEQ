@@ -21,7 +21,8 @@ Global="*res://Scripts/Global.gd"
 
 [gui]
 
-theme/default_theme_scale=3.01
+theme/default_theme_scale=4.0
+theme/custom="uid://cefsrbwntlb7m"
 theme/custom_font="uid://b4j557ixbb7jg"
 
 [input]
