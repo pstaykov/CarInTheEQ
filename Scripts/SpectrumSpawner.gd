@@ -15,7 +15,7 @@ var sun: Node3D= null
 
 # === CONFIG ===
 @export var bar_width: float = 3
-@export var row_spacing: float = 2.85
+@export var row_spacing: float = 3
 @export var height_scale: float = 50.0
 @export var ground_y: float = 0.0
 @export var step_time: float = 0.2
