@@ -7,6 +7,7 @@ script = ExtResource("1_jvagm")
 
 [node name="Timer" type="Timer" parent="."]
 wait_time = 0.302
+wait_time = 0.3
 one_shot = true
 
 [connection signal="body_entered" from="." to="." method="_on_body_entered"]
