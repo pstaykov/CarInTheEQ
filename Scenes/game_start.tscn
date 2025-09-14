@@ -52,13 +52,16 @@ horizontal_alignment = 1
 uppercase = true
 
 [node name="Start game" type="Button" parent="VBoxContainer"]
+process_mode = 3
 layout_mode = 2
 text = "Select Song"
 
 [node name="Options" type="Button" parent="VBoxContainer"]
+process_mode = 3
 layout_mode = 2
 text = "Options"
 
 [node name="Quit" type="Button" parent="VBoxContainer"]
+process_mode = 3
 layout_mode = 2
 text = "Quit"

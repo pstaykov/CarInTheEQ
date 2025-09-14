@@ -70,3 +70,29 @@ func _switch_camera() -> void:
 
 	# enable new cam
 	cameras[current_index].current = true
+
+func add_smoke_effect():
+	var smoke_particles = GPUParticles3D.new()
+	smoke_particles.process_material = ParticleProcessMaterial.new()
+	smoke_particles.draw_pass_1 = SphereMesh.new()
+	smoke_particles.amount = 50
+	smoke_particles.lifetime = 2.0
+	smoke_particles.explosiveness = 0.0
+	smoke_particles.emitting = true
+	
+	var material = StandardMaterial3D.new()
+	material.albedo_color = Color(0.3, 0.3, 0.3, 0.5)
+	material.flags_unshaded = true
+	material.flags_transparent = true
+	smoke_particles.draw_pass_1.material = material
+	
+	var process_material = smoke_particles.process_material
+	process_material.emission_box_extents = Vector3(1, 1, 1)
+	process_material.gravity = Vector3(0, 2, 0)
+	process_material.initial_velocity_min = 0.5
+	process_material.initial_velocity_max = 1.5
+	process_material.scale_min = 0.5
+	process_material.scale_max = 1.5
+	
+	add_child(smoke_particles)
+	return smoke_particles
