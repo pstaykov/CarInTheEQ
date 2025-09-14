@@ -1,0 +1,11 @@
+[gd_scene load_steps=3 format=3 uid="uid://xr2s52d4y0e8"]
+
+[ext_resource type="Script" uid="uid://rlpco4b5emtk" path="res://Scenes/visualiser_ring.gd" id="1_058bx"]
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_058bx"]
+
+[node name="VisualiserRing" type="Node3D"]
+script = ExtResource("1_058bx")
+
+[node name="WaveMesh" type="MeshInstance3D" parent="."]
+mesh = SubResource("ImmediateMesh_058bx")
