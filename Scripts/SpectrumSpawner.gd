@@ -108,36 +108,45 @@ func _spawn_row(values: Array) -> void:
 
 		# Create the mesh
 		var bar := MeshInstance3D.new()
-		var mesh := BoxMesh.new()
-		mesh.size = Vector3(bar_width, 1.0, row_spacing)
-		bar.mesh = mesh
+		var bar_mesh := BoxMesh.new()
+		bar_mesh.size = Vector3(bar_width, 1.0, row_spacing)
+		bar.mesh = bar_mesh
 
 		# Create the collision shape
 		var collision := CollisionShape3D.new()
-		var shape := BoxShape3D.new()
-		shape.size = mesh.size
-		collision.shape = shape
+		var collision_shape := BoxShape3D.new()
+		collision_shape.size = bar_mesh.size
+		collision.shape = collision_shape
 
-		# Add mesh and collision to the body
+		# Add killzone to the bar
+		var killzone: Area3D = preload("res://Scenes/killzone.tscn").instantiate()
+		var killzone_collision := CollisionShape3D.new()
+		var killzone_shape := BoxShape3D.new()
+		killzone_shape.size = bar_mesh.size  # Same size as the bar
+		killzone_collision.shape = killzone_shape
+		killzone.add_child(killzone_collision)
+
+		# Add mesh, collision, and killzone to the body
 		body.add_child(bar)
-		body.add_child(collision)
+		body.add_child(collision)	
+		body.add_child(killzone)
 
 		# Add the body to the scene
 		add_child(body)
 
 		# material
-		var mat := StandardMaterial3D.new()
+		var bar_mat := StandardMaterial3D.new()
 		var t: float = clamp(h / (height_scale * 0.8), 0.0, 1.0)
 		var low := Color(0.2, 0.4, 1.0, 0.95)
 		var high := Color(0.8, 0.2, 1.0, 0.95)
 		var col := low.lerp(high, t)
-		mat.albedo_color = col
-		mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		mat.emission_enabled = true
-		mat.emission = col
-		mat.emission_energy_multiplier = 1.2
-		bar.material_override = mat
+		bar_mat.albedo_color = col
+		bar_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		bar_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		bar_mat.emission_enabled = true
+		bar_mat.emission = col
+		bar_mat.emission_energy_multiplier = 1.2
+		bar.material_override = bar_mat
 
 		# Position and scale the StaticBody3D (not just the MeshInstance3D)
 		body.transform.origin = Vector3(
@@ -148,23 +157,23 @@ func _spawn_row(values: Array) -> void:
 		body.scale = Vector3(1.0, h, 1.0)
 
 	# --- Pink floor strip under the tunnel ---
-	var floor := MeshInstance3D.new()
-	var plane := BoxMesh.new()
-	plane.size = Vector3(gap_size * bar_width, 0.2, row_spacing)
-	floor.mesh = plane
+	var floor_mesh_instance := MeshInstance3D.new()
+	var floor_plane := BoxMesh.new()
+	floor_plane.size = Vector3(gap_size * bar_width, 0.2, row_spacing)
+	floor_mesh_instance.mesh = floor_plane
 
-	var floor_mat := StandardMaterial3D.new()
-	floor_mat.albedo_color = Color(1.0, 0.2, 0.6, 0.9)
-	floor_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	floor.material_override = floor_mat
+	var floor_material := StandardMaterial3D.new()
+	floor_material.albedo_color = Color(1.0, 0.2, 0.6, 0.9)
+	floor_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	floor_mesh_instance.material_override = floor_material
 
-	var gap_x = left_x + tunnel_pos * bar_width + (gap_size * bar_width * 0.5)
-	floor.transform.origin = Vector3(
-		gap_x - bar_width * 0.5,
+	var tunnel_gap_x = left_x + tunnel_pos * bar_width + (gap_size * bar_width * 0.5)
+	floor_mesh_instance.transform.origin = Vector3(
+		tunnel_gap_x - bar_width * 0.5,
 		ground_y - 0.1,
 		z_offset
 	)
-	add_child(floor)
+	add_child(floor_mesh_instance)
 
 	# --- Decorations at road edges (every 4th row) ---
 	row_counter += 1
@@ -189,7 +198,7 @@ func _spawn_row(values: Array) -> void:
 
 	if sun:
 		# Position the sun directly at the horizon behind the tunnel gap
-		var sun_x = gap_x
+		var sun_x = tunnel_gap_x
 		var sun_y = ground_y + sun.scale.y * 0.4  # half risen
 		var sun_z = z_offset - row_spacing * 500   # slightly behind the latest floor
 		sun.transform.origin = Vector3(sun_x, sun_y, sun_z)
