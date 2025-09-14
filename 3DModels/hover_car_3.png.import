@@ -1,0 +1,38 @@
+[remap]
+
+importer="texture"
+type="CompressedTexture2D"
+uid="uid://l1klag21kkwg"
+path.s3tc="res://.godot/imported/hover_car_3.png-04b6c616736041c1696f7ab749c398ca.s3tc.ctex"
+metadata={
+"imported_formats": ["s3tc_bptc"],
+"vram_texture": true
+}
+generator_parameters={
+"md5": "520a497476ea52a47b52c23ff4ed7a91"
+}
+
+[deps]
+
+source_file="res://3DModels/hover_car_3.png"
+dest_files=["res://.godot/imported/hover_car_3.png-04b6c616736041c1696f7ab749c398ca.s3tc.ctex"]
+
+[params]
+
+compress/mode=2
+compress/high_quality=false
+compress/lossy_quality=0.7
+compress/hdr_compression=1
+compress/normal_map=1
+compress/channel_pack=0
+mipmaps/generate=true
+mipmaps/limit=-1
+roughness/mode=1
+roughness/src_normal="res://3DModels/hover_car_3.png"
+process/fix_alpha_border=true
+process/premult_alpha=false
+process/normal_map_invert_y=false
+process/hdr_as_srgb=false
+process/hdr_clamp_exposure=false
+process/size_limit=0
+detect_3d/compress_to=0
