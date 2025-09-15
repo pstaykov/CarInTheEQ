@@ -1,6 +1,6 @@
-[gd_scene load_steps=9 format=3 uid="uid://di734maie6u20"]
+[gd_scene load_steps=9 format=3 uid="uid://b4sdvep1rldrp"]
 
-[ext_resource type="Script" uid="uid://cljy178fnry2i" path="res://Scripts/character_body_3d.gd" id="2_p3ued"]
+[ext_resource type="Script" path="res://Scripts/character_body_3d.gd" id="2_p3ued"]
 [ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="3_2fo43"]
 [ext_resource type="PackedScene" uid="uid://dq0f2qpkeidd4" path="res://3DModels/hover_car.glb" id="3_bj3u6"]
 
@@ -31,6 +31,7 @@ background_mode = 2
 sky = SubResource("Sky_va77k")
 
 [node name="Space" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.447367, 0)
 
 [node name="Visualiser" type="Node3D" parent="."]
 script = SubResource("GDScript_2fo43")

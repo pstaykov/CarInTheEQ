@@ -140,7 +140,6 @@ light_energy = 16.0
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="Car"]
 transform = Transform3D(-1, 0, 8.74228e-08, 0, 1, 0, -8.74228e-08, 0, -1, -0.000281334, -0.657219, -0.00313276)
-bus = &"Music"
 
 [node name="behindCam" type="Camera3D" parent="Car"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.66795e-07, 1.1683, 3.05157)
