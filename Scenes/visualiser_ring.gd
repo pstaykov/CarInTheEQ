@@ -2,13 +2,14 @@ extends Node3D
 
 @export var point_count: int = 128
 @export var base_radius: float = 5.0
-@export var magnitude_boost: float = 5.0
+@export var magnitude_boost: float = 15.0
 @export var wave_material: Material
 @export var ring_scene: PackedScene
 @export var ring_count: int = 50
 @export var spacing: float = 5.0
 @export var curve_strength: float = 3.0
-
+@export var low_cut_hz: float = 200.0     # min frequency
+@export var high_cut_hz: float = 12000.0  # max frequency
 
 var _values: Array[float] = []
 var _spectrum: AudioEffectSpectrumAnalyzerInstance
@@ -42,24 +43,42 @@ func _process(delta: float) -> void:
 	if _spectrum == null:
 		return
 
-	var points: Array[Vector3] = []
+	var half_points: int = point_count / 2
+	var right_side: Array[Vector3] = []
+	var left_side: Array[Vector3] = []
 
-	for i in range(point_count):
-		var freq: float = 20.0 * pow(1000.0, float(i) / float(point_count))
-		var mag: Vector2 = _spectrum.get_magnitude_for_frequency_range(freq, freq + 100.0, AudioEffectSpectrumAnalyzerInstance.MAGNITUDE_AVERAGE)
+	# build the right side (top → bottom, low → high)
+	for i in range(half_points):
+		var t: float = float(i) / float(half_points - 1)
+		var freq: float = low_cut_hz * pow(high_cut_hz / low_cut_hz, t)
+
+		var mag: Vector2 = _spectrum.get_magnitude_for_frequency_range(
+			freq, freq + 100.0, AudioEffectSpectrumAnalyzerInstance.MAGNITUDE_AVERAGE
+		)
 		var db: float = linear_to_db(max(mag.length(), 1e-6))
 		var norm: float = clamp(inverse_lerp(-60.0, 0.0, db), 0.0, 1.0)
 		_values[i] = lerpf(_values[i], norm, 0.2)
 
-		var angle: float = (float(i) / float(point_count)) * TAU
+		# angles from 90° (top) to 270° (bottom)
+		var angle: float = lerp(PI/2, 3*PI/2, t)
 		var radius: float = base_radius + _values[i] * magnitude_boost
 		var x: float = cos(angle) * radius
 		var y: float = sin(angle) * radius
-		points.append(Vector3(x, y, 0))
+		right_side.append(Vector3(x, y, 0))
+
+	# mirror the right side to make the left side
+	# (reverse so it goes bottom → top smoothly)
+	for i in range(half_points - 1, -1, -1):
+		var p = right_side[i]
+		left_side.append(Vector3(-p.x, p.y, 0))
+
+	# combine
+	var points: Array[Vector3] = right_side + left_side
 
 	_mesh.clear_surfaces()
 	_mesh.surface_begin(Mesh.PRIMITIVE_LINE_STRIP)
 	for p in points:
 		_mesh.surface_add_vertex(p)
-	_mesh.surface_add_vertex(points[0])  # Close the loop
+	if points.size() > 0:
+		_mesh.surface_add_vertex(points[0])  # Close the loop
 	_mesh.surface_end()
