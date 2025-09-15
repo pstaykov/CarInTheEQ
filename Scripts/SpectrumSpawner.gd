@@ -11,12 +11,15 @@ extends Node3D
 @export var sun_scene: PackedScene = preload("res://Decorations/Sun.tscn")
 var sun: Node3D= null
 
+# spawn store
+@export var store_scene: PackedScene = preload("res://Decorations/Store.tscn")
+var store_spawned := false
 
 
 # === CONFIG ===
 @export var bar_width: float = 3
-@export var row_spacing: float = 3
-@export var height_scale: float = 50.0
+@export var row_spacing: float = 2.85
+@export var height_scale: float = 10.0
 @export var ground_y: float = 0.0
 @export var step_time: float = 0.2
 @export var gap_size: int = 8
@@ -79,8 +82,22 @@ func _on_tick() -> void:
 	if current_row >= frames.size():
 		timer.stop()
 		print("Finished spawning spectrum")
-		return
+		if not store_spawned and store_scene:
+			var store = store_scene.instantiate()
+			add_child(store)
 
+			# Get center of the tunnel (same as floor strip)
+			var left_x := -(bands * bar_width) * 0.5
+			var gap_x = left_x + tunnel_pos * bar_width + (gap_size * bar_width * 0.5)
+
+			# Position store right at the end of the road
+			var store_x = gap_x
+			var store_y = ground_y
+			var store_z = z_offset - row_spacing  
+			store.transform.origin = Vector3(store_x, store_y, store_z)
+
+			store_spawned = true
+		return
 	_spawn_row(frames[current_row])
 	current_row += 1
 	z_offset -= row_spacing

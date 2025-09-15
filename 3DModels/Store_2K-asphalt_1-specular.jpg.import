@@ -2,13 +2,10 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://743cklqrdwvu"
+uid="uid://d2vyaqwr6rfcj"
 path="res://.godot/imported/Store_2K-asphalt_1-specular.jpg-96a6712ffb31b56689e22a834fdfdde0.ctex"
 metadata={
 "vram_texture": false
-}
-generator_parameters={
-"md5": "037635aefaa9cb1b136722d21208d3e2"
 }
 
 [deps]
@@ -24,7 +21,7 @@ compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""

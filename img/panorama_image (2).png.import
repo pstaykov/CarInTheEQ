@@ -2,8 +2,13 @@
 
 importer="texture"
 type="CompressedTexture2D"
+<<<<<<<< HEAD:img/panorama_image (2).png.import
 uid="uid://x7brsbwwlava"
 path.bptc="res://.godot/imported/panorama_image (2).png-4a5de4e7eabc05528c77b77a088e138d.bptc.ctex"
+========
+uid="uid://cbeq1k3nk0o6o"
+path.bptc="res://.godot/imported/panorama_image (2).png-e70d2e8d6d6727d59ed6c0137a4a81bc.bptc.ctex"
+>>>>>>>> 1a5b667e9f9e0cf6ea32e0e5e2c16e4f6be6569a:panorama_image (2).png.import
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
