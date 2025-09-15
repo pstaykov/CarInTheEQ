@@ -11,9 +11,23 @@ config_version=5
 [application]
 
 config/name="firstCar"
-run/main_scene="uid://j5as40ig7f3t"
+run/main_scene="uid://dvvmqyrcyfwj6"
 config/features=PackedStringArray("4.4", "Forward Plus")
 config/icon="res://icon.svg"
+
+[audio]
+
+buses/default_bus_layout="uid://b0u4plpajhros"
+
+[autoload]
+
+Global="*res://Scripts/Global.gd"
+
+[gui]
+
+theme/default_theme_scale=4.0
+theme/custom="uid://cefsrbwntlb7m"
+theme/custom_font="uid://b4j557ixbb7jg"
 
 [input]
 
@@ -39,5 +53,10 @@ accelerate={
 "deadzone": 0.2,
 "events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":87,"key_label":0,"unicode":119,"location":0,"echo":false,"script":null)
 , Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":4194322,"key_label":0,"unicode":0,"location":0,"echo":false,"script":null)
+]
+}
+switch_camera={
+"deadzone": 0.2,
+"events": [Object(InputEventKey,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"alt_pressed":false,"shift_pressed":false,"ctrl_pressed":false,"meta_pressed":false,"pressed":false,"keycode":0,"physical_keycode":67,"key_label":0,"unicode":99,"location":0,"echo":false,"script":null)
 ]
 }
