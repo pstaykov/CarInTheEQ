@@ -1,0 +1,24 @@
+[gd_scene load_steps=4 format=3 uid="uid://bnjuatktu831t"]
+
+[ext_resource type="Script" uid="uid://cchntuq1hqk76" path="res://Scripts/store.gd" id="1_sfon2"]
+[ext_resource type="PackedScene" uid="uid://x5f5jyovtknc" path="res://3DModels/Store.glb" id="1_t27hw"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_sfon2"]
+size = Vector3(6.52835, 1.84094, 2.99713)
+
+[node name="Store" type="Node3D"]
+transform = Transform3D(-4.37114e-08, 0, -1, 0, 1, 0, 1, 0, -4.37114e-08, 0, 0, 0)
+script = ExtResource("1_sfon2")
+
+[node name="Store" parent="." instance=ExtResource("1_t27hw")]
+
+[node name="TriggerArea" type="Area3D" parent="Store"]
+transform = Transform3D(1.1178, 0, 10.2895, 0, 10.35, 0, -10.2895, 0, 1.1178, 3.03531, 0, 5.0754)
+collision_layer = 2
+collision_mask = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Store/TriggerArea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.724288, 0.420471, 0.0501834)
+shape = SubResource("BoxShape3D_sfon2")
+
+[connection signal="body_entered" from="Store/TriggerArea" to="." method="_on_trigger_area_body_entered"]
