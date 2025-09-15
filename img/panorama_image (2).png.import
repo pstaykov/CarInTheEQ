@@ -2,32 +2,26 @@
 
 importer="texture"
 type="CompressedTexture2D"
-<<<<<<<< HEAD:img/panorama_image (2).png.import
-uid="uid://x7brsbwwlava"
-path.bptc="res://.godot/imported/panorama_image (2).png-4a5de4e7eabc05528c77b77a088e138d.bptc.ctex"
-========
-uid="uid://cbeq1k3nk0o6o"
-path.bptc="res://.godot/imported/panorama_image (2).png-e70d2e8d6d6727d59ed6c0137a4a81bc.bptc.ctex"
->>>>>>>> 1a5b667e9f9e0cf6ea32e0e5e2c16e4f6be6569a:panorama_image (2).png.import
+uid="uid://3pl1ppjn0yw5"
+path="res://.godot/imported/panorama_image (2).png-4a5de4e7eabc05528c77b77a088e138d.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://img/panorama_image (2).png"
-dest_files=["res://.godot/imported/panorama_image (2).png-4a5de4e7eabc05528c77b77a088e138d.bptc.ctex"]
+dest_files=["res://.godot/imported/panorama_image (2).png-4a5de4e7eabc05528c77b77a088e138d.ctex"]
 
 [params]
 
-compress/mode=2
-compress/high_quality=true
+compress/mode=0
+compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1
 compress/normal_map=0
 compress/channel_pack=0
-mipmaps/generate=true
+mipmaps/generate=false
 mipmaps/limit=-1
 roughness/mode=0
 roughness/src_normal=""
@@ -37,4 +31,4 @@ process/normal_map_invert_y=false
 process/hdr_as_srgb=false
 process/hdr_clamp_exposure=false
 process/size_limit=0
-detect_3d/compress_to=0
+detect_3d/compress_to=1
