@@ -1,0 +1,134 @@
+[gd_scene load_steps=12 format=3 uid="uid://b4sdvep1rldrp"]
+
+[ext_resource type="Script" uid="uid://cljy178fnry2i" path="res://Scripts/character_body_3d.gd" id="2_p3ued"]
+[ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="3_2fo43"]
+[ext_resource type="PackedScene" uid="uid://dq0f2qpkeidd4" path="res://3DModels/hover_car.glb" id="3_bj3u6"]
+[ext_resource type="Texture2D" uid="uid://bfr7vjqx3waa7" path="res://img/ringed_gas_giant_planet.hdr" id="4_bj3u6"]
+[ext_resource type="Script" uid="uid://c3sm78g21mr8w" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
+[ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scenes/space_spawner.gd" id="6_va77k"]
+
+[sub_resource type="GDScript" id="GDScript_2fo43"]
+script/source = "extends Node3D
+
+@export var ring_scene: PackedScene = preload(\"res://Scenes/VisualiserRing.tscn\")
+
+@export var ring_count: int = 50
+@export var ring_spacing: float = 100.0
+@export var max_offset_x: float = 200.0
+@export var max_offset_y: float = 200.0
+@export var step_jitter_x: float = 30.0
+@export var step_jitter_y: float = 20.0
+
+@export var random_seed: int = 0 # 0 = fully random each run, >0 = fixed path
+
+var _rng := RandomNumberGenerator.new()
+var _rings: Array[Node3D] = []
+var _positions: Array[Vector3] = []
+
+func _ready() -> void:
+	if random_seed != 0:
+		_rng.seed = random_seed
+	else:
+		_rng.randomize()
+
+	_generate_positions()
+	_spawn_rings()
+
+func _generate_positions() -> void:
+	var last_pos := Vector3.ZERO
+
+	for i in range(ring_count):
+		if i > 0:
+			# apply a random step in x/y direction each time
+			last_pos.x = clamp(
+				last_pos.x + _rng.randf_range(-step_jitter_x, step_jitter_x),
+				-max_offset_x, max_offset_x
+			)
+			last_pos.y = clamp(
+				last_pos.y + _rng.randf_range(-step_jitter_y, step_jitter_y),
+				-max_offset_y, max_offset_y
+			)
+
+		last_pos.z = i * ring_spacing
+		_positions.append(last_pos)
+
+func _spawn_rings() -> void:
+	for i in range(ring_count):
+		var ring := ring_scene.instantiate()
+		ring.position = _positions[i]
+
+		# Look ahead a few rings for smoother orientation
+		var target_index = clamp(i + 3, 0, ring_count - 1)
+		ring.look_at(_positions[target_index], Vector3.UP)
+
+		add_child(ring)
+		_rings.append(ring)
+"
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_2fo43"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_bj3u6"]
+panorama = ExtResource("4_bj3u6")
+
+[sub_resource type="Sky" id="Sky_va77k"]
+sky_material = SubResource("PanoramaSkyMaterial_bj3u6")
+
+[sub_resource type="Environment" id="Environment_uqc4w"]
+background_mode = 2
+sky = SubResource("Sky_va77k")
+fog_mode = 1
+fog_light_color = Color(0.513233, 0.513233, 0.513233, 1)
+fog_light_energy = 1.52
+fog_density = 0.5721
+fog_aerial_perspective = 0.713
+fog_sky_affect = 0.28
+fog_height = 8.1
+fog_depth_curve = 0.574349
+fog_depth_begin = 0.0
+fog_depth_end = 39.6
+
+[node name="Space" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.447367, 0)
+
+[node name="Visualiser" type="Node3D" parent="."]
+script = SubResource("GDScript_2fo43")
+
+[node name="WaveMesh" type="MeshInstance3D" parent="Visualiser"]
+mesh = SubResource("ImmediateMesh_2fo43")
+skeleton = NodePath("../..")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("2_p3ued")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="CharacterBody3D"]
+stream = ExtResource("3_2fo43")
+autoplay = true
+bus = &"Music"
+
+[node name="Sketchfab_Scene" parent="CharacterBody3D" instance=ExtResource("3_bj3u6")]
+transform = Transform3D(-4.80825e-09, 0, 0.11, 0, 0.11, 0, -0.11, 0, -4.80825e-09, 0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.451033, 0.892507, 0, -0.892507, -0.451033, 0, 0.55979, 2.86423)
+light_energy = 16.0
+light_volumetric_fog_energy = 3.743
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uqc4w")
+
+[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("ship")]
+transform = Transform3D(1, 0, 0, 0, 0.998806, 0.0488498, 0, -0.0488498, 0.998806, 0, 0.74, -1.702)
+h_offset = 0.165
+v_offset = 2.68
+fov = 85.2
+near = 0.344
+script = ExtResource("4_wnfdr")
+ship = NodePath("../CharacterBody3D")
+follow_smooth = 31.795
+
+[node name="SpaceSpawner" type="Node3D" parent="." node_paths=PackedStringArray("ship")]
+script = ExtResource("6_va77k")
+ship = NodePath("../CharacterBody3D")
+max_junk = 500
+spawn_interval = 0.1
+spread = 50.0

@@ -9,7 +9,7 @@
 [ext_resource type="Script" uid="uid://cvh5evafvffhi" path="res://Scripts/window_eq.gd" id="6_6iyac"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="6_jkdf5"]
 [ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_wsu2k"]
-[ext_resource type="Script" uid="uid://ml46sid6l4o4" path="res://Scripts/VieportContainer.gd" id="8_hptm8"]
+[ext_resource type="Script" uid="uid://binsr4wgq8dqy" path="res://Scripts/VieportContainer.gd" id="8_hptm8"]
 [ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_k12tt"]
 [ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="9_h1bgf"]
 [ext_resource type="Script" path="res://Scripts/StoreMenu.gd" id="13_fdnlq"]

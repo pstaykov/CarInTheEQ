@@ -6,6 +6,13 @@ extends Node3D
 @export var floor_height: float = 0.2
 @export var smooth: float = 0.2
 
+# Path shaping
+@export var spacing: float = 5.0
+@export var curve_strength_x: float = 10.0
+@export var curve_strength_y: float = 6.0
+@export var curve_freq_x: float = 0.3
+@export var curve_freq_y: float = 0.25
+
 var _bars: Array[MeshInstance3D] = []
 var _values: Array[float] = []
 var _spectrum: AudioEffectSpectrumAnalyzerInstance
@@ -25,6 +32,7 @@ func _ready() -> void:
 		return
 	print("✅ SpectrumAnalyzer found and assigned.")
 
+	# Frequency bands
 	var f_min: float = 20.0
 	var f_max: float = 20000.0
 	for i in range(num_bars + 1):
@@ -33,13 +41,12 @@ func _ready() -> void:
 		_freqs.append(freq)
 
 	_values.resize(num_bars)
-	var bar_spacing: float = width / num_bars
-	var start_x: float = -width * 0.5
 
+	# Create bars along a twisting path
 	for i in range(num_bars):
 		var bar: MeshInstance3D = MeshInstance3D.new()
 		var mesh: BoxMesh = BoxMesh.new()
-		mesh.size = Vector3(bar_spacing * 0.8, floor_height, 0.2)
+		mesh.size = Vector3(width / num_bars * 0.8, floor_height, 0.2)
 		bar.mesh = mesh
 
 		var mat: StandardMaterial3D = StandardMaterial3D.new()
@@ -48,12 +55,17 @@ func _ready() -> void:
 		mat.emission = Color(0.2, 0.6, 1.0)
 		bar.material_override = mat
 
-		bar.transform.origin = Vector3(start_x + i * bar_spacing, floor_height * 0.5, 0.0)
+		# Position along Z, with X/Y offsets for curves
+		var z_pos: float = i * spacing
+		var x_pos: float = sin(i * curve_freq_x) * curve_strength_x
+		var y_pos: float = cos(i * curve_freq_y) * curve_strength_y
+
+		bar.transform.origin = Vector3(x_pos, y_pos, z_pos)
 		add_child(bar)
 		_bars.append(bar)
 		_values[i] = floor_height
 
-	print("✅ EQ bars created:", _bars.size())
+	print("✅ EQ bars created with twists:", _bars.size())
 
 func _process(_delta: float) -> void:
 	if _spectrum == null:
@@ -62,7 +74,9 @@ func _process(_delta: float) -> void:
 	for i in range(num_bars):
 		var f1: float = _freqs[i]
 		var f2: float = _freqs[i + 1]
-		var mag: Vector2 = _spectrum.get_magnitude_for_frequency_range(f1, f2, AudioEffectSpectrumAnalyzerInstance.MAGNITUDE_AVERAGE)
+		var mag: Vector2 = _spectrum.get_magnitude_for_frequency_range(
+			f1, f2, AudioEffectSpectrumAnalyzerInstance.MAGNITUDE_AVERAGE
+		)
 
 		var lin: float = mag.length()
 		var db: float = linear_to_db(max(lin, 1e-6))
@@ -75,13 +89,11 @@ func _process(_delta: float) -> void:
 		bar.scale.y = h / floor_height
 
 		var t: Transform3D = bar.transform
-		t.origin.y = h * 0.5
+		t.origin.y = h * 0.5 + cos(i * curve_freq_y) * curve_strength_y
+		t.origin.x = sin(i * curve_freq_x) * curve_strength_x
 		bar.transform = t
 
 		var col: Color = Color(0.2, 0.6, 1.0).lerp(Color(1.0, 0.2, 0.6), _values[i])
 		var mat: StandardMaterial3D = bar.material_override as StandardMaterial3D
 		mat.albedo_color = col
 		mat.emission = col
-
-		# 🔍 Debug output
-		print("Bar", i, "Freq:", f1, "-", f2, "Mag:", mag, "Norm:", norm, "Height:", h)

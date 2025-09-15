@@ -1,0 +1,142 @@
+[gd_scene load_steps=9 format=3 uid="uid://b4sdvep1rldrp"]
+
+[ext_resource type="Script" uid="uid://cljy178fnry2i" path="res://Scripts/character_body_3d.gd" id="2_p3ued"]
+[ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="3_2fo43"]
+[ext_resource type="PackedScene" uid="uid://dq0f2qpkeidd4" path="res://3DModels/hover_car.glb" id="3_bj3u6"]
+
+[sub_resource type="GDScript" id="GDScript_2fo43"]
+script/source = "extends Node3D
+
+var ring_scene: PackedScene = preload(\"res://Scenes/VisualiserRing.tscn\")
+
+@export var ring_count: int = 50
+@export var ring_spacing: float = 100.0
+@export var max_offset_x: float = 200.0
+@export var max_offset_y: float = 100.0
+@export var step_jitter_x: float = 50.0
+@export var step_jitter_y: float = 30.0
+
+# Audio spectrum settings
+@export var low_cut_hz: float = 20.0
+@export var high_cut_hz: float = 12000.0
+@export var norm_boost: float = 0.01  # lower = more sensitive, 1.0 = normal
+
+var _spectrum: AudioEffectSpectrumAnalyzerInstance
+var _rings: Array[Node3D] = []
+var _ring_materials: Array[StandardMaterial3D] = []
+
+func _ready() -> void:
+	_setup_spectrum()
+
+	var current_x: float = 0.0
+	var current_y: float = 0.0
+
+	for i in range(ring_count):
+		var ring: Node3D = ring_scene.instantiate()
+
+		var z_pos: float = i * ring_spacing
+		if i > 0:
+			current_x += randf_range(-step_jitter_x, step_jitter_x)
+			current_y += randf_range(-step_jitter_y, step_jitter_y)
+			current_x = clamp(current_x, -max_offset_x, max_offset_x)
+			current_y = clamp(current_y, -max_offset_y, max_offset_y)
+
+		ring.position = Vector3(current_x, current_y, z_pos)
+		ring.look_at_from_position(
+			Vector3(current_x, current_y, z_pos),
+			Vector3(current_x, current_y, z_pos + 1.0),
+			Vector3.UP
+		)
+
+		add_child(ring)
+		_rings.append(ring)
+
+		# Create and assign material once
+		var mesh_instance := ring.get_node_or_null(\"WaveMesh\") as MeshInstance3D
+		if mesh_instance:
+			var mat := StandardMaterial3D.new()
+			mat.albedo_color = Color(\"#0000FF\")
+			mat.emission_enabled = true
+			mat.emission = mat.albedo_color
+			mesh_instance.material_override = mat
+			_ring_materials.append(mat)
+		else:
+			_ring_materials.append(null)
+
+func _setup_spectrum() -> void:
+	var bus_index: int = AudioServer.get_bus_index(\"Music\")
+	if bus_index == -1:
+		push_warning(\"Music bus not found.\")
+		return
+
+	var effect: AudioEffectInstance = AudioServer.get_bus_effect_instance(bus_index, 0)
+	_spectrum = effect as AudioEffectSpectrumAnalyzerInstance
+	if _spectrum == null:
+		push_warning(\"SpectrumAnalyzer not found.\")
+
+func _process(delta: float) -> void:
+	if _spectrum == null:
+		return
+
+	var mag: Vector2 = _spectrum.get_magnitude_for_frequency_range(
+		low_cut_hz, high_cut_hz,
+		AudioEffectSpectrumAnalyzerInstance.MAGNITUDE_AVERAGE
+	)
+	var db: float = linear_to_db(max(mag.length(), 1e-6))
+	var norm: float = clamp(inverse_lerp(-60.0, 0.0, db), 0.0, 1.0)
+
+	# Boost sensitivity without affecting geometry
+	norm = pow(norm, norm_boost)  # norm_boost < 1.0 = more sensitive
+
+	var low_color := Color(\"#0000FF\")
+	var high_color := Color(\"#800080\")
+	var adaptive_color := low_color.lerp(high_color, norm)
+
+	for mat in _ring_materials:
+		if mat:
+			mat.albedo_color = adaptive_color
+			mat.emission = adaptive_color
+	print(\"mag:\", mag.length(), \" db:\", db, \" norm:\", norm)
+"
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_2fo43"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_bj3u6"]
+
+[sub_resource type="Sky" id="Sky_va77k"]
+sky_material = SubResource("PanoramaSkyMaterial_bj3u6")
+
+[sub_resource type="Environment" id="Environment_uqc4w"]
+background_mode = 2
+sky = SubResource("Sky_va77k")
+
+[node name="Space" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.447367, 0)
+
+[node name="Visualiser" type="Node3D" parent="."]
+script = SubResource("GDScript_2fo43")
+
+[node name="WaveMesh" type="MeshInstance3D" parent="Visualiser"]
+mesh = SubResource("ImmediateMesh_2fo43")
+skeleton = NodePath("../..")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+script = ExtResource("2_p3ued")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="CharacterBody3D"]
+stream = ExtResource("3_2fo43")
+autoplay = true
+bus = &"Music"
+
+[node name="Camera3D" type="Camera3D" parent="CharacterBody3D"]
+transform = Transform3D(-1, 4.27058e-09, -8.73184e-08, 0, 0.998806, 0.0488498, 8.74228e-08, 0.0488498, -0.998806, 0, 1.305, -2.877)
+
+[node name="Sketchfab_Scene" parent="CharacterBody3D" instance=ExtResource("3_bj3u6")]
+transform = Transform3D(-4.80825e-09, 0, 0.11, 0, 0.11, 0, -0.11, 0, -4.80825e-09, 0, 0, 0)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.999953, 0.00970388, 0, -0.00970388, 0.999953, 0, 0.55979, 2.86423)
+light_energy = 16.0
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uqc4w")
