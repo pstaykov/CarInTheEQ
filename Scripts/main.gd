@@ -1,6 +1,8 @@
 extends Node3D
 
 @onready var pause_menu = $PauseGame/Panel
+
+
 func _ready():
 	$PauseGame/Panel/VBoxContainer/Continue.pressed.connect(_on_resume_button_pressed)
 	$PauseGame/Panel/VBoxContainer/Restart.pressed.connect(_on_restart_button_pressed)

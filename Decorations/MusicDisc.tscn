@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://cmxvu4c38f6ku"]
+
+[ext_resource type="PackedScene" uid="uid://3uoxvhehunr" path="res://3DModels/music_disc.glb" id="1_ia5vl"]
+[ext_resource type="Script" uid="uid://7631djgjy0w" path="res://Scripts/music_disc.gd" id="1_tpikw"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ia5vl"]
+radius = 1.83514
+
+[node name="MusicDisc" type="Area3D" groups=["MusicDisc"]]
+script = ExtResource("1_tpikw")
+
+[node name="Music_disc" parent="." instance=ExtResource("1_ia5vl")]
+transform = Transform3D(7, 0, 0, 0, 7, 0, 0, 0, 7, 0, 0, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("SphereShape3D_ia5vl")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

@@ -15,6 +15,10 @@ var sun: Node3D= null
 @export var store_scene: PackedScene = preload("res://Decorations/Store.tscn")
 var store_spawned := false
 
+# music disks
+@export var disk_scene: PackedScene = preload("res://Decorations/MusicDisc.tscn")
+@export var disks_per_gap: int = 3
+
 
 # === CONFIG ===
 @export var bar_width: float = 3
@@ -219,3 +223,14 @@ func _spawn_row(values: Array) -> void:
 		var sun_y = ground_y + sun.scale.y * 0.4  # half risen
 		var sun_z = z_offset - row_spacing * 500   # slightly behind the latest floor
 		sun.transform.origin = Vector3(sun_x, sun_y, sun_z)
+		
+	if current_row % 15 == 0:  
+		for i in range(disks_per_gap):
+			var disk = disk_scene.instantiate()
+			add_child(disk)
+
+			var offset_x = randf_range(-gap_size * 0.4, gap_size * 0.4) * bar_width
+			var offset_y = ground_y + 1.5
+			var offset_z = z_offset + (i * 3.0)  # stagger them along Z
+
+			disk.transform.origin = Vector3(tunnel_gap_x + offset_x, offset_y, offset_z)
