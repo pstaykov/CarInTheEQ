@@ -97,7 +97,7 @@ func _spawn_junk() -> void:
 
 	# Scale down to ~1%
 	if junk is Node3D:
-		var scale_factor = _rng.randf_range(1, 1.6)
+		var scale_factor = _rng.randf_range(2, 2.6)
 		junk.scale = Vector3.ONE * scale_factor
 
 	add_child(junk)

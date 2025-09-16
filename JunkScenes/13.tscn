@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=4 uid="uid://bmuke0fmnmxih"]
+[gd_scene load_steps=6 format=4 uid="uid://bmuke0fmnmxih"]
 
 [ext_resource type="Texture2D" uid="uid://c83ipypcc1q4k" path="res://3DModels/ws_all_models_display_0.png" id="1_2od1d"]
+[ext_resource type="Script" uid="uid://yg875ijp6ip7" path="res://JunkScenes/JunkSpinning.gd" id="1_uv7aq"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yq63l"]
 resource_name = "Texture"
@@ -44,6 +45,7 @@ shadow_mesh = SubResource("ArrayMesh_eyq40")
 
 [node name="Asteroid_3" type="Node3D"]
 transform = Transform3D(4.6132e-06, -61.1037, -1.72392e-05, 0, -1.72392e-05, 61.1037, -61.1037, -4.6132e-06, -1.3025e-12, 0, 0, 0)
+script = ExtResource("1_uv7aq")
 
 [node name="Asteroid_3_Texture_0" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_q3clv")

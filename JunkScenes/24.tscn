@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=4 uid="uid://gd82c6f2yf8c"]
+[gd_scene load_steps=6 format=4 uid="uid://gd82c6f2yf8c"]
 
 [ext_resource type="Texture2D" uid="uid://c83ipypcc1q4k" path="res://3DModels/ws_all_models_display_0.png" id="1_62nme"]
+[ext_resource type="Script" uid="uid://yg875ijp6ip7" path="res://JunkScenes/JunkSpinning.gd" id="1_owwda"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yq63l"]
 resource_name = "Texture"
@@ -44,6 +45,7 @@ shadow_mesh = SubResource("ArrayMesh_f7vjg")
 
 [node name="Car" type="Node3D"]
 transform = Transform3D(139.356, 0, 0, 0, -2.07309e-05, 113.677, 0, -127.245, -1.85203e-05, 0, 0, 0)
+script = ExtResource("1_owwda")
 
 [node name="Car_Texture_0" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_2yho3")
