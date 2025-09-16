@@ -5,7 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://dq0f2qpkeidd4" path="res://3DModels/hover_car.glb" id="3_bj3u6"]
 [ext_resource type="Texture2D" uid="uid://bfr7vjqx3waa7" path="res://img/ringed_gas_giant_planet.hdr" id="4_bj3u6"]
 [ext_resource type="Script" uid="uid://c3sm78g21mr8w" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
-[ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scenes/space_spawner.gd" id="6_va77k"]
+[ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scripts/space_spawner.gd" id="6_va77k"]
 
 [sub_resource type="GDScript" id="GDScript_2fo43"]
 script/source = "extends Node3D
