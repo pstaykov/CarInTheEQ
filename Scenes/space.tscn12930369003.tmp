@@ -11,7 +11,7 @@
 script/source = "extends Node3D
 
 @export var ring_scene: PackedScene = preload(\"res://Scenes/VisualiserRing.tscn\")
-@export var audio_player: AudioStreamPlayer3D                                    # assign your music player here
+@export var audio_player: AudioStreamPlayer                                    # assign your music player here
 
 # Path shape / spacing
 @export var ring_spacing: float = 100.0
@@ -21,7 +21,7 @@ script/source = "extends Node3D
 @export var step_jitter_y: float = 20.0
 
 # Streaming spawn control
-@export var seconds_per_ring: float = 1.0                                    # spawn rate
+@export var seconds_per_ring: float = 0.25                                     # spawn rate
 @export var max_rings_in_scene: int = 200                                      # cap to avoid unbounded growth
 
 # Optional deterministic path
@@ -157,9 +157,8 @@ fog_depth_end = 409.9
 [node name="Space" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.447367, 0)
 
-[node name="Visualiser" type="Node3D" parent="." node_paths=PackedStringArray("audio_player")]
+[node name="Visualiser" type="Node3D" parent="."]
 script = SubResource("GDScript_2fo43")
-audio_player = NodePath("../CharacterBody3D/AudioStreamPlayer3D")
 
 [node name="WaveMesh" type="MeshInstance3D" parent="Visualiser"]
 mesh = SubResource("ImmediateMesh_2fo43")
@@ -198,10 +197,9 @@ script = ExtResource("4_wnfdr")
 ship = NodePath("../CharacterBody3D")
 follow_smooth = 31.795
 
-[node name="SpaceSpawner" type="Node3D" parent="." node_paths=PackedStringArray("ship", "music_player")]
+[node name="SpaceSpawner" type="Node3D" parent="." node_paths=PackedStringArray("ship")]
 script = ExtResource("6_va77k")
 ship = NodePath("../CharacterBody3D")
 max_junk = 500
 spawn_interval = 0.3
 spread = 100.0
-music_player = NodePath("../CharacterBody3D/AudioStreamPlayer3D")

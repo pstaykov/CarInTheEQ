@@ -6,6 +6,7 @@ extends Node3D
 @export var max_junk: int = 50
 @export var spawn_interval: float = 1.0
 @export var spread: float = 200.0
+@export var music_player: AudioStreamPlayer3D
 
 var junk_scenes: Array[PackedScene] = [
 	preload("res://JunkScenes/1.tscn"),
@@ -56,6 +57,9 @@ func _ready() -> void:
 
 func _physics_process(delta: float) -> void:
 	if not ship or junk_scenes.is_empty():
+		return
+		
+	if not music_player or not music_player.playing:
 		return
 
 	_timer += delta

@@ -1,6 +1,6 @@
 extends CharacterBody3D
 
-@export var max_speed: float = 60.0
+@export var max_speed: float = 100.0
 @export var acceleration: float = 30.0
 
 # Steering & movement

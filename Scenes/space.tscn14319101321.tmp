@@ -201,7 +201,7 @@ follow_smooth = 31.795
 [node name="SpaceSpawner" type="Node3D" parent="." node_paths=PackedStringArray("ship", "music_player")]
 script = ExtResource("6_va77k")
 ship = NodePath("../CharacterBody3D")
+music_player = NodePath("../CharacterBody3D/AudioStreamPlayer3D")
 max_junk = 500
 spawn_interval = 0.3
 spread = 100.0
-music_player = NodePath("../CharacterBody3D/AudioStreamPlayer3D")

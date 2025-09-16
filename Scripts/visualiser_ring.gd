@@ -11,7 +11,7 @@ extends Node3D
 @export var high_color: Color = Color(1.0, 0.2, 0.2)  # loud
 @export var db_min: float = -80.0    # dB value that maps to low_color (increase magnitude = moves toward high_color)
 @export var db_max: float = -20.0    # dB value that maps to high_color (set lower if it still saturates)
-@export var color_gamma: float = 1.2 # >1.0 compresses highs a bit; try 1.0–2.0
+@export var color_gamma: float = 1.2 # >1.0 compresses highs a bit
 @export var smooth: float = 0.2      # 0..1 smoothing of magnitudes
 
 var _values: PackedFloat32Array = []  # store smoothed magnitudes for half the ring
@@ -87,7 +87,7 @@ func _process(delta: float) -> void:
 		right_pts.append(Vector3(x, y, 0))
 		right_vals.append(_values[i])
 
-	# Mirror to left side (copy values so color matches)
+	# Mirror to left side (copy values so color matches)d
 	var left_pts: Array[Vector3] = []
 	var left_vals: Array[float] = []
 	for i in range(half_points - 1, -1, -1):
