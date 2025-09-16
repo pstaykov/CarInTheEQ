@@ -1,4 +1,4 @@
-[gd_scene format=3 uid="uid://ubrebnp4w1nf"]
+[gd_scene load_steps=0 format=3 uid="uid://ubrebnp4w1nf"]
 
 [node name="SpaceSpawner" type="Node3D"]
 

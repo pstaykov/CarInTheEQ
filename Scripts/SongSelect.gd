@@ -1,28 +1,6 @@
 extends Control
 
-# Dictionary of available songs
-var songs = {
-	"Tetris": {
-		"audio": "res://audio/Tetris.mp3",
-		"json": "res://audio/Jsons/Tetris.json"
-	},
-	"Sonic": {
-		"audio": "res://audio/Sonic.mp3",
-		"json": "res://audio/Jsons/Sonic.json"
-	},
-	"PacMan": {
-		"audio": "res://audio/PacMan.mp3",
-		"json": "res://audio/Jsons/PacMan.json"
-	},
-	"AKAI": {
-		"audio": "res://audio/AKAI.mp3",
-		"json": "res://audio/Jsons/AKAI.json"
-	},
-	"TriPoloski": {
-		"audio": "res://audio/TriPoloski.mp3",
-		"json": "res://audio/Jsons/TriPoloski.json"
-	}
-}
+@onready var buttons = {"Tetris": get_tree().get_nodes_in_group("lvl_buttons")[0], "Sonic": get_tree().get_nodes_in_group("lvl_buttons")[1], "AKAI": get_tree().get_nodes_in_group("lvl_buttons")[2], "TriPoloski": get_tree().get_nodes_in_group("lvl_buttons")[3]}
 
 func _ready():
 	# Connect buttons (adjust paths to match your scene tree)
@@ -32,16 +10,23 @@ func _ready():
 	$VBoxContainer/AKAIButton.pressed.connect(func(): _on_song_selected("AKAI"))
 	$VBoxContainer/TriPoloskiButton.pressed.connect(func(): _on_song_selected("TriPoloski"))
 	$VBoxContainer/Back.pressed.connect(func(): _on_back_button_pressed())
+	
+	for i in buttons.keys():
+		if i in Global.unlocked_songs.keys():
+			buttons[i].visible = true
+		else:
+			buttons[i].visible = false
+		
 
 func _on_song_selected(song_name: String) -> void:
-	if not songs.has(song_name):
+	if not Global.songs.has(song_name):
 		push_error("❌ Song not found: %s" % song_name)
 		return
 
 	# Explicitly typed dictionary
 	var game_data: Dictionary = {
-		"audio_path": songs[song_name]["audio"],
-		"json_path": songs[song_name]["json"]
+		"audio_path": Global.songs[song_name]["audio"],
+		"json_path": Global.songs[song_name]["json"]
 	}
 
 	Global.current_level = game_data

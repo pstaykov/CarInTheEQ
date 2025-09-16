@@ -42,11 +42,13 @@ offset_bottom = 68.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TetrisButton" type="Button" parent="VBoxContainer"]
+[node name="TetrisButton" type="Button" parent="VBoxContainer" groups=["lvl_buttons"]]
+visible = false
 layout_mode = 2
 text = "Tetris"
 
-[node name="SonicButton" type="Button" parent="VBoxContainer"]
+[node name="SonicButton" type="Button" parent="VBoxContainer" groups=["lvl_buttons"]]
+visible = false
 layout_mode = 2
 text = "Sonic"
 
@@ -54,11 +56,13 @@ text = "Sonic"
 layout_mode = 2
 text = "PacMan"
 
-[node name="AKAIButton" type="Button" parent="VBoxContainer"]
+[node name="AKAIButton" type="Button" parent="VBoxContainer" groups=["lvl_buttons"]]
+visible = false
 layout_mode = 2
 text = "AKAI"
 
-[node name="TriPoloskiButton" type="Button" parent="VBoxContainer"]
+[node name="TriPoloskiButton" type="Button" parent="VBoxContainer" groups=["lvl_buttons"]]
+visible = false
 layout_mode = 2
 text = "TriPoloski
 "
