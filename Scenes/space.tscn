@@ -1,9 +1,10 @@
-[gd_scene load_steps=12 format=3 uid="uid://b4sdvep1rldrp"]
+[gd_scene load_steps=15 format=3 uid="uid://b4sdvep1rldrp"]
 
 [ext_resource type="Script" uid="uid://cljy178fnry2i" path="res://Scripts/character_body_3d.gd" id="2_p3ued"]
 [ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="3_2fo43"]
 [ext_resource type="PackedScene" uid="uid://dq0f2qpkeidd4" path="res://3DModels/hover_car.glb" id="3_bj3u6"]
 [ext_resource type="Texture2D" uid="uid://bfr7vjqx3waa7" path="res://img/ringed_gas_giant_planet.hdr" id="4_bj3u6"]
+[ext_resource type="Shader" uid="uid://du86wxyudwg0v" path="res://Scenes/fog.gdshader" id="4_uqc4w"]
 [ext_resource type="Script" uid="uid://c3sm78g21mr8w" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
 [ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scenes/space_spawner.gd" id="6_va77k"]
 
@@ -67,6 +68,19 @@ func _spawn_rings() -> void:
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_2fo43"]
 
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1fjq1"]
+render_priority = 0
+shader = ExtResource("4_uqc4w")
+shader_parameter/fog_near = 150.0
+shader_parameter/fog_far = 200.0
+shader_parameter/fog_color = Color(1, 0.645201, 0.488551, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_kqa63"]
+material = SubResource("ShaderMaterial_1fjq1")
+flip_faces = true
+radius = 250.0
+height = 100.0
+
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_bj3u6"]
 panorama = ExtResource("4_bj3u6")
 
@@ -77,15 +91,15 @@ sky_material = SubResource("PanoramaSkyMaterial_bj3u6")
 background_mode = 2
 sky = SubResource("Sky_va77k")
 fog_mode = 1
-fog_light_color = Color(0.513233, 0.513233, 0.513233, 1)
-fog_light_energy = 1.52
-fog_density = 0.5721
+fog_light_color = Color(0.681385, 0.822142, 1, 1)
+fog_light_energy = 3.97
+fog_density = 1.0
 fog_aerial_perspective = 0.713
-fog_sky_affect = 0.28
+fog_sky_affect = 0.084
 fog_height = 8.1
-fog_depth_curve = 0.574349
-fog_depth_begin = 0.0
-fog_depth_end = 39.6
+fog_depth_curve = 16.0
+fog_depth_begin = 199.4
+fog_depth_end = 409.9
 
 [node name="Space" type="Node3D"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.447367, 0)
@@ -108,8 +122,12 @@ bus = &"Music"
 [node name="Sketchfab_Scene" parent="CharacterBody3D" instance=ExtResource("3_bj3u6")]
 transform = Transform3D(-4.80825e-09, 0, 0.11, 0, 0.11, 0, -0.11, 0, -4.80825e-09, 0, 0, 0)
 
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("SphereMesh_kqa63")
+
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, -0.451033, 0.892507, 0, -0.892507, -0.451033, 0, 0.55979, 2.86423)
+transform = Transform3D(1, 0, 0, 0, 0.252678, 0.96755, 0, -0.96755, 0.252678, 0, 0.55979, 2.86423)
+light_color = Color(1, 0.579903, 0.429373, 1)
 light_energy = 16.0
 light_volumetric_fog_energy = 3.743
 

@@ -1,5 +1,6 @@
-[gd_scene load_steps=5 format=4 uid="uid://4m8j5qkxw2si"]
+[gd_scene load_steps=6 format=4 uid="uid://4m8j5qkxw2si"]
 
+[ext_resource type="Script" uid="uid://yg875ijp6ip7" path="res://JunkScenes/JunkSpinning.gd" id="1_7kep7"]
 [ext_resource type="Texture2D" uid="uid://c83ipypcc1q4k" path="res://3DModels/ws_all_models_display_0.png" id="1_vaw8m"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yq63l"]
@@ -42,6 +43,7 @@ shadow_mesh = SubResource("ArrayMesh_jcjty")
 
 [node name="Container" type="Node3D"]
 transform = Transform3D(78.9486, 0, 0, 0, -1.28624e-05, 78.9486, 0, -78.9486, -1.28624e-05, 0, 0, 0)
+script = ExtResource("1_7kep7")
 
 [node name="Container_Texture_0" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_hqwwm")

@@ -2,7 +2,7 @@
 extends EditorScript
 
 func _run():
-	var script = load("res://SpaceJunk.gd")
+	var script = load("res://JunkScenes/%d.tscn")
 	for i in range(1, 38):  # loop 1–37
 		var path = "res://JunkScenes/%d.tscn" % i
 		var packed: PackedScene = load(path)

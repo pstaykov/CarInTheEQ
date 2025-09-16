@@ -1,6 +1,7 @@
-[gd_scene load_steps=5 format=4 uid="uid://bckg3rxwbn8ah"]
+[gd_scene load_steps=6 format=4 uid="uid://bckg3rxwbn8ah"]
 
 [ext_resource type="Texture2D" uid="uid://bl1ee6o60xocg" path="res://3DModels/ws_all_models_display_1.png" id="1_06vgu"]
+[ext_resource type="Script" uid="uid://yg875ijp6ip7" path="res://JunkScenes/JunkSpinning.gd" id="1_81cx6"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dq4ab"]
 resource_name = "Textexture"
@@ -42,6 +43,7 @@ shadow_mesh = SubResource("ArrayMesh_skmbe")
 
 [node name="Rocket_broken_0" type="Node3D"]
 transform = Transform3D(78.889, 0, 0, 0, -1.28527e-05, 78.889, 0, -78.889, -1.28527e-05, 0, 0, 0)
+script = ExtResource("1_81cx6")
 
 [node name="Rocket_broken_0_Textexture_0" type="MeshInstance3D" parent="."]
 mesh = SubResource("ArrayMesh_4ymjr")
