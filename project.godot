@@ -24,6 +24,10 @@ buses/default_bus_layout="uid://b0u4plpajhros"
 
 Global="*res://Scripts/Global.gd"
 
+[global_group]
+
+popup_manager=""
+
 [gui]
 
 theme/default_theme_scale=4.0
