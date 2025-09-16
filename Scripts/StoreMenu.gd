@@ -10,7 +10,7 @@ func _ready() -> void:
 
 func update_labels() -> void:
 	$VBoxContainer/BuyRareSong.text = "Buy rare song %d/15" % Global.disc_count
-	$VBoxContainer/UnlockSpace.text = "Unlock space %d/5" % Global.casette_count
+	$VBoxContainer/UnlockSpace.text = "Unlock space %d/10" % Global.casette_count
 
 
 func _on_MainMenu_button_pressed():
@@ -29,7 +29,7 @@ func _on_RareSongButton_pressed():
 
 
 func _on_UnlockSpaceButton_pressed():
-	if Global.casette_count >= 5:
-		Global.casette_count -= 5
+	if Global.casette_count >= 10:
+		Global.casette_count -= 10
 		Global.SpaceUnlocked = true
 		update_labels()  # refresh after purchase

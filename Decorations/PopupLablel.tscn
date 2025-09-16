@@ -1,0 +1,8 @@
+[gd_scene load_steps=2 format=3 uid="uid://vciceohem1pa"]
+
+[ext_resource type="Script" uid="uid://cdyvpivm3j1rs" path="res://Scripts/popup_lablel.gd" id="1_81a7k"]
+
+[node name="PopupLabel" type="Label"]
+offset_right = 40.0
+offset_bottom = 31.0
+script = ExtResource("1_81a7k")
