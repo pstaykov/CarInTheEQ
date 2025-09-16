@@ -88,6 +88,20 @@ func _on_tick() -> void:
 	if current_row >= frames.size():
 		timer.stop()
 		print("Finished spawning spectrum")
+		   # === Resize road collision to match bars ===
+		var road_collision: CollisionShape3D = get_tree().root.get_node("Main/road/StaticBody3D/CollisionShape3D")
+
+		if road_collision and road_collision.shape is BoxShape3D:
+			var shape := road_collision.shape as BoxShape3D
+			var total_length = frames.size() * row_spacing
+
+			# Update Z size of road
+			shape.size.z = total_length
+
+			# Move collider so it starts where bars begin
+			road_collision.transform.origin.z = -(total_length * 0.5)
+
+			print("Road collider adjusted to length:", total_length)
 		if not store_spawned and store_scene:
 			var store = store_scene.instantiate()
 			add_child(store)
