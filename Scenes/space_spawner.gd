@@ -47,7 +47,6 @@ var junk_scenes: Array[PackedScene] = [
 	preload("res://JunkScenes/37.tscn"),
 ]
 
-
 var _rng := RandomNumberGenerator.new()
 var _timer := 0.0
 var _spawned: Array[Node3D] = []
@@ -83,7 +82,7 @@ func _spawn_junk() -> void:
 	# Pick a random junk scene
 	var scene: PackedScene = junk_scenes[_rng.randi_range(0, junk_scenes.size() - 1)]
 
-	# Ship forward (-Z)
+	# Ship forward (-Z usually, but your base uses +Z → keep it!)
 	var forward = ship.global_transform.basis.z.normalized()
 
 	# Position in front with spread
@@ -95,9 +94,9 @@ func _spawn_junk() -> void:
 	var junk = scene.instantiate()
 	junk.global_position = pos
 
-	# Scale down to ~1%
+	# Scale slightly randomized
 	if junk is Node3D:
-		var scale_factor = _rng.randf_range(2, 2.6)
+		var scale_factor = _rng.randf_range(2.0, 2.6)
 		junk.scale = Vector3.ONE * scale_factor
 
 	add_child(junk)
