@@ -15,9 +15,11 @@ var sun: Node3D= null
 @export var store_scene: PackedScene = preload("res://Decorations/Store.tscn")
 var store_spawned := false
 
-# music disks
+# music disks and casetted
 @export var disk_scene: PackedScene = preload("res://Decorations/MusicDisc.tscn")
+@export var casette_scene: PackedScene = preload("res://Scenes/casette.tscn")
 @export var disks_per_gap: int = 3
+var casette_spawned = false
 
 
 # === CONFIG ===
@@ -234,3 +236,23 @@ func _spawn_row(values: Array) -> void:
 			var offset_z = z_offset + (i * 3.0)  # stagger them along Z
 
 			disk.transform.origin = Vector3(tunnel_gap_x + offset_x, offset_y, offset_z)
+			
+	if not casette_spawned and current_row > int(frames.size() * 0.3):
+		# Spawn it somewhere about 30% into the level (you can change the factor)
+		var casette = casette_scene.instantiate()
+		add_child(casette)
+
+		var casette_x = randf_range(-gap_size * 0.4, gap_size * 0.4) * bar_width
+		var casette_y = ground_y + 1.5
+		var casette_z = z_offset - row_spacing * 5  # just a few rows ahead
+
+		casette.transform.origin = Vector3(
+			tunnel_gap_x + casette_x,
+			casette_y,
+			casette_z
+		)
+			
+		casette_spawned = true
+		
+	
+	

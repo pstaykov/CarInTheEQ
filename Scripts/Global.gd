@@ -34,6 +34,10 @@ var unlocked_songs = {}
 
 var disc_count = 0
 
+var casette_count = 0
+
+var SpaceUnlocked = false
+
 func unlock_song(song_id: String) -> void:
 	if song_id not in unlocked_songs:
 		unlocked_songs[song_id] = songs[song_id]

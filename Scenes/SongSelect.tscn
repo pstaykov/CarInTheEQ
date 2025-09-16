@@ -67,6 +67,12 @@ layout_mode = 2
 text = "TriPoloski
 "
 
+[node name="SpaceLevel" type="Button" parent="VBoxContainer" groups=["space_lvls"]]
+process_mode = 3
+visible = false
+layout_mode = 2
+text = "Space Levels"
+
 [node name="Back" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "Back

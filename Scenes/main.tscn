@@ -6,7 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="3_d1ilt"]
 [ext_resource type="Script" uid="uid://0pj6vevpq8hq" path="res://Scripts/roof_eq.gd" id="5_d1ilt"]
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="5_fdnlq"]
-[ext_resource type="Script" uid="uid://cvh5evafvffhi" path="res://Scripts/window_eq.gd" id="6_6iyac"]
+[ext_resource type="Script" path="res://Scripts/window_eq.gd" id="6_6iyac"]
 [ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="6_jkdf5"]
 [ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_wsu2k"]
 [ext_resource type="Script" uid="uid://binsr4wgq8dqy" path="res://Scripts/VieportContainer.gd" id="8_hptm8"]
@@ -295,6 +295,11 @@ text = "Welcome to the store"
 process_mode = 3
 layout_mode = 2
 text = "Buy a rare song"
+
+[node name="UnlockSpace" type="Button" parent="CanvasLayer/StoreMenu/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+text = "Unlock the space"
 
 [node name="MainMenu" type="Button" parent="CanvasLayer/StoreMenu/VBoxContainer"]
 process_mode = 3

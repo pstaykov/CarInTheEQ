@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://jtoxi48qfqub"]
+
+[ext_resource type="Script" uid="uid://dhhjoagp1ix3e" path="res://Scripts/casette.gd" id="1_gq11i"]
+[ext_resource type="PackedScene" uid="uid://csfgqal1gllwb" path="res://3DModels/video_casette.glb" id="1_s3b4m"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_gq11i"]
+
+[node name="Area3D" type="Area3D"]
+script = ExtResource("1_gq11i")
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("1_s3b4m")]
+transform = Transform3D(0.25, -0.353553, 0.25, 0.368791, 0.0225692, -0.336873, 0.226921, 0.352832, 0.272059, 0.068124, 0, -0.012341)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(4.6, 0, 0, 0, 4.6, 0, 0, 0, 4.6, 0, 0, 0)
+shape = SubResource("SphereShape3D_gq11i")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+
+[connection signal="body_entered" from="." to="." method="_on_body_entered"]

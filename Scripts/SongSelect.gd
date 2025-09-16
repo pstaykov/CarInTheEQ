@@ -10,13 +10,17 @@ func _ready():
 	$VBoxContainer/AKAIButton.pressed.connect(func(): _on_song_selected("AKAI"))
 	$VBoxContainer/TriPoloskiButton.pressed.connect(func(): _on_song_selected("TriPoloski"))
 	$VBoxContainer/Back.pressed.connect(func(): _on_back_button_pressed())
+	$VBoxContainer/SpaceLevel.pressed.connect(func(): _on_SpaceLevel_button_pressed())
+	
+	if Global.SpaceUnlocked:
+		$VBoxContainer/SpaceLevel.visible = true
 	
 	for i in buttons.keys():
 		if i in Global.unlocked_songs.keys():
 			buttons[i].visible = true
 		else:
 			buttons[i].visible = false
-		
+
 
 func _on_song_selected(song_name: String) -> void:
 	if not Global.songs.has(song_name):
@@ -35,3 +39,7 @@ func _on_song_selected(song_name: String) -> void:
 
 func _on_back_button_pressed() -> void:
 	get_tree().change_scene_to_file("res://Scenes/game_start.tscn")
+	
+
+func _on_SpaceLevel_button_pressed():
+	get_tree().change_scene_to_file("res://Scenes/space.tscn")
