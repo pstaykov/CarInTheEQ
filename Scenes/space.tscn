@@ -19,7 +19,6 @@ script/source = "extends Node3D
 @export var max_offset_y: float = 200.0
 @export var step_jitter_x: float = 30.0
 @export var step_jitter_y: float = 20.0
-
 @export var random_seed: int = 0 # 0 = fully random each run, >0 = fixed path
 
 var _rng := RandomNumberGenerator.new()
@@ -40,7 +39,6 @@ func _generate_positions() -> void:
 
 	for i in range(ring_count):
 		if i > 0:
-			# apply a random step in x/y direction each time
 			last_pos.x = clamp(
 				last_pos.x + _rng.randf_range(-step_jitter_x, step_jitter_x),
 				-max_offset_x, max_offset_x
@@ -58,7 +56,6 @@ func _spawn_rings() -> void:
 		var ring := ring_scene.instantiate()
 		ring.position = _positions[i]
 
-		# Look ahead a few rings for smoother orientation
 		var target_index = clamp(i + 3, 0, ring_count - 1)
 		ring.look_at(_positions[target_index], Vector3.UP)
 
@@ -126,7 +123,7 @@ transform = Transform3D(-4.80825e-09, 0, 0.11, 0, 0.11, 0, -0.11, 0, -4.80825e-0
 mesh = SubResource("SphereMesh_kqa63")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.252678, 0.96755, 0, -0.96755, 0.252678, 0, 0.55979, 2.86423)
+transform = Transform3D(1, 0, 0, 0, -0.44174, 0.897143, 0, -0.897143, -0.44174, 0, 0.55979, 2.86423)
 light_color = Color(1, 0.579903, 0.429373, 1)
 light_energy = 16.0
 light_volumetric_fog_energy = 3.743
@@ -149,4 +146,4 @@ script = ExtResource("6_va77k")
 ship = NodePath("../CharacterBody3D")
 max_junk = 500
 spawn_interval = 0.3
-spread = 50.0
+spread = 100.0
