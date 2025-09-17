@@ -1,0 +1,55 @@
+[gd_scene load_steps=7 format=3 uid="uid://xr2s52d4y0e8"]
+
+[ext_resource type="Script" uid="uid://rlpco4b5emtk" path="res://Scripts/visualiser_ring.gd" id="1_058bx"]
+
+[sub_resource type="Shader" id="Shader_058bx"]
+code = "shader_type spatial;
+
+render_mode unshaded;
+
+uniform vec4 low_color : source_color = vec4(0.0, 0.4, 1.0, 1.0); // bright blue
+uniform vec4 high_color : source_color = vec4(1.0, 0.2, 0.8, 1.0); // pink
+uniform float magnitude = 0.0;
+uniform float threshold = 0.6;
+uniform float fade_width = 0.1;
+
+void fragment() {
+    float mask = smoothstep(threshold - fade_width, threshold + fade_width, magnitude);
+    vec3 col = mix(low_color.rgb, high_color.rgb, mask);
+    ALBEDO = col;
+    EMISSION = col;
+}"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_mh64f"]
+render_priority = 0
+shader = SubResource("Shader_058bx")
+shader_parameter/low_color = Color(1, 0.398123, 0.780381, 1)
+shader_parameter/high_color = Color(1, 0.2, 0.8, 1)
+shader_parameter/magnitude = 5.0
+shader_parameter/threshold = 0.6
+shader_parameter/fade_width = 0.1
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_058bx"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_058bx"]
+height = 0.5
+radius = 10.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_058bx"]
+
+[node name="VisualiserRing" type="Node3D"]
+script = ExtResource("1_058bx")
+
+[node name="WaveMesh" type="MeshInstance3D" parent="."]
+material_override = SubResource("ShaderMaterial_mh64f")
+mesh = SubResource("ImmediateMesh_058bx")
+
+[node name="Area3D" type="Area3D" parent="."]
+collision_layer = 2
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1.91069e-15, 4.37114e-08, 1, 1, -4.37114e-08, 0, 4.37114e-08, 1, -4.37114e-08, 0, 0, 0)
+shape = SubResource("CylinderShape3D_058bx")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="Area3D"]
+mesh = SubResource("CylinderMesh_058bx")

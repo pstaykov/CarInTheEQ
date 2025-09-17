@@ -75,7 +75,6 @@ func _physics_process(delta: float) -> void:
 			continue
 		var rel = j.global_position - ship.global_position
 		if rel.dot(ship.global_transform.basis.z) > despawn_distance:
-			print("Despawning junk at ", j.global_position)
 			_spawned.remove_at(i)
 			j.queue_free()
 
@@ -105,5 +104,3 @@ func _spawn_junk() -> void:
 
 	add_child(junk)
 	_spawned.append(junk)
-
-	print("Spawned junk: ", scene.resource_path, " at ", pos, " scale ", junk.scale)

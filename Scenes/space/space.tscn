@@ -1,0 +1,241 @@
+[gd_scene load_steps=17 format=3 uid="uid://b4sdvep1rldrp"]
+
+[ext_resource type="Script" uid="uid://cljy178fnry2i" path="res://Scripts/character_body_3d.gd" id="1_7xxun"]
+[ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="2_3foqv"]
+[ext_resource type="PackedScene" uid="uid://dq0f2qpkeidd4" path="res://3DModels/hover_car.glb" id="3_hn2ay"]
+[ext_resource type="Texture2D" uid="uid://bfr7vjqx3waa7" path="res://img/ringed_gas_giant_planet.hdr" id="4_ovymi"]
+[ext_resource type="Script" uid="uid://c3sm78g21mr8w" path="res://Scripts/camera_3d.gd" id="5_88kq3"]
+[ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scripts/space_spawner.gd" id="6_dnxb6"]
+[ext_resource type="Script" uid="uid://d01svtskf1o5q" path="res://Scripts/canvas_layer.gd" id="7_rcuir"]
+
+[sub_resource type="GDScript" id="GDScript_2fo43"]
+script/source = "extends Node3D
+
+@export var ring_scene: PackedScene = preload(\"res://Scenes/VisualiserRing.tscn\")
+@export var audio_player: AudioStreamPlayer3D          # assign your music player here
+@export var hud_path: NodePath                         # drag your CanvasLayer HUD here in the inspector
+
+# Path shape / spacing
+@export var ring_spacing: float = 100.0
+@export var max_offset_x: float = 200.0
+@export var max_offset_y: float = 200.0
+@export var step_jitter_x: float = 30.0
+@export var step_jitter_y: float = 20.0
+
+# Streaming spawn control
+@export var seconds_per_ring: float = 1.0
+@export var max_rings_in_scene: int = 200
+
+# Optional deterministic path
+@export var random_seed: int = 0   # 0 = random each run, >0 = fixed
+
+var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _time_accum: float = 0.0
+var _last_pos: Vector3 = Vector3.ZERO
+var _have_last: bool = false
+var _last_ring_node: Node3D = null
+var _rings: Array[Node3D] = []
+var _positions: Array[Vector3] = []
+
+@onready var hud = get_node_or_null(hud_path)
+
+func _ready() -> void:
+	if random_seed != 0:
+		_rng.seed = random_seed
+	else:
+		_rng.randomize()
+
+	Global.SpaceRings = 0   # reset count when starting level
+	if hud:
+		hud.update_ring_count(Global.SpaceRings)
+
+	# Start with one ring if music is already playing
+	if audio_player != null and audio_player.playing:
+		_spawn_next_ring()
+
+func _process(delta: float) -> void:
+	if audio_player == null or audio_player.stream == null:
+		return
+	if not audio_player.playing:
+		return
+
+	_time_accum += delta
+	while _time_accum >= seconds_per_ring:
+		_time_accum -= seconds_per_ring
+		_spawn_next_ring()
+
+	# Keep memory under control
+	while _rings.size() > max_rings_in_scene:
+		var old: Node3D = _rings.front()
+		_rings.pop_front()
+		if is_instance_valid(old):
+			old.queue_free()
+		if _positions.size() > 0:
+			_positions.pop_front()
+
+func _spawn_next_ring() -> void:
+	# Compute next position
+	var next_pos: Vector3
+	if _have_last:
+		var nx: float = clamp(_last_pos.x + _rng.randf_range(-step_jitter_x, step_jitter_x), -max_offset_x, max_offset_x)
+		var ny: float = clamp(_last_pos.y + _rng.randf_range(-step_jitter_y, step_jitter_y), -max_offset_y, max_offset_y)
+		var nz: float = _last_pos.z + ring_spacing
+		next_pos = Vector3(nx, ny, nz)
+	else:
+		next_pos = Vector3(0.0, 0.0, 0.0)
+		_have_last = true
+
+	# Instance & place
+	var ring: Node3D = ring_scene.instantiate() as Node3D
+	ring.position = next_pos
+	add_child(ring)
+
+	# Connect signal from this ring
+	if ring.has_signal(\"ring_passed\"):
+		ring.ring_passed.connect(_on_ring_passed)
+
+	# Orient previous ring toward new one
+	if _last_ring_node != null and is_instance_valid(_last_ring_node):
+		_last_ring_node.look_at(next_pos, Vector3.UP)
+	ring.look_at(next_pos + Vector3(0, 0, 1), Vector3.UP)
+
+	# Bookkeeping
+	_last_ring_node = ring
+	_last_pos = next_pos
+	_rings.append(ring)
+	_positions.append(next_pos)
+
+func _on_ring_passed() -> void:
+	if hud:
+		hud.update_ring_count(Global.SpaceRings)
+"
+
+[sub_resource type="ImmediateMesh" id="ImmediateMesh_2fo43"]
+
+[sub_resource type="Shader" id="Shader_va77k"]
+code = "shader_type spatial;
+render_mode unshaded, cull_front, depth_draw_always, blend_mix, fog_disabled;
+
+uniform float fog_near = 200.0;   // distance where fog starts
+uniform float fog_far = 600.0;    // distance where fog is fully opaque
+uniform vec4 fog_color : source_color = vec4(0.5, 0.6, 0.8, 1.0); // fog color
+
+void fragment() {
+    // VIEW is the vector from fragment to camera in world space
+    float dist = length(VIEW);
+
+    // fog factor
+    float fog = smoothstep(fog_near, fog_far, dist);
+
+    // Just render fog color with fade
+    ALBEDO = fog_color.rgb;
+    ALPHA = fog;
+}
+"
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_1fjq1"]
+render_priority = 0
+shader = SubResource("Shader_va77k")
+shader_parameter/fog_near = 150.0
+shader_parameter/fog_far = 200.0
+shader_parameter/fog_color = Color(1, 0.645201, 0.488551, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_kqa63"]
+material = SubResource("ShaderMaterial_1fjq1")
+flip_faces = true
+radius = 250.0
+height = 100.0
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_va77k"]
+size = Vector3(1, 0.601501, 2.37622)
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_bj3u6"]
+panorama = ExtResource("4_ovymi")
+
+[sub_resource type="Sky" id="Sky_va77k"]
+sky_material = SubResource("PanoramaSkyMaterial_bj3u6")
+
+[sub_resource type="Environment" id="Environment_uqc4w"]
+background_mode = 2
+sky = SubResource("Sky_va77k")
+fog_mode = 1
+fog_light_color = Color(0.681385, 0.822142, 1, 1)
+fog_light_energy = 3.97
+fog_density = 1.0
+fog_aerial_perspective = 0.713
+fog_sky_affect = 0.084
+fog_height = 8.1
+fog_depth_curve = 16.0
+fog_depth_begin = 199.4
+fog_depth_end = 409.9
+
+[node name="Space" type="Node3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.447367, 0)
+
+[node name="Visualiser" type="Node3D" parent="." node_paths=PackedStringArray("audio_player")]
+script = SubResource("GDScript_2fo43")
+audio_player = NodePath("../CharacterBody3D/AudioStreamPlayer3D")
+hud_path = NodePath("../CanvasLayer")
+
+[node name="WaveMesh" type="MeshInstance3D" parent="Visualiser"]
+mesh = SubResource("ImmediateMesh_2fo43")
+skeleton = NodePath("../..")
+
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." groups=["player"]]
+collision_layer = 3
+collision_mask = 3
+script = ExtResource("1_7xxun")
+
+[node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="CharacterBody3D"]
+stream = ExtResource("2_3foqv")
+autoplay = true
+bus = &"Music"
+
+[node name="Sketchfab_Scene" parent="CharacterBody3D" instance=ExtResource("3_hn2ay")]
+transform = Transform3D(-4.80825e-09, 0, 0.11, 0, 0.11, 0, -0.11, 0, -4.80825e-09, 0, 0, 0)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="CharacterBody3D"]
+mesh = SubResource("SphereMesh_kqa63")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="CharacterBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.0116272, 0.126099)
+shape = SubResource("BoxShape3D_va77k")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, -0.44174, 0.897143, 0, -0.897143, -0.44174, 0, 0.55979, 2.86423)
+light_color = Color(1, 0.579903, 0.429373, 1)
+light_energy = 16.0
+light_volumetric_fog_energy = 3.743
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_uqc4w")
+
+[node name="Camera3D" type="Camera3D" parent="." node_paths=PackedStringArray("ship")]
+transform = Transform3D(1, 0, 0, 0, 0.998806, 0.0488498, 0, -0.0488498, 0.998806, 0, 0.74, -1.702)
+h_offset = 0.165
+v_offset = 2.68
+fov = 85.2
+near = 0.344
+script = ExtResource("5_88kq3")
+ship = NodePath("../CharacterBody3D")
+follow_smooth = 31.795
+
+[node name="SpaceSpawner" type="Node3D" parent="." node_paths=PackedStringArray("ship", "music_player")]
+script = ExtResource("6_dnxb6")
+ship = NodePath("../CharacterBody3D")
+max_junk = 500
+spawn_interval = 0.3
+spread = 100.0
+music_player = NodePath("../CharacterBody3D/AudioStreamPlayer3D")
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+script = ExtResource("7_rcuir")
+
+[node name="RingCounter" type="Label" parent="CanvasLayer"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -150.0
+offset_bottom = 31.0
+grow_horizontal = 0
+text = "Rings: 0"

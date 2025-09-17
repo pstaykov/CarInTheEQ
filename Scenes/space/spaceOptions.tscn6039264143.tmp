@@ -1,0 +1,138 @@
+[gd_scene load_steps=2 format=3 uid="uid://dx6kjygbotf0q"]
+
+[ext_resource type="Script" uid="uid://cr4n042bwxfdv" path="res://Scenes/space/space_options.gd" id="1_jrwyx"]
+
+[node name="SpaceOptions" type="Control"]
+layout_mode = 3
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_jrwyx")
+
+[node name="CenterContainer" type="CenterContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Panel" type="Panel" parent="CenterContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="CenterContainer/Panel"]
+layout_mode = 0
+offset_left = 21.0
+offset_top = 435.0
+offset_right = 237.0
+offset_bottom = 485.0
+text = "apply"
+
+[node name="TabContainer" type="TabContainer" parent="CenterContainer/Panel"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+current_tab = 1
+clip_tabs = false
+
+[node name="generation Options" type="VBoxContainer" parent="CenterContainer/Panel/TabContainer"]
+visible = false
+layout_mode = 2
+metadata/_tab_index = 0
+
+[node name="HBoxContainer" type="HBoxContainer" parent="CenterContainer/Panel/TabContainer/generation Options"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer"]
+layout_mode = 2
+text = "label"
+
+[node name="SpinBox" type="SpinBox" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer"]
+layout_mode = 2
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="CenterContainer/Panel/TabContainer/generation Options"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer2"]
+layout_mode = 2
+text = "label"
+
+[node name="SpinBox" type="SpinBox" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer2"]
+layout_mode = 2
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="CenterContainer/Panel/TabContainer/generation Options"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer3"]
+layout_mode = 2
+text = "label"
+
+[node name="SpinBox" type="SpinBox" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer3"]
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="CenterContainer/Panel/TabContainer/generation Options"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer4"]
+layout_mode = 2
+text = "label"
+
+[node name="SpinBox" type="SpinBox" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer4"]
+layout_mode = 2
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="CenterContainer/Panel/TabContainer/generation Options"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer5"]
+layout_mode = 2
+text = "label"
+
+[node name="SpinBox" type="SpinBox" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer5"]
+layout_mode = 2
+
+[node name="HBoxContainer6" type="HBoxContainer" parent="CenterContainer/Panel/TabContainer/generation Options"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer6"]
+layout_mode = 2
+text = "label"
+
+[node name="SpinBox" type="SpinBox" parent="CenterContainer/Panel/TabContainer/generation Options/HBoxContainer6"]
+layout_mode = 2
+
+[node name="audio" type="VBoxContainer" parent="CenterContainer/Panel/TabContainer"]
+layout_mode = 2
+metadata/_tab_index = 1
+
+[node name="Volume" type="HBoxContainer" parent="CenterContainer/Panel/TabContainer/audio"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/TabContainer/audio/Volume"]
+layout_mode = 2
+text = "Volume"
+
+[node name="HSlider" type="HSlider" parent="CenterContainer/Panel/TabContainer/audio/Volume"]
+layout_mode = 2
+size_flags_horizontal = 3
+tooltip_text = "change voume percentage"
+
+[node name="Output Device" type="HBoxContainer" parent="CenterContainer/Panel/TabContainer/audio"]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CenterContainer/Panel/TabContainer/audio"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="CenterContainer/Panel/TabContainer/audio/VBoxContainer"]
+layout_mode = 2
+text = "output device"
+
+[node name="OutputDeviceOption" type="OptionButton" parent="CenterContainer/Panel/TabContainer/audio/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3

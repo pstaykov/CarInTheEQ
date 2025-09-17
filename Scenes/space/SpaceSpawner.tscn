@@ -1,0 +1,7 @@
+[gd_scene format=3 uid="uid://dw8alvprjcx2m"]
+
+[node name="SpaceSpawner" type="Node3D"]
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+
+[node name="RigidBody3D" type="RigidBody3D" parent="MeshInstance3D"]
