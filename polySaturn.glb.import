@@ -3,13 +3,13 @@
 importer="scene"
 importer_version=1
 type="PackedScene"
-uid="uid://docqw7mwsvjek"
-path="res://.godot/imported/saturn_planet.glb-4687bdc531006eac51f68a67aec6d007.scn"
+uid="uid://ck81jr0w0lwgl"
+path="res://.godot/imported/polySaturn.glb-4a6943fd5fb0b77e377778f2aa704fd0.scn"
 
 [deps]
 
-source_file="res://3DModels/saturn_planet.glb"
-dest_files=["res://.godot/imported/saturn_planet.glb-4687bdc531006eac51f68a67aec6d007.scn"]
+source_file="res://polySaturn.glb"
+dest_files=["res://.godot/imported/polySaturn.glb-4a6943fd5fb0b77e377778f2aa704fd0.scn"]
 
 [params]
 
