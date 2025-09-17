@@ -5,7 +5,7 @@ extends CharacterBody3D
 
 # Steering & movement
 @export var turn_speed: float = 14.0
-@export var strafe_speed: float = 25.0
+@export var strafe_speed: float = 50.0
 @export var vertical_speed: float = 1.0
 
 # Craft tilt behaviour

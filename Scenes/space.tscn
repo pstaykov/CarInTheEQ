@@ -4,33 +4,29 @@
 [ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="3_2fo43"]
 [ext_resource type="PackedScene" uid="uid://dq0f2qpkeidd4" path="res://3DModels/hover_car.glb" id="3_bj3u6"]
 [ext_resource type="Texture2D" uid="uid://bfr7vjqx3waa7" path="res://img/ringed_gas_giant_planet.hdr" id="4_bj3u6"]
-[ext_resource type="Script" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
-[ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scenes/space_spawner.gd" id="6_va77k"]
+[ext_resource type="Script" uid="uid://c3sm78g21mr8w" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
+[ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scripts/space_spawner.gd" id="6_va77k"]
 
 [sub_resource type="GDScript" id="GDScript_2fo43"]
 script/source = "extends Node3D
 
 @export var ring_scene: PackedScene = preload(\"res://Scenes/VisualiserRing.tscn\")
-@export var audio_player: AudioStreamPlayer3D                                    # assign your music player here
+@export var audio_player: AudioStreamPlayer3D
 
-# Path shape / spacing
 @export var ring_spacing: float = 100.0
 @export var max_offset_x: float = 200.0
 @export var max_offset_y: float = 200.0
 @export var step_jitter_x: float = 30.0
 @export var step_jitter_y: float = 20.0
 
-# Streaming spawn control
-@export var seconds_per_ring: float = 1.0                                    # spawn rate
-@export var max_rings_in_scene: int = 200                                      # cap to avoid unbounded growth
+@export var seconds_per_ring: float = 1.0
+@export var max_rings_in_scene: int = 200
+@export var random_seed: int = 0
 
-# Optional deterministic path
-@export var random_seed: int = 0                                               # 0 = random each run, >0 = fixed
-
-var _rng: RandomNumberGenerator = RandomNumberGenerator.new()
+var _rng := RandomNumberGenerator.new()
 var _time_accum: float = 0.0
 var _last_pos: Vector3 = Vector3.ZERO
-var _have_last: bool = false
+var _have_last := false
 var _last_ring_node: Node3D = null
 var _rings: Array[Node3D] = []
 var _positions: Array[Vector3] = []
@@ -41,15 +37,12 @@ func _ready() -> void:
 	else:
 		_rng.randomize()
 
-	# (Optional) start with one ring when music starts
-	if audio_player != null and audio_player.playing:
+	if audio_player and audio_player.playing:
 		_spawn_next_ring()
 
 func _process(delta: float) -> void:
-	if audio_player == null or audio_player.stream == null:
+	if not audio_player or not audio_player.stream:
 		return
-
-	# Stop spawning automatically when song is not playing
 	if not audio_player.playing:
 		return
 
@@ -58,44 +51,43 @@ func _process(delta: float) -> void:
 		_time_accum -= seconds_per_ring
 		_spawn_next_ring()
 
-	# Keep memory under control
 	while _rings.size() > max_rings_in_scene:
-		var old: Node3D = _rings.front()
-		_rings.pop_front()
+		var old: Node3D = _rings.pop_front()
 		if is_instance_valid(old):
 			old.queue_free()
 		if _positions.size() > 0:
 			_positions.pop_front()
 
 func _spawn_next_ring() -> void:
-	# Compute next position
 	var next_pos: Vector3
 	if _have_last:
-		var nx: float = clamp(_last_pos.x + _rng.randf_range(-step_jitter_x, step_jitter_x), -max_offset_x, max_offset_x)
-		var ny: float = clamp(_last_pos.y + _rng.randf_range(-step_jitter_y, step_jitter_y), -max_offset_y, max_offset_y)
-		var nz: float = _last_pos.z + ring_spacing
+		var nx = clamp(_last_pos.x + _rng.randf_range(-step_jitter_x, step_jitter_x), -max_offset_x, max_offset_x)
+		var ny = clamp(_last_pos.y + _rng.randf_range(-step_jitter_y, step_jitter_y), -max_offset_y, max_offset_y)
+		var nz = _last_pos.z + ring_spacing
 		next_pos = Vector3(nx, ny, nz)
 	else:
-		# First ring
-		next_pos = Vector3(0.0, 0.0, 0.0)
+		next_pos = Vector3(0, 0, 0)
 		_have_last = true
 
-	# Instance & place
-	var ring: Node3D = ring_scene.instantiate() as Node3D
+	var ring = ring_scene.instantiate() as Node3D
 	ring.position = next_pos
 	add_child(ring)
 
-	# Orient previous ring to look toward this new one for a smooth path
-	if _last_ring_node != null and is_instance_valid(_last_ring_node):
+	# Listen for pass-through event
+	if ring.has_signal(\"ring_passed\"):
+		ring.connect(\"ring_passed\", Callable(self, \"_on_ring_passed\"))
+
+	if _last_ring_node and is_instance_valid(_last_ring_node):
 		_last_ring_node.look_at(next_pos, Vector3.UP)
-	# Make the newly spawned ring face forward along +Z as a default
 	ring.look_at(next_pos + Vector3(0, 0, 1), Vector3.UP)
 
-	# Bookkeeping
 	_last_ring_node = ring
 	_last_pos = next_pos
 	_rings.append(ring)
 	_positions.append(next_pos)
+
+func _on_ring_passed() -> void:
+	print(\"Player went through a ring! Score =\", Global.SpaceRings)
 "
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_2fo43"]
@@ -165,7 +157,9 @@ audio_player = NodePath("../CharacterBody3D/AudioStreamPlayer3D")
 mesh = SubResource("ImmediateMesh_2fo43")
 skeleton = NodePath("../..")
 
-[node name="CharacterBody3D" type="CharacterBody3D" parent="."]
+[node name="CharacterBody3D" type="CharacterBody3D" parent="." groups=["player"]]
+collision_layer = 3
+collision_mask = 3
 script = ExtResource("2_p3ued")
 
 [node name="AudioStreamPlayer3D" type="AudioStreamPlayer3D" parent="CharacterBody3D"]
