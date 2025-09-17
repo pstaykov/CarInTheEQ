@@ -1,10 +1,10 @@
 [gd_scene load_steps=2 format=3 uid="uid://bk2fafqvggw7d"]
 
-[ext_resource type="Script" uid="uid://ct2lbmk0pgm51" path="res://Scripts/death_screen.gd" id="1_w60y0"]
+[ext_resource type="Script" uid="uid://ct2lbmk0pgm51" path="res://Scripts/death_screen.gd" id="1_4pnsc"]
 
 [node name="DeathScreen" type="CanvasLayer"]
 process_mode = 3
-script = ExtResource("1_w60y0")
+script = ExtResource("1_4pnsc")
 
 [node name="ColorRect" type="ColorRect" parent="."]
 anchors_preset = 15

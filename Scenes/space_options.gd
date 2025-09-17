@@ -1,5 +1,5 @@
-extends CanvasLayer
-
+#extends CanvasLayer
+"""
 @export var spawner_path: NodePath  # drag RingSpawner here
 
 # Spawner controls
@@ -99,4 +99,4 @@ func _on_volume_changed(value: float) -> void:
 	if bus_idx >= 0:
 		# Convert linear [0..1] to decibels
 		var db = linear_to_db(clamp(value, 0.001, 1.0))
-		AudioServer.set_bus_volume_db(bus_idx, db)
+		AudioServer.set_bus_volume_db(bus_idx, db) ##

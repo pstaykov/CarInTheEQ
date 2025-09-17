@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://do5ksykaihl3f"]
 
-[ext_resource type="Script" uid="uid://bokon8fbomyid" path="res://Scripts/options.gd" id="1_hkd14"]
-[ext_resource type="Texture2D" uid="uid://b5kxyi5jqjhg6" path="res://img/Screenshot 2025-09-13 230237.png" id="2_jay1w"]
-[ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="3_1htu2"]
+[ext_resource type="Script" uid="uid://bokon8fbomyid" path="res://Scripts/options.gd" id="1_qqnya"]
+[ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="2_hg628"]
+[ext_resource type="Texture2D" uid="uid://b5kxyi5jqjhg6" path="res://img/Screenshot 2025-09-13 230237.png" id="3_5hy3q"]
 
 [node name="Options" type="Control"]
 layout_mode = 3
@@ -15,7 +15,7 @@ offset_right = -2.0
 offset_bottom = -2.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_hkd14")
+script = ExtResource("1_qqnya")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -24,7 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_jay1w")
+texture = ExtResource("3_5hy3q")
 expand_mode = 3
 stretch_mode = 6
 
@@ -59,5 +59,5 @@ text = "Back"
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
 position = Vector2(394, 332.5)
-stream = ExtResource("3_1htu2")
+stream = ExtResource("2_hg628")
 autoplay = true

@@ -1,22 +1,22 @@
 [gd_scene load_steps=22 format=3 uid="uid://j5as40ig7f3t"]
 
-[ext_resource type="Script" uid="uid://dpmi4b802mrkh" path="res://Scripts/main.gd" id="1_ovwol"]
-[ext_resource type="Texture2D" uid="uid://3pl1ppjn0yw5" path="res://img/panorama_image (2).png" id="2_blb6r"]
-[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="3_qigkw"]
-[ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="4_lsetm"]
-[ext_resource type="Script" uid="uid://0pj6vevpq8hq" path="res://Scripts/roof_eq.gd" id="5_1d1g3"]
-[ext_resource type="Script" uid="uid://cvh5evafvffhi" path="res://Scripts/window_eq.gd" id="6_jwhyh"]
-[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="7_khtn1"]
-[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="8_pftho"]
-[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="9_xn3md"]
-[ext_resource type="Script" uid="uid://binsr4wgq8dqy" path="res://Scripts/VieportContainer.gd" id="10_gtjo6"]
-[ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="11_mam3x"]
-[ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="12_1gyc3"]
-[ext_resource type="Script" uid="uid://b2hjrvvfsuk7f" path="res://Scripts/StoreMenu.gd" id="13_ybwyh"]
-[ext_resource type="Script" uid="uid://bp1dwcg0sw4nw" path="res://Scripts/Popups.gd" id="14_p13px"]
+[ext_resource type="Script" uid="uid://dpmi4b802mrkh" path="res://Scripts/main.gd" id="1_hptm8"]
+[ext_resource type="Texture2D" uid="uid://3pl1ppjn0yw5" path="res://img/panorama_image (2).png" id="1_ynf5e"]
+[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="2_hptm8"]
+[ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="3_d1ilt"]
+[ext_resource type="Script" uid="uid://0pj6vevpq8hq" path="res://Scripts/roof_eq.gd" id="5_d1ilt"]
+[ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="5_fdnlq"]
+[ext_resource type="Script" uid="uid://cvh5evafvffhi" path="res://Scripts/window_eq.gd" id="6_6iyac"]
+[ext_resource type="Script" uid="uid://db2u66onynmvp" path="res://Scripts/SpectrumSpawner.gd" id="6_jkdf5"]
+[ext_resource type="PackedScene" uid="uid://bdosa12yxj7m" path="res://3DModels/sign_text.glb" id="7_wsu2k"]
+[ext_resource type="Script" uid="uid://binsr4wgq8dqy" path="res://Scripts/VieportContainer.gd" id="8_hptm8"]
+[ext_resource type="Script" uid="uid://brbn8s6rka1y7" path="res://Scripts/mini_map_cam.gd" id="8_k12tt"]
+[ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="9_h1bgf"]
+[ext_resource type="Script" uid="uid://b2hjrvvfsuk7f" path="res://Scripts/StoreMenu.gd" id="13_fdnlq"]
+[ext_resource type="Script" uid="uid://bp1dwcg0sw4nw" path="res://Scripts/Popups.gd" id="14_jkdf5"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
-panorama = ExtResource("2_blb6r")
+panorama = ExtResource("1_ynf5e")
 
 [sub_resource type="Sky" id="Sky_272bh"]
 sky_material = SubResource("PanoramaSkyMaterial_lquwl")
@@ -50,7 +50,7 @@ size = Vector3(436.28, 1, 35.324)
 size = Vector3(1.02294, 2.2668, 0.657196)
 
 [node name="Main" type="Node3D"]
-script = ExtResource("1_ovwol")
+script = ExtResource("1_hptm8")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.966358, 0.0446066, -0.253301, 0.222371, 0.343551, 0.91348, -0.128074, 0.936982, -0.322098, 0, 0, 0)
@@ -80,7 +80,7 @@ collision_layer = 3
 mass = 100.0
 center_of_mass_mode = 1
 center_of_mass = Vector3(0, -0.1, 0)
-script = ExtResource("3_qigkw")
+script = ExtResource("2_hptm8")
 max_engine_force = 500.0
 max_brake = 20.0
 cameras = [NodePath("behindCam"), NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam"), NodePath("SpringArmChaseCAm/ChaseCam")]
@@ -113,7 +113,7 @@ transform = Transform3D(1, 0, 0, 0, 0.767166, -0.64145, 0, 0.64145, 0.767165, 0,
 current = true
 fov = 75.3
 
-[node name="Sketchfab_Scene" parent="Car" instance=ExtResource("4_lsetm")]
+[node name="Sketchfab_Scene" parent="Car" instance=ExtResource("3_d1ilt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.00787032)
 
 [node name="HoodCam" type="Camera3D" parent="Car"]
@@ -148,17 +148,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.66795e-07, 1.1683, 3.05157
 
 [node name="RoofEQ" type="Node3D" parent="Car"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.813198, 0)
-script = ExtResource("5_1d1g3")
+script = ExtResource("5_d1ilt")
 
 [node name="windowEQ" type="Node3D" parent="Car"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0184231, 0.463136, 0.351507)
-script = ExtResource("6_jwhyh")
+script = ExtResource("6_6iyac")
 
-[node name="ThePalmOfMemories" parent="." instance=ExtResource("7_khtn1")]
+[node name="ThePalmOfMemories" parent="." instance=ExtResource("5_fdnlq")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 1.53722, 0.14351, 5.33982)
 
 [node name="SprectrumSpawner" type="Node3D" parent="."]
-script = ExtResource("8_pftho")
+script = ExtResource("6_jkdf5")
 
 [node name="SpeedLabel" type="CanvasLayer" parent="."]
 
@@ -173,7 +173,7 @@ offset_top = -97.2
 offset_right = 125.432
 offset_bottom = 96.8
 
-[node name="TheSignOfTheCurvyRoad" parent="." instance=ExtResource("9_xn3md")]
+[node name="TheSignOfTheCurvyRoad" parent="." instance=ExtResource("7_wsu2k")]
 transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, -1.26757, 3.17124, 5.84302)
 
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
@@ -189,7 +189,7 @@ offset_bottom = -17.0
 grow_horizontal = 2
 grow_vertical = 0
 scale = Vector2(1.105, 1.105)
-script = ExtResource("10_gtjo6")
+script = ExtResource("8_hptm8")
 
 [node name="MiniMapViewport" type="SubViewport" parent="MiniMapViewportContainer"]
 transparent_bg = true
@@ -201,10 +201,10 @@ render_target_update_mode = 4
 transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35.808, 3.349, -1.137)
 current = true
 fov = 20.0
-script = ExtResource("11_mam3x")
+script = ExtResource("8_k12tt")
 car_path = NodePath("../../../Car")
 
-[node name="signboard" parent="." instance=ExtResource("12_1gyc3")]
+[node name="signboard" parent="." instance=ExtResource("9_h1bgf")]
 transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, -2.83298, -0.0289622, 5.4902)
 
 [node name="PauseGame" type="CanvasLayer" parent="."]
@@ -272,7 +272,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("13_ybwyh")
+script = ExtResource("13_fdnlq")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/StoreMenu"]
 layout_mode = 1
@@ -308,7 +308,7 @@ layout_mode = 2
 text = "Explore new level"
 
 [node name="Popups" type="CanvasLayer" parent="."]
-script = ExtResource("14_p13px")
+script = ExtResource("14_jkdf5")
 
 [node name="Control" type="Control" parent="Popups"]
 layout_mode = 3

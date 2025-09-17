@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://dx6kjygbotf0q"]
 
-[ext_resource type="Script" uid="uid://cr4n042bwxfdv" path="res://Scenes/space/space_options.gd" id="1_jrwyx"]
+[ext_resource type="Script" uid="uid://cr4n042bwxfdv" path="res://Scenes/space_options.gd" id="1_l6knw"]
 
 [node name="SpaceOptions" type="Control"]
 layout_mode = 3
@@ -11,7 +11,8 @@ anchor_right = 0.5
 anchor_bottom = 0.5
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_jrwyx")
+script = ExtResource("1_l6knw")
+spawner_path = null
 
 [node name="CenterContainer" type="CenterContainer" parent="."]
 layout_mode = 1

@@ -1,8 +1,8 @@
 [gd_scene load_steps=4 format=3 uid="uid://mh8qb7w4ndgf"]
 
-[ext_resource type="Script" uid="uid://737m26ps68ii" path="res://Scripts/SongSelect.gd" id="1_8dtfb"]
-[ext_resource type="Texture2D" uid="uid://cxr0dgq6w10lr" path="res://img/Start_menu_screen.jpg" id="2_fe2fn"]
-[ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="3_flte2"]
+[ext_resource type="Script" uid="uid://737m26ps68ii" path="res://Scripts/SongSelect.gd" id="1_gr4uf"]
+[ext_resource type="Texture2D" uid="uid://cxr0dgq6w10lr" path="res://img/Start_menu_screen.jpg" id="2_gid5b"]
+[ext_resource type="AudioStream" uid="uid://divkxtec30wbt" path="res://audio/music.wav" id="3_jwku3"]
 
 [node name="SongSelect" type="Control"]
 layout_mode = 3
@@ -13,7 +13,7 @@ offset_left = 1.0
 offset_right = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-script = ExtResource("1_8dtfb")
+script = ExtResource("1_gr4uf")
 
 [node name="TextureRect" type="TextureRect" parent="."]
 layout_mode = 1
@@ -22,10 +22,10 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_fe2fn")
+texture = ExtResource("2_gid5b")
 
 [node name="AudioStreamPlayer2D" type="AudioStreamPlayer2D" parent="."]
-stream = ExtResource("3_flte2")
+stream = ExtResource("3_jwku3")
 autoplay = true
 
 [node name="VBoxContainer" type="VBoxContainer" parent="."]
