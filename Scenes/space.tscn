@@ -1,4 +1,4 @@
-[gd_scene load_steps=17 format=3 uid="uid://b4sdvep1rldrp"]
+[gd_scene load_steps=19 format=3 uid="uid://b4sdvep1rldrp"]
 
 [ext_resource type="Script" uid="uid://cljy178fnry2i" path="res://Scripts/character_body_3d.gd" id="2_p3ued"]
 [ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="3_2fo43"]
@@ -7,6 +7,8 @@
 [ext_resource type="Script" uid="uid://c3sm78g21mr8w" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
 [ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scripts/space_spawner.gd" id="6_va77k"]
 [ext_resource type="Script" uid="uid://b8mww0uckgech" path="res://Scenes/ringcounter.gd" id="7_uqc4w"]
+[ext_resource type="PackedScene" uid="uid://docqw7mwsvjek" path="res://3DModels/saturn_planet.glb" id="8_1fjq1"]
+[ext_resource type="Script" uid="uid://78t05td1lwjn" path="res://3DModels/saturnSpin.gd" id="9_kqa63"]
 
 [sub_resource type="GDScript" id="GDScript_2fo43"]
 script/source = "extends Node3D
@@ -203,8 +205,8 @@ shape = SubResource("BoxShape3D_va77k")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, -0.44174, 0.897143, 0, -0.897143, -0.44174, 0, 0.55979, 2.86423)
-light_color = Color(1, 0.579903, 0.429373, 1)
-light_energy = 16.0
+light_color = Color(1, 0.807363, 0.739519, 1)
+light_energy = 3.305
 light_volumetric_fog_energy = 3.743
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
@@ -238,3 +240,7 @@ anchor_right = 1.0
 offset_left = -150.0
 offset_bottom = 31.0
 grow_horizontal = 0
+
+[node name="Sketchfab_Scene" parent="." instance=ExtResource("8_1fjq1")]
+transform = Transform3D(2000, 0, 0, 0, 2000, 0, 0, 0, 2000, 3552.59, -216.777, 1910.15)
+script = ExtResource("9_kqa63")
