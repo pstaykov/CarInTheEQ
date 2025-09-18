@@ -22,5 +22,6 @@
 - Drive a car with wacky physics  
 - Admire the beautiful, glitchy surroundings  
 - Listen **and** look at the music as it pulses through the EQ  
+- fly a spaceship throgh circular visualisers in space
 
 ---
