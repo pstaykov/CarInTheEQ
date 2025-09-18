@@ -9,7 +9,7 @@ extends Node3D
 
 # sun
 @export var sun_scene: PackedScene = preload("res://Decorations/Sun.tscn")
-var sun: Node3D= null
+var sun: Node3D = null
 
 # spawn store
 @export var store_scene: PackedScene = preload("res://Decorations/Store.tscn")
@@ -29,7 +29,8 @@ var casette_spawned = false
 @export var ground_y: float = 0.0
 @export var step_time: float = 0.2
 @export var gap_size: int = 8
-
+@export var max_rows: int = 20
+@export var max_disks: int = 10
 
 
 # === RUNTIME ===
@@ -41,6 +42,11 @@ var offset_x: float = 30.0
 var tunnel_pos: int = 35
 var timer: Timer
 var row_counter: int = 0
+
+# --- NEW ---
+var active_rows: Array[Node3D] = []
+var active_disks: Array[Node3D] = []
+
 
 func _ready() -> void:
 	randomize()
@@ -88,7 +94,7 @@ func _on_tick() -> void:
 	if current_row >= frames.size():
 		timer.stop()
 		print("Finished spawning spectrum")
-		   # === Resize road collision to match bars ===
+		# === Resize road collision to match bars ===
 		var road_collision: CollisionShape3D = get_tree().root.get_node("Main/road/StaticBody3D/CollisionShape3D")
 
 		if road_collision and road_collision.shape is BoxShape3D:
@@ -118,13 +124,28 @@ func _on_tick() -> void:
 
 			store_spawned = true
 		return
-	_spawn_row(frames[current_row])
+
+	# --- Spawn next row ---
+	var row = _spawn_row(frames[current_row])
+	if row:
+		active_rows.append(row)
+
+		# keep only latest max_rows
+		if active_rows.size() > max_rows:
+			var old = active_rows.pop_front()
+			if is_instance_valid(old):
+				old.queue_free()
+
 	current_row += 1
 	z_offset -= row_spacing
 
+
 @export var palm_scene: PackedScene = decorations.pick_random()
 
-func _spawn_row(values: Array) -> void:
+func _spawn_row(values: Array) -> Node3D:
+	var row_container := Node3D.new()
+	add_child(row_container)
+
 	var left_x := -(bands * bar_width) * 0.5
 
 	# --- Tunnel shifting (max ±1, 25% chance) ---
@@ -140,38 +161,30 @@ func _spawn_row(values: Array) -> void:
 		var h: float = float(values[i]) * height_scale
 		h = max(h, 1.0)
 		
-		# Create a StaticBody3D to hold the mesh and collision
 		var body := StaticBody3D.new()
+		row_container.add_child(body)
 
-		# Create the mesh
 		var bar := MeshInstance3D.new()
 		var bar_mesh := BoxMesh.new()
 		bar_mesh.size = Vector3(bar_width, 1.0, row_spacing)
 		bar.mesh = bar_mesh
 
-		# Create the collision shape
 		var collision := CollisionShape3D.new()
 		var collision_shape := BoxShape3D.new()
 		collision_shape.size = bar_mesh.size
 		collision.shape = collision_shape
 
-		# Add killzone to the bar
 		var killzone: Area3D = preload("res://Scenes/killzone.tscn").instantiate()
 		var killzone_collision := CollisionShape3D.new()
 		var killzone_shape := BoxShape3D.new()
-		killzone_shape.size = bar_mesh.size  # Same size as the bar
+		killzone_shape.size = bar_mesh.size
 		killzone_collision.shape = killzone_shape
 		killzone.add_child(killzone_collision)
 
-		# Add mesh, collision, and killzone to the body
 		body.add_child(bar)
 		body.add_child(collision)	
 		body.add_child(killzone)
 
-		# Add the body to the scene
-		add_child(body)
-
-		# material
 		var bar_mat := StandardMaterial3D.new()
 		var t: float = clamp(h / (height_scale * 0.8), 0.0, 1.0)
 		var low := Color(0.2, 0.4, 1.0, 0.95)
@@ -185,12 +198,7 @@ func _spawn_row(values: Array) -> void:
 		bar_mat.emission_energy_multiplier = 1.2
 		bar.material_override = bar_mat
 
-		# Position and scale the StaticBody3D (not just the MeshInstance3D)
-		body.transform.origin = Vector3(
-			left_x + i * bar_width,
-			ground_y + h * 0.5,
-			z_offset
-		)
+		body.transform.origin = Vector3(left_x + i * bar_width, ground_y + h * 0.5, z_offset)
 		body.scale = Vector3(1.0, h, 1.0)
 
 	# --- Pink floor strip under the tunnel ---
@@ -210,63 +218,60 @@ func _spawn_row(values: Array) -> void:
 		ground_y - 0.1,
 		z_offset
 	)
-	add_child(floor_mesh_instance)
+	row_container.add_child(floor_mesh_instance)
 
 	# --- Decorations at road edges (every 4th row) ---
 	row_counter += 1
 	if row_counter % 4 == 0 and not decorations.is_empty():
-		# Left edge of the drivable road (just before tunnel starts)
 		var palm_left : Node3D = decorations.pick_random().instantiate()
 		var left_edge_x = left_x + tunnel_pos * bar_width
 		palm_left.transform.origin = Vector3(left_edge_x + 2.0, ground_y, z_offset)
-		add_child(palm_left)
+		row_container.add_child(palm_left)
 
-		# Right edge of the drivable road (just after tunnel ends)
 		var palm_right : Node3D = decorations.pick_random().instantiate()
 		var right_edge_x = left_x + (tunnel_pos + gap_size) * bar_width
 		palm_right.transform.origin = Vector3(right_edge_x - 2.0, ground_y, z_offset)
-		add_child(palm_right)
+		row_container.add_child(palm_right)
 		
 	# --- Sun behind the gap ---
 	if sun == null and sun_scene:
 		sun = sun_scene.instantiate()
 		add_child(sun)
-		sun.scale = Vector3(30, 30, 1) # make it big
+		sun.scale = Vector3(30, 30, 1)
 
 	if sun:
-		# Position the sun directly at the horizon behind the tunnel gap
 		var sun_x = tunnel_gap_x
-		var sun_y = ground_y + sun.scale.y * 0.4  # half risen
-		var sun_z = z_offset - row_spacing * 500   # slightly behind the latest floor
+		var sun_y = ground_y + sun.scale.y * 0.4
+		var sun_z = z_offset - row_spacing * 500
 		sun.transform.origin = Vector3(sun_x, sun_y, sun_z)
 		
+	# --- Disks every 15th row ---
 	if current_row % 15 == 0:  
 		for i in range(disks_per_gap):
 			var disk = disk_scene.instantiate()
-			add_child(disk)
+			row_container.add_child(disk)
+			active_disks.append(disk)
+
+			# keep only latest max_disks
+			if active_disks.size() > max_disks:
+				var old_disk = active_disks.pop_front()
+				if is_instance_valid(old_disk):
+					old_disk.queue_free()
 
 			var offset_x = randf_range(-gap_size * 0.4, gap_size * 0.4) * bar_width
 			var offset_y = ground_y + 1.5
-			var offset_z = z_offset + (i * 3.0)  # stagger them along Z
-
+			var offset_z = z_offset + (i * 3.0)
 			disk.transform.origin = Vector3(tunnel_gap_x + offset_x, offset_y, offset_z)
 			
+	# --- Casette (once ~30% into level) ---
 	if not casette_spawned and current_row > int(frames.size() * 0.3):
-		# Spawn it somewhere about 30% into the level (you can change the factor)
 		var casette = casette_scene.instantiate()
-		add_child(casette)
+		row_container.add_child(casette)
 
 		var casette_x = randf_range(-gap_size * 0.4, gap_size * 0.4) * bar_width
 		var casette_y = ground_y + 1.5
-		var casette_z = z_offset - row_spacing * 5  # just a few rows ahead
-
-		casette.transform.origin = Vector3(
-			tunnel_gap_x + casette_x,
-			casette_y,
-			casette_z
-		)
-			
+		var casette_z = z_offset - row_spacing * 5
+		casette.transform.origin = Vector3(tunnel_gap_x + casette_x, casette_y, casette_z)
 		casette_spawned = true
 		
-	
-	
+	return row_container
