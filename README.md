@@ -2,7 +2,7 @@
 
 *Drive through sound itself.*
 
-**Car In The EQ** is a driving and flying game where you literally cruise through a 3D musical equalizer or fly through circular vosualiers in space. Built with **Godot 4**, it blends chaotic physics, vibrant visuals, and reactive audio into one surreal experience.
+**Car In The EQ** is a driving and flying game where you literally cruise through a 3D musical equalizer or fly through circular visualisers in space. Built with **Godot 4**, it blends chaotic physics, vibrant visuals, and reactive audio into one surreal experience.
 
 ---
 
