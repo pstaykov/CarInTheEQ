@@ -26,7 +26,7 @@ var casette_spawned = false
 @export var bar_width: float = 3
 @export var row_spacing: float = 2.85
 @export var height_scale: float = 10.0
-@export var ground_y: float = 0.0
+@export var ground_y: float = -1.0
 @export var step_time: float = 0.2
 @export var gap_size: int = 8
 @export var max_rows: int = 20
@@ -202,6 +202,9 @@ func _spawn_row(values: Array) -> Node3D:
 		body.scale = Vector3(1.0, h, 1.0)
 
 	# --- Pink floor strip under the tunnel ---
+	var floor_container := StaticBody3D.new()
+	row_container.add_child(floor_container)
+
 	var floor_mesh_instance := MeshInstance3D.new()
 	var floor_plane := BoxMesh.new()
 	floor_plane.size = Vector3(gap_size * bar_width, 0.2, row_spacing)
@@ -211,13 +214,22 @@ func _spawn_row(values: Array) -> Node3D:
 	floor_material.albedo_color = Color(1.0, 0.2, 0.6, 0.9)
 	floor_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	floor_mesh_instance.material_override = floor_material
+	floor_container.add_child(floor_mesh_instance)
+
+	# --- Collision for the floor ---
+	var floor_collision := CollisionShape3D.new()
+	var floor_shape := BoxShape3D.new()
+	floor_shape.size = floor_plane.size 
+	floor_collision.shape = floor_shape
+	floor_container.add_child(floor_collision)
 
 	var tunnel_gap_x = left_x + tunnel_pos * bar_width + (gap_size * bar_width * 0.5)
-	floor_mesh_instance.transform.origin = Vector3(
+	floor_container.transform.origin = Vector3(
 		tunnel_gap_x - bar_width * 0.5,
 		ground_y - 0.1,
 		z_offset
 	)
+
 	row_container.add_child(floor_mesh_instance)
 
 	# --- Decorations at road edges (every 4th row) ---

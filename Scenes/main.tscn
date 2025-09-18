@@ -44,7 +44,7 @@ metallic = 0.1
 metallic_specular = 0.15
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
-size = Vector3(436.28, 1, 35.324)
+size = Vector3(77.4329, 1, 35.324)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
@@ -64,14 +64,14 @@ environment = SubResource("Environment_7dm0k")
 [node name="road" type="Node3D" parent="."]
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="road"]
-transform = Transform3D(-1.31134e-06, 0, -30, 0, 0.856, 0, 30, 0, -1.31134e-06, 0, -0.51, 0)
+transform = Transform3D(-8.05819e-07, 0, -18.435, 0, 0.526, 0, 18.435, 0, -8.05819e-07, 0, -0.351, 0)
 mesh = SubResource("BoxMesh_ig7tw")
 surface_material_override/0 = SubResource("StandardMaterial3D_1bvp3")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="road"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="road/StaticBody3D"]
-transform = Transform3D(-1.37778e-06, 0, 117.535, 0, 0.365, 0, -31.52, 0, -5.13762e-06, -3.59005, -0.185, -1737.01)
+transform = Transform3D(-0.0179573, 0, 0.892491, 0, 0.003, 0, -0.239327, 0, -0.0669658, -2.26294e-07, -0.185, -5.177)
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="Car" type="VehicleBody3D" parent="." node_paths=PackedStringArray("cameras")]
