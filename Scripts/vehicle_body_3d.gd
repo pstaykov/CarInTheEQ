@@ -12,12 +12,12 @@ extends VehicleBody3D
 var _steer_target := 0.0
 var current_index := 0
 
-# reference to UI label (adjust path if needed)
+# reference to UI label 
 @onready var speed_label: Label = get_tree().root.get_node("Main/SpeedLabel/SpeedLabel")
 
 func _ready() -> void:
 	add_to_group("car")
-	global_transform.origin = Vector3(0, 1.2, 0) # spawn above road
+	global_transform.origin = Vector3(0, 1.2, 5) # spawn above road
 	cameras[0].current = true
 
 func _physics_process(delta: float) -> void:
