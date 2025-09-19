@@ -54,7 +54,8 @@ size = Vector3(1.02294, 2.2668, 0.657196)
 script = ExtResource("1_hptm8")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.966358, 0.0446066, -0.253301, 0.222371, 0.343551, 0.91348, -0.128074, 0.936982, -0.322098, 0, 0, 0)
+transform = Transform3D(0.966503, 0.0451374, -0.252654, 0.0249663, 0.96321, 0.267586, -0.255437, 0.264931, -0.929819, 0, 1.74611, 0)
+light_color = Color(1, 0.443137, 0.603922, 1)
 light_energy = 11.64
 light_indirect_energy = 2.245
 shadow_enabled = true
@@ -198,7 +199,7 @@ size = Vector2i(417, 122)
 render_target_update_mode = 4
 
 [node name="MiniMapCam" type="Camera3D" parent="MiniMapViewportContainer/MiniMapViewport"]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -35.808, 3.349, -1.137)
+transform = Transform3D(1, 0, 0, 0, 1.19249e-08, 1, 0, -1, 1.19249e-08, 0, 100, 0)
 current = true
 fov = 20.0
 script = ExtResource("8_k12tt")

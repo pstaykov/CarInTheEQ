@@ -23,7 +23,7 @@ var casette_spawned = false
 
 
 # === CONFIG ===
-@export var bar_width: float = 3
+@export var bar_width: float = 2
 @export var row_spacing: float = 2.85
 @export var height_scale: float = 10.0
 @export var ground_y: float = -1.0
@@ -223,15 +223,25 @@ func _spawn_row(values: Array) -> Node3D:
 		body.transform.origin = Vector3(left_x + i * bar_width, ground_y + h * 0.5, z_offset)
 		body.scale = Vector3(1.0, h, 1.0)
 
-	# --- Pink floor strip under the tunnel (visual only, no collision) ---
+	# --- Road floor under the tunnel ---
 	var floor_mesh_instance := MeshInstance3D.new()
 	var floor_plane := BoxMesh.new()
 	floor_plane.size = Vector3(gap_size * bar_width, 0.2, row_spacing)
 	floor_mesh_instance.mesh = floor_plane
 
+	# Glossy black asphalt-like base
 	var floor_material := StandardMaterial3D.new()
-	floor_material.albedo_color = Color(1.0, 0.2, 0.6, 0.9)
-	floor_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	floor_material.albedo_color = Color(0.02, 0.02, 0.02, 1.0) # near black
+	floor_material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+	floor_material.metallic = 1.00
+	floor_material.roughness = 0.008
+	floor_material.specular = 1.0
+	floor_material.clearcoat = 1.0
+	floor_material.clearcoat_roughness = 0.05
+	# subtle neon sheen
+	floor_material.emission_enabled = true
+	floor_material.emission = Color(0.04, 0.02, 0.04, 1.0)
+	floor_material.emission_energy_multiplier = 0.35
 	floor_mesh_instance.material_override = floor_material
 	row_container.add_child(floor_mesh_instance)
 
@@ -241,6 +251,39 @@ func _spawn_row(values: Array) -> Node3D:
 		ground_y - 0.1,
 		z_offset
 	)
+
+	# --- Yellow center stripe (every second spectrum row) ---
+	if current_row % 2 == 0:
+		var stripe := MeshInstance3D.new()
+		var stripe_mesh := BoxMesh.new()
+		# slim stripe centered in gap
+		var stripe_width := bar_width * 0.4
+		var stripe_thickness := 0.02
+		var stripe_length := row_spacing * 0.9
+		stripe_mesh.size = Vector3(stripe_width, stripe_thickness, stripe_length)
+		stripe.mesh = stripe_mesh
+
+		var stripe_mat := StandardMaterial3D.new()
+		stripe_mat.albedo_color = Color(1.0, 0.9, 0.15, 1.0) # yellow
+		stripe_mat.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+		stripe_mat.metallic = 0.7
+		stripe_mat.roughness = 0.2
+		stripe_mat.specular = 1.0
+		stripe_mat.clearcoat = 0.8
+		stripe_mat.clearcoat_roughness = 0.05
+		# mild glow so it pops
+		stripe_mat.emission_enabled = true
+		stripe_mat.emission = Color(1.0, 0.9, 0.15, 1.0)
+		stripe_mat.emission_energy_multiplier = 0.45
+		stripe.material_override = stripe_mat
+
+		row_container.add_child(stripe)
+		# Slightly above floor to avoid z-fighting, centered in the gap
+		stripe.transform.origin = Vector3(
+			tunnel_gap_x,            # true center of the gap
+			ground_y + stripe_thickness * 0.5 + 0.001,
+			z_offset
+		)
 
 	# --- Decorations at road edges (every 4th row) ---
 	row_counter += 1
