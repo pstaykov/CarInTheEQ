@@ -1,0 +1,113 @@
+[gd_scene load_steps=17 format=3 uid="uid://c6c1kayd1amtk"]
+
+[ext_resource type="Script" uid="uid://fyajymdfdl0f" path="res://Scripts/solar_start_screen.gd" id="1_qjjy0"]
+[ext_resource type="Shader" uid="uid://dob1t8tsgr70i" path="res://Shaders/planet_shader.gdshader" id="1_y58hh"]
+[ext_resource type="Script" uid="uid://8ou6wcndv2g" path="res://Scripts/Earth_click.gd" id="3_6ed17"]
+[ext_resource type="Texture2D" uid="uid://s5a7jftnotfq" path="res://img/Solarsystemscope_texture_8k_earth_daymap.jpg" id="4_6ed17"]
+[ext_resource type="Texture2D" uid="uid://3pl1ppjn0yw5" path="res://img/panorama_image (2).png" id="4_a8hqv"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_a7ltw"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sn34o"]
+render_priority = 0
+shader = ExtResource("1_y58hh")
+shader_parameter/radius = 256.0
+shader_parameter/rimRetraction = 4.0
+shader_parameter/rimBrightness = 1.0
+shader_parameter/rimColor = Color(0.181708, 0.380532, 0.563231, 1)
+shader_parameter/animationSpeed = 0.25
+shader_parameter/distortionStrength = 0.3
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_05gfr"]
+radius = 0.126891
+
+[sub_resource type="SphereMesh" id="SphereMesh_eflt5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a8hqv"]
+albedo_texture = ExtResource("4_6ed17")
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_y8mpt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_horpi"]
+vertex_color_use_as_albedo = true
+albedo_color = Color(0, 0, 0, 1)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_0bqqh"]
+
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_cjp4h"]
+panorama = ExtResource("4_a8hqv")
+
+[sub_resource type="Sky" id="Sky_nr6qh"]
+sky_material = SubResource("PanoramaSkyMaterial_cjp4h")
+
+[sub_resource type="Environment" id="Environment_018tj"]
+background_mode = 2
+sky = SubResource("Sky_nr6qh")
+
+[node name="SolarStartScreen" type="Node3D"]
+script = ExtResource("1_qjjy0")
+
+[node name="WaterPlanet" type="MeshInstance3D" parent="."]
+transform = Transform3D(4.705, 0, 0, 0, 4.705, 0, 0, 0, 4.705, -0.0463002, 0.103356, 0)
+mesh = SubResource("SphereMesh_a7ltw")
+surface_material_override/0 = SubResource("ShaderMaterial_sn34o")
+
+[node name="Area3D" type="Area3D" parent="WaterPlanet"]
+script = ExtResource("3_6ed17")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="WaterPlanet/Area3D"]
+transform = Transform3D(4.705, 0, 0, 0, 4.705, 0, 0, 0, 4.705, 0, 0, 0)
+shape = SubResource("SphereShape3D_05gfr")
+
+[node name="Earth" type="MeshInstance3D" parent="."]
+transform = Transform3D(4.705, 0, 0, 0, 4.705, 0, 0, 0, 4.705, 13.7364, 5.67125, 0)
+mesh = SubResource("SphereMesh_eflt5")
+surface_material_override/0 = SubResource("StandardMaterial3D_a8hqv")
+
+[node name="Area3D" type="Area3D" parent="Earth"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Earth/Area3D"]
+transform = Transform3D(4.705, 0, 0, 0, 4.705, 0, 0, 0, 4.705, 0, 0, 0)
+shape = SubResource("SphereShape3D_05gfr")
+
+[node name="Line" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.123199, 5.00627, 0, -0.228959, 2.69379, 0, 0, 0, 0.2, 6.98876, 3.36476, -0.0220284)
+mesh = SubResource("CapsuleMesh_y8mpt")
+surface_material_override/0 = SubResource("StandardMaterial3D_horpi")
+
+[node name="Area3D" type="Area3D" parent="Line"]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Line/Area3D"]
+transform = Transform3D(3.24831, 0, 0, 0, 1.99782, 0, 0, 0, 4.705, 0, 0, 0)
+shape = SubResource("SphereShape3D_0bqqh")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.2522, 2.30282, 10.4554)
+fov = 65.4368
+
+[node name="CanvasLayer" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="CanvasLayer"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -20.0
+offset_right = 20.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Label" type="Label" parent="CanvasLayer/Control/VBoxContainer"]
+layout_mode = 2
+text = "Click earth to start!"
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_018tj")
