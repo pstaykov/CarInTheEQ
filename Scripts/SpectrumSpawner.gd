@@ -43,9 +43,11 @@ var tunnel_pos: int = 35
 var timer: Timer
 var row_counter: int = 0
 
-# --- NEW ---
 var active_rows: Array[Node3D] = []
 var active_disks: Array[Node3D] = []
+
+# --- NEW ---
+var global_floor: CollisionShape3D
 
 
 func _ready() -> void:
@@ -54,6 +56,9 @@ func _ready() -> void:
 	if frames.is_empty():
 		push_error("No frames in JSON: %s" % Global.current_level["json_path"])
 		return
+
+	# Create global floor collider
+	_create_global_floor()
 
 	# --- Timer ---
 	timer = Timer.new()
@@ -90,24 +95,38 @@ func _load_json(path: String) -> void:
 	print("Loaded %d frames, %d bands" % [frames.size(), bands])
 
 
+func _create_global_floor():
+	var floor_body := StaticBody3D.new()
+	add_child(floor_body)
+
+	global_floor = CollisionShape3D.new()
+	var floor_shape := BoxShape3D.new()
+	floor_shape.size = Vector3(9999.0, 0.2, max_rows * row_spacing) # super wide X, limited Z
+	global_floor.shape = floor_shape
+	floor_body.add_child(global_floor)
+
+	# place initially
+	floor_body.transform.origin = Vector3(0, ground_y - 0.1, 0)
+
+
+func _update_global_floor():
+	if not global_floor:
+		return
+	var shape := global_floor.shape as BoxShape3D
+	shape.size.z = max_rows * row_spacing
+
+	# center collider over visible rows
+	var start_z = z_offset
+	var end_z = z_offset + (max_rows * row_spacing)
+	var center_z = (start_z + end_z) * 0.5
+
+	global_floor.transform.origin.z = center_z
+
+
 func _on_tick() -> void:
 	if current_row >= frames.size():
 		timer.stop()
 		print("Finished spawning spectrum")
-		# === Resize road collision to match bars ===
-		var road_collision: CollisionShape3D = get_tree().root.get_node("Main/road/StaticBody3D/CollisionShape3D")
-
-		if road_collision and road_collision.shape is BoxShape3D:
-			var shape := road_collision.shape as BoxShape3D
-			var total_length = frames.size() * row_spacing
-
-			# Update Z size of road
-			shape.size.z = total_length
-
-			# Move collider so it starts where bars begin
-			road_collision.transform.origin.z = -(total_length * 0.5)
-
-			print("Road collider adjusted to length:", total_length)
 		if not store_spawned and store_scene:
 			var store = store_scene.instantiate()
 			add_child(store)
@@ -138,6 +157,9 @@ func _on_tick() -> void:
 
 	current_row += 1
 	z_offset -= row_spacing
+
+	# update floor collider position
+	_update_global_floor()
 
 
 @export var palm_scene: PackedScene = decorations.pick_random()
@@ -201,10 +223,7 @@ func _spawn_row(values: Array) -> Node3D:
 		body.transform.origin = Vector3(left_x + i * bar_width, ground_y + h * 0.5, z_offset)
 		body.scale = Vector3(1.0, h, 1.0)
 
-	# --- Pink floor strip under the tunnel ---
-	var floor_container := StaticBody3D.new()
-	row_container.add_child(floor_container)
-
+	# --- Pink floor strip under the tunnel (visual only, no collision) ---
 	var floor_mesh_instance := MeshInstance3D.new()
 	var floor_plane := BoxMesh.new()
 	floor_plane.size = Vector3(gap_size * bar_width, 0.2, row_spacing)
@@ -214,23 +233,14 @@ func _spawn_row(values: Array) -> Node3D:
 	floor_material.albedo_color = Color(1.0, 0.2, 0.6, 0.9)
 	floor_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 	floor_mesh_instance.material_override = floor_material
-	floor_container.add_child(floor_mesh_instance)
-
-	# --- Collision for the floor ---
-	var floor_collision := CollisionShape3D.new()
-	var floor_shape := BoxShape3D.new()
-	floor_shape.size = floor_plane.size 
-	floor_collision.shape = floor_shape
-	floor_container.add_child(floor_collision)
+	row_container.add_child(floor_mesh_instance)
 
 	var tunnel_gap_x = left_x + tunnel_pos * bar_width + (gap_size * bar_width * 0.5)
-	floor_container.transform.origin = Vector3(
+	floor_mesh_instance.transform.origin = Vector3(
 		tunnel_gap_x - bar_width * 0.5,
 		ground_y - 0.1,
 		z_offset
 	)
-
-	row_container.add_child(floor_mesh_instance)
 
 	# --- Decorations at road edges (every 4th row) ---
 	row_counter += 1

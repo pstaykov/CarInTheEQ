@@ -1,4 +1,4 @@
-[gd_scene load_steps=15 format=3 uid="uid://b4sdvep1rldrp"]
+[gd_scene load_steps=14 format=3 uid="uid://b4sdvep1rldrp"]
 
 [ext_resource type="Script" uid="uid://cljy178fnry2i" path="res://Scripts/character_body_3d.gd" id="2_p3ued"]
 [ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="3_2fo43"]
@@ -6,8 +6,7 @@
 [ext_resource type="Texture2D" uid="uid://bfr7vjqx3waa7" path="res://img/ringed_gas_giant_planet.hdr" id="4_bj3u6"]
 [ext_resource type="Script" uid="uid://c3sm78g21mr8w" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
 [ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scripts/space_spawner.gd" id="6_va77k"]
-[ext_resource type="Script" path="res://Scenes/ringcounter.gd" id="7_uqc4w"]
-[ext_resource type="PackedScene" uid="uid://cqpcxyb3p747q" path="res://3DModels/Blender/planet.glb" id="8_1fjq1"]
+[ext_resource type="Script" uid="uid://b8mww0uckgech" path="res://Scenes/ringcounter.gd" id="7_uqc4w"]
 
 [sub_resource type="GDScript" id="GDScript_2fo43"]
 script/source = "extends Node3D
@@ -202,5 +201,3 @@ anchor_right = 1.0
 offset_left = -150.0
 offset_bottom = 31.0
 grow_horizontal = 0
-
-[node name="planet" parent="." instance=ExtResource("8_1fjq1")]
