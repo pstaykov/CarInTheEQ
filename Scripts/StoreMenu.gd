@@ -33,3 +33,4 @@ func _on_UnlockSpaceButton_pressed():
 		Global.casette_count -= 10
 		Global.SpaceUnlocked = true
 		update_labels()  # refresh after purchase
+		

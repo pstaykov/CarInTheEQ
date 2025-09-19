@@ -1,12 +1,13 @@
-[gd_scene load_steps=14 format=3 uid="uid://b4sdvep1rldrp"]
+[gd_scene load_steps=15 format=3 uid="uid://b4sdvep1rldrp"]
 
 [ext_resource type="Script" uid="uid://cljy178fnry2i" path="res://Scripts/character_body_3d.gd" id="2_p3ued"]
 [ext_resource type="AudioStream" uid="uid://bq8i4rvlopgbo" path="res://audio/AKAI.mp3" id="3_2fo43"]
 [ext_resource type="PackedScene" uid="uid://dq0f2qpkeidd4" path="res://3DModels/hover_car.glb" id="3_bj3u6"]
 [ext_resource type="Texture2D" uid="uid://bfr7vjqx3waa7" path="res://img/ringed_gas_giant_planet.hdr" id="4_bj3u6"]
-[ext_resource type="Script" uid="uid://c3sm78g21mr8w" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
+[ext_resource type="Script" path="res://Scripts/camera_3d.gd" id="4_wnfdr"]
 [ext_resource type="Script" uid="uid://b4t78ry7ffite" path="res://Scripts/space_spawner.gd" id="6_va77k"]
 [ext_resource type="Script" uid="uid://b8mww0uckgech" path="res://Scenes/ringcounter.gd" id="7_uqc4w"]
+[ext_resource type="Script" uid="uid://kc4nb54ebm58" path="res://Scripts/space_store_menu.gd" id="8_1fjq1"]
 
 [sub_resource type="GDScript" id="GDScript_2fo43"]
 script/source = "extends Node3D
@@ -14,6 +15,9 @@ script/source = "extends Node3D
 @export var ring_scene: PackedScene = preload(\"res://Scenes/VisualiserRing.tscn\")
 @export var audio_player: AudioStreamPlayer3D          # assign your music player here
 @export var hud_path: NodePath                         # drag your CanvasLayer HUD here in the inspector
+@export var store: PackedScene = preload(\"res://Decorations/Store.tscn\")
+var _store_spawned: bool = false
+
 
 # Path shape / spacing
 @export var ring_spacing: float = 100.0
@@ -56,8 +60,10 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if audio_player == null or audio_player.stream == null:
 		return
-	if not audio_player.playing:
-		return
+	if not audio_player.playing and not _store_spawned:
+		_spawn_store()
+		_store_spawned = true
+		
 
 	_time_accum += delta
 	while _time_accum >= seconds_per_ring:
@@ -108,6 +114,18 @@ func _spawn_next_ring() -> void:
 func _on_ring_passed() -> void:
 	if hud:
 		hud.update_ring_count(Global.SpaceRings)
+
+
+func _spawn_store() -> void:
+	var store_instance = store.instantiate()
+	add_child(store_instance)
+
+	# Place it a bit ahead of the last ring position (or player position)
+	var spawn_pos = _last_pos + Vector3(0, 0, 50)  # 50 units further in Z
+	store_instance.position = spawn_pos
+
+	_store_spawned = true
+	print(\"Store spawned at:\", spawn_pos)
 "
 
 [sub_resource type="ImmediateMesh" id="ImmediateMesh_2fo43"]
@@ -201,3 +219,34 @@ anchor_right = 1.0
 offset_left = -150.0
 offset_bottom = 31.0
 grow_horizontal = 0
+
+[node name="CanvasLayer2" type="CanvasLayer" parent="."]
+
+[node name="SpaceStoreMenu" type="Control" parent="CanvasLayer2" groups=["SpaceStore"]]
+visible = false
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("8_1fjq1")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer2/SpaceStoreMenu"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="Label" type="Label" parent="CanvasLayer2/SpaceStoreMenu/VBoxContainer"]
+layout_mode = 2
+text = "Welcome to the space store"
+
+[node name="BackToMain" type="Button" parent="CanvasLayer2/SpaceStoreMenu/VBoxContainer"]
+process_mode = 3
+layout_mode = 2
+text = "Back to main"
