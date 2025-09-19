@@ -46,7 +46,7 @@ metallic = 0.1
 metallic_specular = 0.15
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_0xm2m"]
-size = Vector3(77.4329, 1, 35.324)
+size = Vector3(55.5784, 1, 21.0629)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
@@ -67,6 +67,7 @@ shadow_enabled = true
 environment = SubResource("Environment_7dm0k")
 
 [node name="road" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.36304, 17.5175)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="road"]
 transform = Transform3D(-8.05819e-07, 0, -18.435, 0, 0.526, 0, 18.435, 0, -8.05819e-07, 0, -0.351, 0)
@@ -76,11 +77,11 @@ surface_material_override/0 = SubResource("StandardMaterial3D_1bvp3")
 [node name="StaticBody3D" type="StaticBody3D" parent="road"]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="road/StaticBody3D"]
-transform = Transform3D(-0.0179573, 0, 0.892491, 0, 0.003, 0, -0.239327, 0, -0.0669658, -2.26294e-07, -0.185, -5.177)
+transform = Transform3D(-1.04907e-08, 0, 0.895, 0, 0.003, 0, -0.24, 0, -3.91217e-08, -0.194344, -0.185, -2.56137)
 shape = SubResource("BoxShape3D_0xm2m")
 
 [node name="Car" type="VehicleBody3D" parent="." node_paths=PackedStringArray("cameras")]
-transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.000281334, 0.657219, -0.00313276)
+transform = Transform3D(-1, 0, -8.74228e-08, 0, 1, 0, 8.74228e-08, 0, -1, -0.000281334, -0.391358, 15.2619)
 collision_layer = 3
 mass = 100.0
 center_of_mass_mode = 1
@@ -88,7 +89,7 @@ center_of_mass = Vector3(0, -0.1, 0)
 script = ExtResource("2_hptm8")
 max_engine_force = 500.0
 max_brake = 20.0
-cameras = [NodePath("behindCam"), NodePath("ChaseCam"), NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam")]
+cameras = [NodePath("ChaseCam"), NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam"), NodePath("behindCam")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Car"]
 transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.0334751)
@@ -159,7 +160,7 @@ script = ExtResource("4_wsu2k")
 target_path = NodePath("..")
 
 [node name="ThePalmOfMemories" parent="." instance=ExtResource("5_fdnlq")]
-transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 1.53722, 0.14351, 5.33982)
+transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 1.53722, 0.14351, 18.4433)
 
 [node name="SprectrumSpawner" type="Node3D" parent="."]
 script = ExtResource("6_jkdf5")
@@ -178,7 +179,7 @@ offset_right = 125.432
 offset_bottom = 96.8
 
 [node name="TheSignOfTheCurvyRoad" parent="." instance=ExtResource("7_wsu2k")]
-transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, -1.26757, 3.17124, 5.84302)
+transform = Transform3D(-0.35, 5.28485e-08, -2.31008e-15, 0, -1.5299e-08, -0.35, -5.28485e-08, -0.35, 1.5299e-08, -1.26757, 3.17124, 17.3317)
 
 [node name="MiniMapViewportContainer" type="SubViewportContainer" parent="."]
 anchors_preset = 7
@@ -209,7 +210,7 @@ script = ExtResource("8_k12tt")
 car_path = NodePath("../../../Car")
 
 [node name="signboard" parent="." instance=ExtResource("9_h1bgf")]
-transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, -2.83298, -0.0289622, 5.4902)
+transform = Transform3D(12.48, 0, 0, 0, 12.48, 0, 0, 0, 12.48, -2.83298, -0.0289622, 17.0673)
 
 [node name="PauseGame" type="CanvasLayer" parent="."]
 
