@@ -1,9 +1,10 @@
-[gd_scene load_steps=22 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=23 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://dpmi4b802mrkh" path="res://Scripts/main.gd" id="1_hptm8"]
 [ext_resource type="Texture2D" uid="uid://3pl1ppjn0yw5" path="res://img/panorama_image (2).png" id="1_ynf5e"]
-[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="2_hptm8"]
+[ext_resource type="Script" uid="uid://dj1s42jara075" path="res://Scripts/vehicle_body_3d.gd" id="2_hptm8"]
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="3_d1ilt"]
+[ext_resource type="Script" uid="uid://cxwhwx8jt7qkg" path="res://Scenes/chase_cam.gd" id="4_wsu2k"]
 [ext_resource type="Script" uid="uid://0pj6vevpq8hq" path="res://Scripts/roof_eq.gd" id="5_d1ilt"]
 [ext_resource type="PackedScene" uid="uid://cp1xgnjc6t5fs" path="res://3DModels/low_poly_retro_palm_tree.glb" id="5_fdnlq"]
 [ext_resource type="Script" uid="uid://cvh5evafvffhi" path="res://Scripts/window_eq.gd" id="6_6iyac"]
@@ -83,7 +84,7 @@ center_of_mass = Vector3(0, -0.1, 0)
 script = ExtResource("2_hptm8")
 max_engine_force = 500.0
 max_brake = 20.0
-cameras = [NodePath("behindCam"), NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam"), NodePath("SpringArmChaseCAm/ChaseCam")]
+cameras = [NodePath("behindCam"), NodePath("ChaseCam"), NodePath("HoodCam"), NodePath("FirstPersonCam"), NodePath("frontCam"), NodePath("TopCam")]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="Car"]
 transform = Transform3D(1.31, 0, 0, 0, 0.437, 0, 0, 0, 2.62, 0.0200424, 0.483982, 0.0334751)
@@ -104,14 +105,6 @@ use_as_traction = true
 [node name="WheelFR" type="VehicleWheel3D" parent="Car"]
 transform = Transform3D(1.041, 0, 0, 0, 0.299, 0, 0, 0, 0.299, -0.498612, 0.139305, 0.597657)
 use_as_steering = true
-
-[node name="SpringArmChaseCAm" type="SpringArm3D" parent="Car"]
-transform = Transform3D(-0.996041, -0.0728179, 0.0509877, 0, 0.573576, 0.819152, -0.0888943, 0.815909, -0.571306, 0.255, 1.9, -4.095)
-
-[node name="ChaseCam" type="Camera3D" parent="Car/SpringArmChaseCAm"]
-transform = Transform3D(1, 0, 0, 0, 0.767166, -0.64145, 0, 0.64145, 0.767165, 0, 0.652, -0.457)
-current = true
-fov = 75.3
 
 [node name="Sketchfab_Scene" parent="Car" instance=ExtResource("3_d1ilt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5.96046e-08, -0.00948644, 0.00787032)
@@ -153,6 +146,13 @@ script = ExtResource("5_d1ilt")
 [node name="windowEQ" type="Node3D" parent="Car"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0184231, 0.463136, 0.351507)
 script = ExtResource("6_6iyac")
+
+[node name="ChaseCam" type="Camera3D" parent="Car"]
+transform = Transform3D(-0.996041, -0.0231574, 0.085825, 0, 0.965473, 0.260505, -0.0888943, 0.259473, -0.96165, 0.184221, 1.89962, -3.30194)
+current = true
+fov = 75.3
+script = ExtResource("4_wsu2k")
+target_path = NodePath("..")
 
 [node name="ThePalmOfMemories" parent="." instance=ExtResource("5_fdnlq")]
 transform = Transform3D(0.504583, 0, 0, 0, 0.39636, 0, 0, 0, 0.625594, 1.53722, 0.14351, 5.33982)
