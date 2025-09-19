@@ -1,66 +1,68 @@
 extends Node3D
 
+# === EXPORTS ===
 @export var decorations: Array[PackedScene] = [
 	preload("res://Decorations/palm.tscn")
-]  # assign Tree, Rock, etc.
-@export var road_width: float = 10.0          # half-width from center
-@export var spacing: float = 10.0             # distance between decorations
-@export var offset_z: float = 5.0             # how far ahead to spawn
+]
+@export var road_width: float = 10.0
+@export var spacing: float = 10.0
+@export var offset_z: float = 5.0
 
 # sun
 @export var sun_scene: PackedScene = preload("res://Decorations/Sun.tscn")
 var sun: Node3D = null
 
-# spawn store
+# store
 @export var store_scene: PackedScene = preload("res://Decorations/Store.tscn")
 var store_spawned := false
 
-# music disks and casetted
+# music disks and cassette
 @export var disk_scene: PackedScene = preload("res://Decorations/MusicDisc.tscn")
 @export var casette_scene: PackedScene = preload("res://Scenes/casette.tscn")
 @export var disks_per_gap: int = 3
 var casette_spawned = false
 
-
 # === CONFIG ===
-@export var bar_width: float = 3
-@export var row_spacing: float = 2.85
-@export var height_scale: float = 10.0
-@export var ground_y: float = -1.0
-@export var step_time: float = 0.2
-@export var gap_size: int = 8
-@export var max_rows: int = 20
+@export var freq_bins: int = 64
+@export var height_scale: float = 100.0       # magnitude
+@export var ground_y: float = -1.0           # Y = baseline (height axis)
+
+@export var row_spacing: float = 1.2         # Z step between rows (time axis)
+@export var step_time: float = 0.08
+@export var max_rows: int = 200
+
+@export var gap_size: int = 3
 @export var max_disks: int = 10
 
-
 # === RUNTIME ===
-var frames: Array = []
-var bands: int = 0
 var current_row: int = 0
-var z_offset: float = 10.0
-var offset_x: float = 30.0  
+var z_offset: float = 10.0                   # Z position of current row
 var tunnel_pos: int = 35
-var timer: Timer
 var row_counter: int = 0
+var timer: Timer
 
-var active_rows: Array[Node3D] = []
+# store pairs [mesh_instance, values]
+var active_mesh_rows: Array = []
 var active_disks: Array[Node3D] = []
 
-# --- NEW ---
 var global_floor: CollisionShape3D
+
+# --- Spectrum ---
+var spectrum: AudioEffectSpectrumAnalyzerInstance
+var player: AudioStreamPlayer3D
 
 
 func _ready() -> void:
-	randomize()
-	_load_json(Global.current_level["json_path"])
-	if frames.is_empty():
-		push_error("No frames in JSON: %s" % Global.current_level["json_path"])
-		return
-
-	# Create global floor collider
+	# Spectrum on "Music" bus (ensure your AudioStreamPlayer3D routes to Music)
+	var idx = AudioServer.get_bus_index("Music")
+	var eff = AudioServer.get_bus_effect(idx, 0) as AudioEffectSpectrumAnalyzer
+	if eff:
+		spectrum = AudioServer.get_bus_effect_instance(idx, 0) as AudioEffectSpectrumAnalyzerInstance
+	else:
+		push_error("No SpectrumAnalyzer effect found on Music bus!")
+	
 	_create_global_floor()
 
-	# --- Timer ---
 	timer = Timer.new()
 	timer.wait_time = step_time
 	timer.one_shot = false
@@ -68,31 +70,15 @@ func _ready() -> void:
 	timer.timeout.connect(_on_tick)
 	timer.start()
 
-	# --- Setup audio on car ---
 	var audio_path: String = Global.current_level["audio_path"]
 	if audio_path != "" and FileAccess.file_exists(audio_path):
-		var car: Node = get_tree().root.get_node("Main/Car") # ⚠ adjust if Car node path is different
+		var car: Node = get_tree().root.get_node("Main/Car")
 		if car and car.has_node("AudioStreamPlayer3D"):
-			var player: AudioStreamPlayer3D = car.get_node("AudioStreamPlayer3D")
+			player = car.get_node("AudioStreamPlayer3D")
 			player.stream = load(audio_path)
 			player.play()
-			print("Playing %s on car" % audio_path)
-		else:
-			push_warning("Car or AudioStreamPlayer3D not found in scene!")
 	else:
-		push_warning("No audio found for: %s" % audio_path)
-
-
-func _load_json(path: String) -> void:
-	if path == "" or not FileAccess.file_exists(path):
-		return
-	var f := FileAccess.open(path, FileAccess.READ)
-	var data = JSON.parse_string(f.get_as_text())
-	frames = data.get("frames", [])
-	bands = data.get("bands", 0)
-	if bands == 0 and frames.size() > 0:
-		bands = frames[0].size()
-	print("Loaded %d frames, %d bands" % [frames.size(), bands])
+		push_warning("No audio file for: %s" % audio_path)
 
 
 func _create_global_floor():
@@ -101,11 +87,10 @@ func _create_global_floor():
 
 	global_floor = CollisionShape3D.new()
 	var floor_shape := BoxShape3D.new()
-	floor_shape.size = Vector3(9999.0, 0.2, max_rows * row_spacing) # super wide X, limited Z
+	# super wide X, thin Y, spans visible Z
+	floor_shape.size = Vector3(9999.0, 0.2, max_rows * row_spacing)
 	global_floor.shape = floor_shape
 	floor_body.add_child(global_floor)
-
-	# place initially
 	floor_body.transform.origin = Vector3(0, ground_y - 0.1, 0)
 
 
@@ -115,185 +100,270 @@ func _update_global_floor():
 	var shape := global_floor.shape as BoxShape3D
 	shape.size.z = max_rows * row_spacing
 
-	# center collider over visible rows
+	# center under current visible rows
 	var start_z = z_offset
 	var end_z = z_offset + (max_rows * row_spacing)
 	var center_z = (start_z + end_z) * 0.5
-
 	global_floor.transform.origin.z = center_z
 
 
 func _on_tick() -> void:
-	if current_row >= frames.size():
+	if spectrum == null:
+		return
+
+	# stop when music ends
+	if player and not player.playing:
 		timer.stop()
-		print("Finished spawning spectrum")
+		print("Music finished – stopping level.")
 		if not store_spawned and store_scene:
 			var store = store_scene.instantiate()
 			add_child(store)
-
-			# Get center of the tunnel (same as floor strip)
-			var left_x := -(bands * bar_width) * 0.5
-			var gap_x = left_x + tunnel_pos * bar_width + (gap_size * bar_width * 0.5)
-
-			# Position store right at the end of the road
-			var store_x = gap_x
-			var store_y = ground_y
-			var store_z = z_offset - row_spacing  
-			store.transform.origin = Vector3(store_x, store_y, store_z)
-
+			store.transform.origin = Vector3(0, ground_y, z_offset - row_spacing)
 			store_spawned = true
 		return
 
-	# --- Spawn next row ---
-	var row = _spawn_row(frames[current_row])
-	if row:
-		active_rows.append(row)
+	# collect spectrum up to 4000 Hz
+	var values: Array[float] = []
+	var min_hz = 20.0
+	var max_hz = 4000.0
+	for i in range(freq_bins):
+		var f0 = lerp(min_hz, max_hz, float(i) / float(freq_bins))
+		var f1 = lerp(min_hz, max_hz, float(i + 1) / float(freq_bins))
+		var mag = spectrum.get_magnitude_for_frequency_range(f0, f1).length()
+		values.append(mag)
 
-		# keep only latest max_rows
-		if active_rows.size() > max_rows:
-			var old = active_rows.pop_front()
-			if is_instance_valid(old):
-				old.queue_free()
+	# previous row values (for full cell fill)
+	var prev_values: Array = []
+	if active_mesh_rows.size() > 0:
+		prev_values = active_mesh_rows.back()[1]
+
+	var row_mesh_instance = _spawn_mesh_row(values, prev_values)
+	if row_mesh_instance:
+		active_mesh_rows.append([row_mesh_instance, values])
+		if active_mesh_rows.size() > max_rows:
+			var old = active_mesh_rows.pop_front()
+			if is_instance_valid(old[0]):
+				old[0].queue_free()
 
 	current_row += 1
 	z_offset -= row_spacing
-
-	# update floor collider position
 	_update_global_floor()
 
 
-@export var palm_scene: PackedScene = decorations.pick_random()
+func _spawn_mesh_row(values: Array, prev_values: Array) -> MeshInstance3D:
+	# X = frequency, Y = height, Z = time (row)
+	var left_x := -(freq_bins * 1.0) * 0.5
 
-func _spawn_row(values: Array) -> Node3D:
-	var row_container := Node3D.new()
-	add_child(row_container)
+	# Build one ArrayMesh with two surfaces:
+	#  - Surface 0: TRIANGLES (solid black fill, cull disabled)
+	#  - Surface 1: LINES (emissive purple outlines)
+	var am := ArrayMesh.new()
 
-	var left_x := -(bands * bar_width) * 0.5
+	# ---------- Surface 0: black fill (full grid + skirts) ----------
+	var st_tri := SurfaceTool.new()
+	st_tri.begin(Mesh.PRIMITIVE_TRIANGLES)
+	var black_col = Color(0, 0, 0, 1)
 
-	# --- Tunnel shifting (max ±1, 25% chance) ---
-	if randi() % 100 < 25:
-		tunnel_pos += randi_range(-2, 2)
-		tunnel_pos = clamp(tunnel_pos, 1, bands - gap_size - 1)
+	var z_cur := z_offset
+	var have_prev := prev_values.size() == values.size()
+	var z_prev := z_cur + row_spacing
 
-	# --- Spawn bars ---
-	for i in range(bands):
-		if i >= tunnel_pos and i < tunnel_pos + gap_size:
-			continue
+	# A) FULL TOP SURFACE BETWEEN ROWS (no holes): for each cell (i, i+1) × (prev, current)
+	if have_prev:
+		for i in range(values.size() - 1):
+			# heights
+			var y_cur_i    = ground_y + values[i] * height_scale
+			var y_cur_ip1  = ground_y + values[i + 1] * height_scale
+			var y_prev_i   = ground_y + prev_values[i] * height_scale
+			var y_prev_ip1 = ground_y + prev_values[i + 1] * height_scale
 
-		var h: float = float(values[i]) * height_scale
-		h = max(h, 1.0)
-		
-		var body := StaticBody3D.new()
-		row_container.add_child(body)
+			# positions
+			var x_i   = left_x + i
+			var x_ip1 = left_x + i + 1
 
-		var bar := MeshInstance3D.new()
-		var bar_mesh := BoxMesh.new()
-		bar_mesh.size = Vector3(bar_width, 1.0, row_spacing)
-		bar.mesh = bar_mesh
+			# four corners of the cell (top surface)
+			var v00 = Vector3(x_i,   y_cur_i,    z_cur)  # current row, i
+			var v10 = Vector3(x_ip1, y_cur_ip1,  z_cur)  # current row, i+1
+			var v01 = Vector3(x_i,   y_prev_i,   z_prev) # prev row, i
+			var v11 = Vector3(x_ip1, y_prev_ip1, z_prev) # prev row, i+1
 
-		var collision := CollisionShape3D.new()
-		var collision_shape := BoxShape3D.new()
-		collision_shape.size = bar_mesh.size
-		collision.shape = collision_shape
+			# two triangles to cover the cell completely
+			st_tri.set_color(black_col)
+			st_tri.add_vertex(v00)
+			st_tri.add_vertex(v10)
+			st_tri.add_vertex(v01)
 
-		var killzone: Area3D = preload("res://Scenes/killzone.tscn").instantiate()
-		var killzone_collision := CollisionShape3D.new()
-		var killzone_shape := BoxShape3D.new()
-		killzone_shape.size = bar_mesh.size
-		killzone_collision.shape = killzone_shape
-		killzone.add_child(killzone_collision)
+			st_tri.set_color(black_col)
+			st_tri.add_vertex(v10)
+			st_tri.add_vertex(v11)
+			st_tri.add_vertex(v01)
+	else:
+		# first row: add a strip (current row → ground) so front is closed
+		for i in range(values.size() - 1):
+			var x0 = left_x + i
+			var x1 = left_x + i + 1
+			var y0 = ground_y + values[i] * height_scale
+			var y1 = ground_y + values[i + 1] * height_scale
 
-		body.add_child(bar)
-		body.add_child(collision)	
-		body.add_child(killzone)
+			var v0 = Vector3(x0, y0, z_cur)
+			var v1 = Vector3(x1, y1, z_cur)
+			var v2 = Vector3(x0, ground_y, z_cur)
+			var v3 = Vector3(x1, ground_y, z_cur)
 
-		var bar_mat := StandardMaterial3D.new()
-		var t: float = clamp(h / (height_scale * 0.8), 0.0, 1.0)
-		var low := Color(0.2, 0.4, 1.0, 0.95)
-		var high := Color(0.8, 0.2, 1.0, 0.95)
-		var col := low.lerp(high, t)
-		bar_mat.albedo_color = col
-		bar_mat.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		bar_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-		bar_mat.emission_enabled = true
-		bar_mat.emission = col
-		bar_mat.emission_energy_multiplier = 1.2
-		bar.material_override = bar_mat
+			st_tri.set_color(black_col)
+			st_tri.add_vertex(v0)
+			st_tri.add_vertex(v1)
+			st_tri.add_vertex(v2)
 
-		body.transform.origin = Vector3(left_x + i * bar_width, ground_y + h * 0.5, z_offset)
-		body.scale = Vector3(1.0, h, 1.0)
+			st_tri.set_color(black_col)
+			st_tri.add_vertex(v1)
+			st_tri.add_vertex(v3)
+			st_tri.add_vertex(v2)
 
-	# --- Pink floor strip under the tunnel (visual only, no collision) ---
-	var floor_mesh_instance := MeshInstance3D.new()
-	var floor_plane := BoxMesh.new()
-	floor_plane.size = Vector3(gap_size * bar_width, 0.2, row_spacing)
-	floor_mesh_instance.mesh = floor_plane
+	# B) FRONT SKIRT (always): current row top → ground (closes front edge)
+	for i in range(values.size() - 1):
+		var x0f = left_x + i
+		var x1f = left_x + i + 1
+		var y0f = ground_y + values[i] * height_scale
+		var y1f = ground_y + values[i + 1] * height_scale
 
-	var floor_material := StandardMaterial3D.new()
-	floor_material.albedo_color = Color(1.0, 0.2, 0.6, 0.9)
-	floor_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	floor_mesh_instance.material_override = floor_material
-	row_container.add_child(floor_mesh_instance)
+		var a0 = Vector3(x0f, y0f, z_cur)
+		var a1 = Vector3(x1f, y1f, z_cur)
+		var b0 = Vector3(x0f, ground_y, z_cur)
+		var b1 = Vector3(x1f, ground_y, z_cur)
 
-	var tunnel_gap_x = left_x + tunnel_pos * bar_width + (gap_size * bar_width * 0.5)
-	floor_mesh_instance.transform.origin = Vector3(
-		tunnel_gap_x - bar_width * 0.5,
-		ground_y - 0.1,
-		z_offset
-	)
+		st_tri.set_color(black_col)
+		st_tri.add_vertex(a0)
+		st_tri.add_vertex(a1)
+		st_tri.add_vertex(b0)
 
-	# --- Decorations at road edges (every 4th row) ---
+		st_tri.set_color(black_col)
+		st_tri.add_vertex(a1)
+		st_tri.add_vertex(b1)
+		st_tri.add_vertex(b0)
+
+	# C) SIDE SKIRTS (left & right): edges → ground across the Z span (prev to current)
+	if have_prev:
+		# Left edge (i = 0)
+		var xl = left_x
+		var yl_cur = ground_y + values[0] * height_scale
+		var yl_prev = ground_y + prev_values[0] * height_scale
+
+		var l00 = Vector3(xl, yl_cur,  z_cur)
+		var l01 = Vector3(xl, yl_prev, z_prev)
+		var l10 = Vector3(xl, ground_y, z_cur)
+		var l11 = Vector3(xl, ground_y, z_prev)
+
+		st_tri.set_color(black_col)
+		st_tri.add_vertex(l00)
+		st_tri.add_vertex(l01)
+		st_tri.add_vertex(l10)
+
+		st_tri.set_color(black_col)
+		st_tri.add_vertex(l01)
+		st_tri.add_vertex(l11)
+		st_tri.add_vertex(l10)
+
+		# Right edge (i = freq_bins - 1)
+		var xr = left_x + (values.size() - 1)
+		var yr_cur = ground_y + values[values.size() - 1] * height_scale
+		var yr_prev = ground_y + prev_values[prev_values.size() - 1] * height_scale
+
+		var r00 = Vector3(xr, yr_cur,  z_cur)
+		var r01 = Vector3(xr, yr_prev, z_prev)
+		var r10 = Vector3(xr, ground_y, z_cur)
+		var r11 = Vector3(xr, ground_y, z_prev)
+
+		st_tri.set_color(black_col)
+		st_tri.add_vertex(r00)
+		st_tri.add_vertex(r01)
+		st_tri.add_vertex(r10)
+
+		st_tri.set_color(black_col)
+		st_tri.add_vertex(r01)
+		st_tri.add_vertex(r11)
+		st_tri.add_vertex(r10)
+
+	st_tri.commit(am)
+
+	# ---------- Surface 1: purple grid lines (X within row, Z between rows) ----------
+	var st_lines = SurfaceTool.new()
+	st_lines.begin(Mesh.PRIMITIVE_LINES)
+
+	# X-axis lines (current row top edge)
+	for i in range(values.size() - 1):
+		var x0 = left_x + i
+		var x1 = left_x + i + 1
+		var y0 = ground_y + values[i] * height_scale
+		var y1 = ground_y + values[i + 1] * height_scale
+		var z  = z_cur
+		st_lines.add_vertex(Vector3(x0, y0, z))
+		st_lines.add_vertex(Vector3(x1, y1, z))
+
+	# Z-axis lines (to previous row)
+	if have_prev:
+		for i in range(values.size()):
+			var x = left_x + i
+			var y_now  = ground_y + values[i] * height_scale
+			var y_prev = ground_y + prev_values[i] * height_scale
+			st_lines.add_vertex(Vector3(x, y_now,  z_cur))
+			st_lines.add_vertex(Vector3(x, y_prev, z_prev))
+
+	st_lines.commit(am)
+
+	# Instance + per-surface materials
+	var mesh_instance := MeshInstance3D.new()
+	mesh_instance.mesh = am
+
+	# Surface 0 (fill): solid black, unshaded, cull disabled (visible from any angle)
+	var fill_mat := StandardMaterial3D.new()
+	fill_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	fill_mat.albedo_color = Color(0, 0, 0, 1)
+	fill_mat.cull_mode = BaseMaterial3D.CULL_DISABLED
+	mesh_instance.set_surface_override_material(0, fill_mat)
+
+	# Surface 1 (lines): emissive purple
+	var line_mat := StandardMaterial3D.new()
+	line_mat.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	line_mat.emission_enabled = true
+	line_mat.emission = Color(0.8, 0.2, 1.0, 1.0)
+	line_mat.emission_energy_multiplier = 1.5
+	mesh_instance.set_surface_override_material(1, line_mat)
+
+	add_child(mesh_instance)
+
+	# Decorations etc (unchanged)
 	row_counter += 1
-	if row_counter % 4 == 0 and not decorations.is_empty():
+	if row_counter % 20 == 0 and not decorations.is_empty():
 		var palm_left : Node3D = decorations.pick_random().instantiate()
-		var left_edge_x = left_x + tunnel_pos * bar_width
-		palm_left.transform.origin = Vector3(left_edge_x + 2.0, ground_y, z_offset)
-		row_container.add_child(palm_left)
+		palm_left.transform.origin = Vector3(left_x, ground_y, z_offset)
+		mesh_instance.add_child(palm_left)
 
-		var palm_right : Node3D = decorations.pick_random().instantiate()
-		var right_edge_x = left_x + (tunnel_pos + gap_size) * bar_width
-		palm_right.transform.origin = Vector3(right_edge_x - 2.0, ground_y, z_offset)
-		row_container.add_child(palm_right)
-		
-	# --- Sun behind the gap ---
 	if sun == null and sun_scene:
 		sun = sun_scene.instantiate()
 		add_child(sun)
 		sun.scale = Vector3(30, 30, 1)
-
 	if sun:
-		var sun_x = tunnel_gap_x
+		var sun_x = 0
 		var sun_y = ground_y + sun.scale.y * 0.4
 		var sun_z = z_offset - row_spacing * 500
 		sun.transform.origin = Vector3(sun_x, sun_y, sun_z)
-		
-	# --- Disks every 15th row ---
-	if current_row % 15 == 0:  
+
+	if current_row % 30 == 0:
 		for i in range(disks_per_gap):
 			var disk = disk_scene.instantiate()
-			row_container.add_child(disk)
+			mesh_instance.add_child(disk)
 			active_disks.append(disk)
-
-			# keep only latest max_disks
 			if active_disks.size() > max_disks:
 				var old_disk = active_disks.pop_front()
 				if is_instance_valid(old_disk):
 					old_disk.queue_free()
+			disk.transform.origin = Vector3(randf_range(-5,5), ground_y + 1.5, z_offset + (i * 2))
 
-			var offset_x = randf_range(-gap_size * 0.4, gap_size * 0.4) * bar_width
-			var offset_y = ground_y + 1.5
-			var offset_z = z_offset + (i * 3.0)
-			disk.transform.origin = Vector3(tunnel_gap_x + offset_x, offset_y, offset_z)
-			
-	# --- Casette (once ~30% into level) ---
-	if not casette_spawned and current_row > int(frames.size() * 0.3):
+	if not casette_spawned and current_row > 100:
 		var casette = casette_scene.instantiate()
-		row_container.add_child(casette)
-
-		var casette_x = randf_range(-gap_size * 0.4, gap_size * 0.4) * bar_width
-		var casette_y = ground_y + 1.5
-		var casette_z = z_offset - row_spacing * 5
-		casette.transform.origin = Vector3(tunnel_gap_x + casette_x, casette_y, casette_z)
+		mesh_instance.add_child(casette)
+		casette.transform.origin = Vector3(0, ground_y + 1.5, z_offset - 10)
 		casette_spawned = true
-		
-	return row_container
+
+	return mesh_instance
