@@ -1,4 +1,4 @@
-[gd_scene load_steps=23 format=3 uid="uid://j5as40ig7f3t"]
+[gd_scene load_steps=25 format=3 uid="uid://j5as40ig7f3t"]
 
 [ext_resource type="Script" uid="uid://dpmi4b802mrkh" path="res://Scripts/main.gd" id="1_hptm8"]
 [ext_resource type="Texture2D" uid="uid://3pl1ppjn0yw5" path="res://img/panorama_image (2).png" id="1_ynf5e"]
@@ -15,6 +15,7 @@
 [ext_resource type="PackedScene" uid="uid://og1jec2w2646" path="res://3DModels/signboard.fbx" id="9_h1bgf"]
 [ext_resource type="Script" uid="uid://b2hjrvvfsuk7f" path="res://Scripts/StoreMenu.gd" id="13_fdnlq"]
 [ext_resource type="Script" uid="uid://bp1dwcg0sw4nw" path="res://Scripts/Popups.gd" id="14_jkdf5"]
+[ext_resource type="PackedScene" uid="uid://dlrkbxyuy0dba" path="res://Scenes/killzone.tscn" id="16_k12tt"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_lquwl"]
 panorama = ExtResource("1_ynf5e")
@@ -49,6 +50,8 @@ size = Vector3(77.4329, 1, 35.324)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_1bvp3"]
 size = Vector3(1.02294, 2.2668, 0.657196)
+
+[sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_h1bgf"]
 
 [node name="Main" type="Node3D"]
 script = ExtResource("1_hptm8")
@@ -316,3 +319,9 @@ layout_mode = 3
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
+
+[node name="Area3D" parent="." instance=ExtResource("16_k12tt")]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="Area3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -20, 0)
+shape = SubResource("WorldBoundaryShape3D_h1bgf")
