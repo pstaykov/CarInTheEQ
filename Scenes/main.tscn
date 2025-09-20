@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dpmi4b802mrkh" path="res://Scripts/main.gd" id="1_hptm8"]
 [ext_resource type="Texture2D" uid="uid://3pl1ppjn0yw5" path="res://img/panorama_image (2).png" id="1_ynf5e"]
-[ext_resource type="Script" uid="uid://b3kw0vbbxjru" path="res://Scripts/vehicle_body_3d.gd" id="2_hptm8"]
+[ext_resource type="Script" uid="uid://dj1s42jara075" path="res://Scripts/vehicle_body_3d.gd" id="2_hptm8"]
 [ext_resource type="PackedScene" uid="uid://dngoe2jeakqeb" path="res://3DModels/low-poly_cartoon_style_car_03.glb" id="3_d1ilt"]
 [ext_resource type="Script" uid="uid://cxwhwx8jt7qkg" path="res://Scenes/chase_cam.gd" id="4_wsu2k"]
 [ext_resource type="Script" uid="uid://0pj6vevpq8hq" path="res://Scripts/roof_eq.gd" id="5_d1ilt"]

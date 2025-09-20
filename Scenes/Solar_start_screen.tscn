@@ -1,10 +1,11 @@
-[gd_scene load_steps=17 format=3 uid="uid://c6c1kayd1amtk"]
+[gd_scene load_steps=18 format=3 uid="uid://c6c1kayd1amtk"]
 
 [ext_resource type="Script" uid="uid://fyajymdfdl0f" path="res://Scripts/solar_start_screen.gd" id="1_qjjy0"]
 [ext_resource type="Shader" uid="uid://dob1t8tsgr70i" path="res://Shaders/planet_shader.gdshader" id="1_y58hh"]
 [ext_resource type="Script" uid="uid://8ou6wcndv2g" path="res://Scripts/Earth_click.gd" id="3_6ed17"]
 [ext_resource type="Texture2D" uid="uid://s5a7jftnotfq" path="res://img/Solarsystemscope_texture_8k_earth_daymap.jpg" id="4_6ed17"]
 [ext_resource type="Texture2D" uid="uid://3pl1ppjn0yw5" path="res://img/panorama_image (2).png" id="4_a8hqv"]
+[ext_resource type="Script" uid="uid://b0ypfqhkgmvuy" path="res://Scripts/earth.gd" id="5_a8hqv"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_a7ltw"]
 
@@ -63,6 +64,7 @@ shape = SubResource("SphereShape3D_05gfr")
 transform = Transform3D(4.705, 0, 0, 0, 4.705, 0, 0, 0, 4.705, 13.7364, 5.67125, 0)
 mesh = SubResource("SphereMesh_eflt5")
 surface_material_override/0 = SubResource("StandardMaterial3D_a8hqv")
+script = ExtResource("5_a8hqv")
 
 [node name="Area3D" type="Area3D" parent="Earth"]
 
@@ -89,11 +91,10 @@ fov = 65.4368
 
 [node name="Control" type="Control" parent="CanvasLayer"]
 layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
 grow_horizontal = 2
-grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="CanvasLayer/Control"]
 layout_mode = 1
